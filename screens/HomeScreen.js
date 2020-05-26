@@ -43,7 +43,7 @@ export default function HomeScreen() {
         </View>
       </ScrollView>
 
-      {/*<View style={styles.tabBarInfoContainer}>
+      <View style={styles.tabBarInfoContainer}>
         <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
         <Text style={styles.red}>just red</Text>
         <Text style={{
@@ -56,7 +56,7 @@ export default function HomeScreen() {
         <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
           <MonoText style={styles.codeHighlightText}>navigation/BottomTabNavigator.js</MonoText>
         </View>
-      </View>*/}
+      </View>
     </View>
   );
 }
