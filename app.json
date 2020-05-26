@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "testExpo",
-    "slug": "testExpo",
+    "name": "News_Pro",
+    "slug": "News_Pro",
     "platforms": [
       "ios",
       "android",
