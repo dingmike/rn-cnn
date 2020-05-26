@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
-    baseURL: 'https://some-domain.com/api/',
+    baseURL: 'http://learn.fecstec.com/api/rsscontent/10', // http://learn.fecstec.com/api/rsscontent/10?type=economistWord
     timeout: 3000,
     headers: { 'X-Custom-Header': 'foobar' }
 });
