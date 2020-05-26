@@ -5,6 +5,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 import { MonoText } from '../components/StyledText';
 
+import { styles } from '../style/homeStyle';
+
 export default function HomeScreen() {
   return (
     <View style={styles.container}>
@@ -12,7 +14,7 @@ export default function HomeScreen() {
         <View style={styles.welcomeContainer}>
           <Image
             source={
-              __DEV__
+              (!__DEV__)
                 ? require('../assets/images/robot-dev.png')
                 : require('../assets/images/robot-prod.png')
             }
@@ -23,7 +25,7 @@ export default function HomeScreen() {
         <View style={styles.getStartedContainer}>
           <DevelopmentModeNotice />
 
-          <Text style={styles.getStartedText}>Open up the code for this screen:</Text>
+          <Text style={styles.getStartedText}>Open up the code for this screen ok:</Text>
 
           <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
             <MonoText>screens/HomeScreen.js</MonoText>
@@ -43,7 +45,14 @@ export default function HomeScreen() {
 
       <View style={styles.tabBarInfoContainer}>
         <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
-
+        <Text style={styles.red}>just red</Text>
+        <Text style={{
+          color: 'blue',
+          fontWeight: 'bold',
+          fontSize: 30,
+        }}>just bigblue</Text>
+        <Text style={[styles.bigblue, styles.red]}>bigblue, then red</Text>
+        <Text style={[styles.red, styles.bigblue]}>red, then bigblue</Text>
         <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
           <MonoText style={styles.codeHighlightText}>navigation/BottomTabNavigator.js</MonoText>
         </View>
@@ -89,7 +98,15 @@ function handleHelpPress() {
   );
 }
 
-const styles = StyleSheet.create({
+/*const styles = StyleSheet.create({
+  bigblue: {
+    color: 'blue',
+    fontWeight: 'bold',
+    fontSize: 30,
+  },
+  red: {
+    color: 'red',
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -176,4 +193,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#2e78b7',
   },
-});
+});*/

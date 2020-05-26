@@ -1,4 +1,4 @@
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons'; // https://icons.expo.fyi/  字体图标源代码 https://ionicons.com/ https://docs.expo.io/guides/icons/#expovector-icons
 import * as React from 'react';
 
 import Colors from '../constants/Colors';

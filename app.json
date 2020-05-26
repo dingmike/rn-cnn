@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "myNewProject",
-    "slug": "myNewProject",
+    "name": "rn-cnn",
+    "slug": "react-native-cnn",
     "platforms": [
       "ios",
       "android",
