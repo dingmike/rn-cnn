@@ -15,7 +15,7 @@ export default function BottomTabNavigator({ navigation, route }) {
   navigation.setOptions({ headerTitle: getHeaderTitle(route) });
 
   return (
-    <BottomTab.Navigator
+        <BottomTab.Navigator
         initialRouteName={INITIAL_ROUTE_NAME}
         tabBarOptions={{
         activeTintColor: '#1ea2e9',
