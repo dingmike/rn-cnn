@@ -1,8 +1,9 @@
 import * as TYPES from '../actionTypes/userTypes';
 
 const initState = {
-    flag:1, //1请求中 2请求成功
-    user: null
+    flag: 1, //1请求中 2请求成功
+    user: null,
+    jokerVideo: null
 }
 
 export default function addUser(state = initState,action){
@@ -10,7 +11,8 @@ export default function addUser(state = initState,action){
         case TYPES.LOAD_USER:
             return Object.assign({},state,{flag : 1});
         case TYPES.UPDATE_DATA:
-            return Object.assign({},state,{flag : 2, user : action.user});
+            debugger
+            return Object.assign({},state,{flag : 2, user : action.user, jokerVideo: action.jokerVideo});
         default:
             return state;
     }

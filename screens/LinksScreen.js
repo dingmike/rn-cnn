@@ -1,10 +1,54 @@
 import { Ionicons } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
-import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, Text, View,Image } from 'react-native';
 import { RectButton, ScrollView } from 'react-native-gesture-handler';
+import {requestData} from "../redux/actions/userAction";
+import {connect} from "react-redux";
+import { Video } from 'expo-av';
 
-export default function LinksScreen() {
+class LinksScreen extends Component{
+  render() {
+    let {flag,user, jokerVideo} = this.props;
+    console.log(jokerVideo)
+    return (
+        <View>
+          <Text>{jokerVideo[0].text}</Text>
+          <Image
+              style={{width: 100, height: 80}}
+              source={{url: jokerVideo[0].thumbnail}}
+          />
+          <Video
+              source={{ uri: jokerVideo[0].video }}
+              rate={1.0}
+              volume={1.0}
+              isMuted={false}
+              resizeMode="cover"
+              shouldPlay
+              isLooping
+              style={{ width: 420, height: 640 }}
+          />
+        </View>
+    );
+  }
+}
+function mapStateToProps(state){
+  return {
+    flag: state.userReducer.flag,
+    user: state.userReducer.user,
+    jokerVideo: state.userReducer.jokerVideo
+  };
+}
+function mapDispatchToProps(dispatch){
+  return {
+    updateData: function(){
+      dispatch(requestData());
+    }
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(LinksScreen);
+
+/*export default function LinksScreen() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
       <OptionButton
@@ -71,4 +115,4 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginTop: 1,
   },
-});
+});*/

@@ -1,7 +1,7 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import * as React from 'react';
-import {Platform, StatusBar, StyleSheet, Text, View} from 'react-native';
+import React, { Component } from 'react';
+import {Platform, StatusBar, StyleSheet, Text, View, Image} from 'react-native';
 
 import useCachedResources from './hooks/useCachedResources';
 import BottomTabNavigator from './navigation/BottomTabNavigator';

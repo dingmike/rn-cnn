@@ -75,6 +75,7 @@ import userReducer from "../redux/reducers/userReducer";
 
 
 class HomeScreen extends Component{
+
   /*render() {
       return (
           <View>
@@ -88,27 +89,26 @@ class HomeScreen extends Component{
   }*/
 
     render(){
-        let {flag,user} = this.props;
-        //flag
-        let content = null;
-        if(flag == 1){
-            content = (<Text>加载中</Text>);
-        }else{
-            content = (<Text>加载成功</Text>);
-        }
+        const {navigate} = this.props.navigation;
+        let {flag,user, jokerVideo} = this.props;
         //user
         let userView = null;
-        if (user) {
+        if (jokerVideo) {
             userView = (<View>
-                <Text>姓名：{user.name}</Text>
-                <Text>年龄：{user.age}</Text>
-                <Text>工作：{user.job}</Text>
+                {/*<Text>姓名：{user.name}</Text>*/}
+                {/*<Text>年龄：{user.age}</Text>*/}
+                {/*<Text>工作：{user.job}</Text>*/}
+                <Text>工作：{jokerVideo[0].text}</Text>
+
+                <Button
+                    title="Go to HomeDetail---->"
+                    onPress={() => navigate('HomeDetail')}
+                />
             </View>);
         }
 
         return (
             <View>
-                {content}
                 {userView}
             </View>
         );
@@ -151,7 +151,8 @@ class Blink extends Component {
 function mapStateToProps(state){
     return {
         flag: state.userReducer.flag,
-        user: state.userReducer.user
+        user: state.userReducer.user,
+        jokerVideo: state.userReducer.jokerVideo
     };
 }
 function mapDispatchToProps(dispatch){

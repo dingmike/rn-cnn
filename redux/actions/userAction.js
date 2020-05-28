@@ -1,21 +1,28 @@
 import * as TYPES from '../actionTypes/userTypes';
-import { Net } from '../../utils/request'
+import userApi from '../../apis/userApi'
 
 
 export function updateData(user){
     return {
         type: TYPES.UPDATE_DATA,
-        user: user
+        user: user,
+        jokerVideo: user
     };
 }
 
 export function requestData(){
     return dispatch => {
         let url = 'https://my.oschina.net/gef';
-        Net.Get('', {}).then(response => {
-            console.log("response:" + response);
-            return response.text();
-        })
+        userApi.getMovieData({page: 1, count: 2, type: 'video'}).then(response => {
+            console.log(response);
+            if (response) {
+                debugger
+                dispatch(updateData(response.result));
+            }
+            // return response;
+        }).catch((error) => {
+            console.log("error:" + error);
+        });
             /*   fetch(url)
             .then((response) =>{
                 console.log("response:" + response);
