@@ -1,5 +1,7 @@
 import * as WebBrowser from 'expo-web-browser';
-import * as React from 'react';
+// import * as React from 'react';
+import React, { Component } from 'react';
+import {connect} from 'react-redux';
 import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, Button } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -9,7 +11,12 @@ import { styles } from '../style/homeStyle';
 
 import HomeDetail from "./HomeDetail";
 
-export default function HomeScreen({ navigation }) {
+import {requestData} from '../redux/actions/userAction';
+import userReducer from "../redux/reducers/userReducer";
+
+
+/*export default function HomeScreen({ navigation }) {
+
   return (
     <View style={styles.container}>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -64,7 +71,99 @@ export default function HomeScreen({ navigation }) {
       </View>
     </View>
   );
+}*/
+
+
+class HomeScreen extends Component{
+  /*render() {
+      return (
+          <View>
+              <Blink text='I love to blink'/>
+              <Blink text='Yes blinking is so great'/>
+              <Blink text='Why did they ever take this out of HTML'/>
+              <Blink text='Look at me look at me look at me'/>
+          </View>
+      );
+
+  }*/
+
+    render(){
+        let {flag,user} = this.props;
+        //flag
+        let content = null;
+        if(flag == 1){
+            content = (<Text>加载中</Text>);
+        }else{
+            content = (<Text>加载成功</Text>);
+        }
+        //user
+        let userView = null;
+        if (user) {
+            userView = (<View>
+                <Text>姓名：{user.name}</Text>
+                <Text>年龄：{user.age}</Text>
+                <Text>工作：{user.job}</Text>
+            </View>);
+        }
+
+        return (
+            <View>
+                {content}
+                {userView}
+            </View>
+        );
+    }
+    componentDidMount(){
+        console.log(this.props)
+        let {updateData} = this.props;
+        updateData();
+    }
 }
+
+
+class Blink extends Component {
+    // 声明state对象
+    state = { isShowingText: true };
+
+    componentDidMount() {
+        // 每1000毫秒对showText状态做一次取反操作
+        setInterval(() => {
+            this.setState({
+                isShowingText: !this.state.isShowingText
+            });
+        }, 1000);
+    }
+
+    render() {
+        // 根据当前showText的值决定是否显示text内容
+        if (!this.state.isShowingText) {
+            return null;
+        }
+
+        return (
+            <Text>{this.props.text}</Text>
+        );
+    }
+}
+
+
+
+function mapStateToProps(state){
+    return {
+        flag: state.userReducer.flag,
+        user: state.userReducer.user
+    };
+}
+function mapDispatchToProps(dispatch){
+    return {
+        updateData: function(){
+            dispatch(requestData());
+        }
+    };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
+
+
 
 HomeScreen.navigationOptions = {
   header: null,

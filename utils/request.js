@@ -1,9 +1,10 @@
 import axios from 'axios';
-
+// 跨域请求，允许保存cookie
+axios.defaults.withCredentials = true
 const instance = axios.create({
-    baseURL: 'http://learn.fecstec.com/api/rsscontent/10', // http://learn.fecstec.com/api/rsscontent/10?type=economistWord
+    baseURL: 'https://www.jinrishici.com/', // http://learn.fecstec.com/api/rsscontent/10?type=economistWord
     timeout: 3000,
-    headers: { 'X-Custom-Header': 'foobar' }
+    // headers: { 'X-Custom-Header': 'foobar' }
 });
 
 //请求拦截处理
@@ -25,7 +26,7 @@ instance.interceptors.response.use(function (response) {
 });
 
 
-export const Net = async (api, params) => {
+const Post = async (api, params) => {
     return new Promise((resolve, reject) => {
         instance.post(api, params)
             .then(res => {
@@ -35,4 +36,58 @@ export const Net = async (api, params) => {
                 reject(error)
             })
     })
+}
+
+
+
+
+const Get = async (api, params) => {
+    return new Promise((resolve, reject) => {
+        instance({method: 'GET', params: params})
+            .then(res => {
+            resolve(res.data)
+            })
+            .catch(error => {
+                reject(error)
+            })
+
+        /*instance.get(api, params)
+            .then(res => {
+                resolve(res.data)
+            })
+            .catch(error => {
+                reject(error)
+            })*/
+    })
+}
+
+const Put = async (api, params) => {
+    return new Promise((resolve, reject) => {
+        instance.put(api, params)
+            .then(res => {
+                resolve(res.data)
+            })
+            .catch(error => {
+                reject(error)
+            })
+    })
+}
+
+const Delete = async (api, params) => {
+    return new Promise((resolve, reject) => {
+        instance.delete(api, params)
+            .then(res => {
+                resolve(res.data)
+            })
+            .catch(error => {
+                reject(error)
+            })
+    })
+}
+
+export const Net = {
+    Get,
+    Put,
+    Delete,
+    Post
 }

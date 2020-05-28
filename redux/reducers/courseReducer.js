@@ -1,6 +1,15 @@
 
-import * as TYPES from '../actionTypes/course'
-import courseInitState from '../actions/course'
+import * as TYPES from '../actionTypes/courseTypes'
+
+
+
+
+
+const courseInitState = {
+    courseList: [],
+    loading: true,
+};
+
 
 export default function (state = courseInitState, action) {
 

@@ -1,9 +1,11 @@
 import { combineReducers } from "redux";
 
-import courseReducer from './course'
+import courseReducer from './courseReducer'
+import userReducer from './userReducer'
 
 const reducers = combineReducers({
-    courseReducer
+    courseReducer,
+    userReducer
 })
 
 
