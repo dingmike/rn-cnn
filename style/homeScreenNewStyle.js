@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     },
     headerDes: {
       fontSize: 16,
-      lineHeight: 14,
+      lineHeight: 16,
       marginTop: 4
     },
     firstArticleImg: {

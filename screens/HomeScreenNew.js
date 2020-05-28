@@ -25,7 +25,7 @@ class HomeScreenNew extends Component {
                         <Text style={styles.headerTitle}>Today Reading!</Text>
                      </View>
                      <View>
-                         <Text style={styles}>Read more, Learn more.</Text>
+                         <Text style={styles.headerDes}>Read more, Learn more.</Text>
                      </View>
                  </View>
 
