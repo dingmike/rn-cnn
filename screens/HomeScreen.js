@@ -12,7 +12,6 @@ import { styles } from '../style/homeStyle';
 import HomeDetail from "./HomeDetail";
 
 import {requestData} from '../redux/actions/userAction';
-import userReducer from "../redux/reducers/userReducer";
 
 
 /*export default function HomeScreen({ navigation }) {
@@ -76,18 +75,6 @@ import userReducer from "../redux/reducers/userReducer";
 
 class HomeScreen extends Component{
 
-  /*render() {
-      return (
-          <View>
-              <Blink text='I love to blink'/>
-              <Blink text='Yes blinking is so great'/>
-              <Blink text='Why did they ever take this out of HTML'/>
-              <Blink text='Look at me look at me look at me'/>
-          </View>
-      );
-
-  }*/
-
     render(){
         const {navigate} = this.props.navigation;
         let {flag,user, jokerVideo} = this.props;
@@ -95,11 +82,7 @@ class HomeScreen extends Component{
         let userView = null;
         if (jokerVideo) {
             userView = (<View>
-                {/*<Text>姓名：{user.name}</Text>*/}
-                {/*<Text>年龄：{user.age}</Text>*/}
-                {/*<Text>工作：{user.job}</Text>*/}
-                <Text>工作：{jokerVideo[0].text}</Text>
-
+                <Text>{jokerVideo[0].text}</Text>
                 <Button
                     title="Go to HomeDetail---->"
                     onPress={() => navigate('HomeDetail')}
@@ -113,6 +96,27 @@ class HomeScreen extends Component{
             </View>
         );
     }
+    componentWillUpdate(){
+        console.log("componentWillUpdate1111---组件将要更新");
+    }
+
+    componentDidUpdate(){
+        console.log("componentDidUpdate1111---组件更新完毕");
+    }
+    shouldComponentUpdate(nextProps, nextState){
+        /*console.log(this.state.detailContent,'detailContent');
+        if (this.state.count !== nextState.count) {
+            console.log("shouldComponentUpdate1111---组件需要更新");
+            return true;
+        }
+        return false;*/
+    }
+    // 在子组件中对父元素props或state的改变进行监听进行相应的操作
+    componentWillReceiveProps(nextProps){
+        // console.log(this.props.detailContent,'this--->>componentWillReceiveProps');
+        // console.log(nextProps.detailContent,'next--->>componentWillReceiveProps')
+    }
+// componentWillReceiveProps -> 改变后执行父组件中 shouldComponentUpdate -> componentWillUpdate -> componentDidUpdate
     componentDidMount(){
         console.log(this.props)
         let {updateData} = this.props;
