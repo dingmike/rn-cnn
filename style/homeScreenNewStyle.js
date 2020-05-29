@@ -9,6 +9,13 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
     },
+    articleList: {
+        flex: 1,
+        backgroundColor: '#fff',
+        marginTop: 20,
+        // marginLeft: 10,
+        // marginRight: 10
+    },
     headView: {
         paddingLeft: 18,
         paddingRight: 18,

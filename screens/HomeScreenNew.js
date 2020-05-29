@@ -37,7 +37,7 @@ import {ImageBackground as WebImageBackground} from "react-native-web";
 class HomeScreenNew extends Component {
 
     render() {
-        return (<ScrollView style={styles.container}>
+        return (<View style={styles.container}>
             {/* header title */}
             <View style={styles.headView}>
                 <View>
@@ -47,10 +47,31 @@ class HomeScreenNew extends Component {
                     <Text style={styles.headerDes}>Read more, Learn more.</Text>
                 </View>
             </View>
-                <CardArticle/>
+
+              {/*  <CardArticle/>
                 <LineCardArticle/>
-                <LineCardArticle/>
-        </ScrollView>
+                <LineCardArticle/>*/}
+                <View style={styles.articleList}>
+                    <FlatList
+                        data={[
+                            { key: 'Devin' },
+                            { key: 'Dan' },
+                            { key: 'Dominic' },
+                            { key: 'Jackson' },
+                            { key: 'James' },
+                            { key: 'Joel' },
+                            { key: 'John' },
+                            { key: 'Jillian' },
+                            { key: 'Jimmy' },
+                            { key: 'Julie' },
+                        ]}
+                        renderItem={({ item }) => item.key === 'Devin' ? <CardArticle/> : <LineCardArticle/>}
+                    />
+                </View>
+        </View>
+
+
+
        )
 
     }
