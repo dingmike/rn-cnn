@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     headView: {
         paddingLeft: 18,
         paddingRight: 18,
-        paddingBottom: 10,
+        // paddingBottom: 10,
         marginTop: 16
     },
     headerTitle: {
