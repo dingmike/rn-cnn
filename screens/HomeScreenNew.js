@@ -26,6 +26,7 @@ import {MonoText} from '../components/StyledText';
 import {styles} from '../style/homeScreenNewStyle';
 import Constants from 'expo-constants';   // 常量
 
+import userApi from "../apis/userApi";
 
 import HomeDetail from "./HomeDetail";
 
@@ -45,6 +46,70 @@ class HomeScreenNew extends Component {
             sourceData: [],             //列表数据
         };
     }
+
+    getDataList(){
+        // const {dispatch, goBack, navigate, setParams} = this.props.navigation;
+        userApi.getMovieData().then(data => {
+
+            if(this.state.currentPage == 1){
+                this.setState({
+                    sourceData: data.result,
+                    totalCount: data.result.length,
+                    isRefreshing: false                 //有可能是下拉刷新
+                })
+            }else{
+                this.setState({
+                    sourceData: this.state.sourceData.concat(data.result),
+                    isLoadMore: false               //关闭正在加载更多
+                })
+            }
+
+        })
+
+        /*  try{
+              Alert.alert(data)
+              // 请求接口，参数不用管；这里只需要主要  currentPage 和 pageSize即可 {page: 1, count: 2, type: 'video'}
+              let data = await userApi.getMovieData({
+                  type: 'video',
+                  page: this.state.currentPage,
+                  count: 10
+              });
+
+              Alert.alert(data)
+              if(this.state.currentPage == 1){
+                  this.setState({
+                      sourceData: data.result,
+                      totalCount: data.result.length,
+                      isRefreshing: false                 //有可能是下拉刷新
+                  })
+              }else{
+                  this.setState({
+                      sourceData: this.state.sourceData.concat(data.result),
+                      isLoadMore: false               //关闭正在加载更多
+                  })
+              }
+
+
+          }catch (err) {
+              Alert.alert(err.message)
+          }*/
+    }
+    _onRefresh(){             // 下拉刷新
+        // 正在上拉刷新，请求第一页
+        this.setState({ isRefreshing: true, currentPage: 1 }, () => {
+            this.getDataList();
+          //利用setState的第二个参数，以便获取最新的state
+        });
+    }
+    _renderItem = ({item}) => (
+        <CardArticle articleTitle={item.text}/>
+        /*<MyListItem
+            id={item.id}
+            onPressItem={this._onPressItem}
+            selected={!!this.state.selected.get(item.id)}
+            title={item.title}
+        />*/
+    );
     _onEndReached() {         //上拉加载更多
         const {currentPage, totalCount, sourceData, isLoadMore} = this.state;
 debugger
@@ -57,6 +122,10 @@ debugger
                 Alert.alert('Right button pressed')
             })
         }
+    }
+    componentDidMount() {
+        Alert.alert('335')
+        this.getDataList();
     }
     render() {
 
@@ -76,21 +145,14 @@ debugger
                 <LineCardArticle/>*/}
                 <View style={styles.articleList}>
                     <FlatList
-                        data={[
-                            { key: 'Devin' },
-                            { key: 'Dan' },
-                            { key: 'Dominic' },
-                            { key: 'Jackson' },
-                            { key: 'James' },
-                            { key: 'Joel' },
-                            { key: 'John' },
-                            { key: 'Jillian' },
-                            { key: 'Jimmy' },
-                            { key: 'Julie' },
-                        ]}
-                        renderItem={({ item }) => item.key === 'Devin' ? <CardArticle/> : <LineCardArticle/>}
+                        data={this.state.sourceData}
+                        keyExtractor = {(item, index) => index.toString()}       //不重复的key
+                        renderItem={this._renderItem}
+                        ListEmptyComponent={<Text>Kongkong</Text>}
+                        onEndReachedThreshold={0.3}
                         onEndReached={()=>this._onEndReached()}
-                        refreshing={true}
+                        onRefresh={ () => {this._onRefresh() } }
+                        refreshing = {this.state.isRefreshing}
                     />
                 </View>
         </View>

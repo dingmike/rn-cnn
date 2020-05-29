@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types'
 import {connect} from 'react-redux';
 import {
     Image,
@@ -22,7 +23,17 @@ import {color} from "../style/common";
 const image = {uri: "https://reactjs.org/logo-og.png"};
 
 export default class CardArticle extends Component {
+    static defaultProps = {
+        bgColor: '#000',
+        fColor: '#fff',
+        size: 10
+    };
+    static propTypes = {
+        //文本的样式
+        articleTitle: PropTypes.string.isRequired,
+    }
     render() {
+        let {articleTitle} = this.props
         const DURATION = 10000;
         const PATTERN = [1000, 2000, 3000];
         return (<View style={styles.firstArticleImg}>
@@ -39,7 +50,7 @@ export default class CardArticle extends Component {
                 </View>
             </WebImageBackground>) : (<ImageBackground source={image} style={styles.insideImg}>
                 <Text style={styles.insideTitleFirst}>No.209 | Hot News</Text>
-                <Text style={styles.insideMainTitle}>Inside the home land ok now hello world!</Text>
+                <Text style={styles.insideMainTitle}>{articleTitle}</Text>
                 <View style={{
                     flexDirection: "row",
                     justifyContent: 'space-between',
