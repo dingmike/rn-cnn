@@ -47,9 +47,9 @@ class HomeScreenNew extends Component {
         };
     }
 
-    getDataList(){
+    async getDataList(){
         // const {dispatch, goBack, navigate, setParams} = this.props.navigation;
-        userApi.getMovieData().then(data => {
+        /*userApi.getMovieData().then(data => {
 
             if(this.state.currentPage == 1){
                 this.setState({
@@ -64,18 +64,19 @@ class HomeScreenNew extends Component {
                 })
             }
 
-        })
+        })*/
 
-        /*  try{
-              Alert.alert(data)
-              // 请求接口，参数不用管；这里只需要主要  currentPage 和 pageSize即可 {page: 1, count: 2, type: 'video'}
-              let data = await userApi.getMovieData({
+          try{
+
+              /*
+              * {
                   type: 'video',
                   page: this.state.currentPage,
                   count: 10
-              });
+              }*/
+              // 请求接口，参数不用管；这里只需要主要  currentPage 和 pageSize即可 {page: 1, count: 2, type: 'video'}
+              let data = await userApi.getMovieData(); //
 
-              Alert.alert(data)
               if(this.state.currentPage == 1){
                   this.setState({
                       sourceData: data.result,
@@ -89,10 +90,9 @@ class HomeScreenNew extends Component {
                   })
               }
 
-
           }catch (err) {
               Alert.alert(err.message)
-          }*/
+          }
     }
     _onRefresh(){             // 下拉刷新
         // 正在上拉刷新，请求第一页
@@ -112,19 +112,17 @@ class HomeScreenNew extends Component {
     );
     _onEndReached() {         //上拉加载更多
         const {currentPage, totalCount, sourceData, isLoadMore} = this.state;
-debugger
         if(sourceData.length < totalCount && !isLoadMore){     //还有数据没有加载完，并且不是正在上拉加载更多
             this.setState({
-                currentPage: currentPage+1,             //加载下一页
+                currentPage: currentPage + 1,             //加载下一页
                 isLoadMore: true                        //正在加载更多
             }, () => {
-                // this.getDataList();          //利用setState的第二个参数，以便获取最新的state
+                this.getDataList();          //利用setState的第二个参数，以便获取最新的state
                 Alert.alert('Right button pressed')
             })
         }
     }
     componentDidMount() {
-        Alert.alert('335')
         this.getDataList();
     }
     render() {
@@ -149,8 +147,8 @@ debugger
                         keyExtractor = {(item, index) => index.toString()}       //不重复的key
                         renderItem={this._renderItem}
                         ListEmptyComponent={<Text>Kongkong</Text>}
-                        onEndReachedThreshold={0.3}
-                        onEndReached={()=>this._onEndReached()}
+                        onEndReachedThreshold={0.5}
+                        onEndReached={() => {this._onEndReached()}}
                         onRefresh={ () => {this._onRefresh() } }
                         refreshing = {this.state.isRefreshing}
                     />
