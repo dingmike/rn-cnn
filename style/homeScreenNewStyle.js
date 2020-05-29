@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
         ...Platform.select({
             ios: {
                 width: null,
-                height: 460,
+                height: 440,
                 marginLeft: 18,
                 marginRight: 18,
                 backgroundColor: 'white',
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
             },
             android: {
                 width: null,
-                height: 460,
+                height: 440,
                 marginLeft: 18,
                 marginRight: 18,
                 backgroundColor: 'white',
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
                 borderRadius: 8
             },
             web: {
-                height: 320,
+                height: 360,
                 width: '90%',
                 marginLeft: 'auto',
                 marginRight: 'auto',
@@ -83,11 +83,26 @@ const styles = StyleSheet.create({
     },
     insideMainTitle: {
         color: color.whiteFont,
-        fontSize: 18,
-        fontWeight: '500',
+        fontSize: 20,
+        fontWeight: '600',
         padding: 10,
     },
+    cardTimeStyle:{
+        height: 36,
+        paddingLeft: 10,
+        textAlign:'left',
+        alignItems:'center',
+        justifyContent:'center',
+        textAlignVertical:'center',
+        ...Platform.select({
+            ios:{
+                lineHeight: 36,
+            },
+            android:{
 
+            }
+        }),
+    },
 
 
 
