@@ -18,6 +18,7 @@ import {
 } from 'react-native';
 import MyButton from '../components/MyButton'
 import CardArticle from '../components/CardArticle'
+import LineCardArticle from '../components/LineCardArticle'
 import {ScrollView} from 'react-native-gesture-handler';
 
 import {MonoText} from '../components/StyledText';
@@ -47,6 +48,8 @@ class HomeScreenNew extends Component {
                 </View>
             </View>
                 <CardArticle/>
+                <LineCardArticle/>
+                <LineCardArticle/>
         </ScrollView>
        )
 

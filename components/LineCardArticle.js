@@ -1,13 +1,88 @@
-import {Platform, StyleSheet, Dimensions} from 'react-native';
-import {color, size, layout} from './common'
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {
+    Image,
+    Platform,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+    Button,
+    Alert,
+    ImageBackground,
+    FlatList,
+    SectionList,
+    StatusBar, Dimensions
+} from 'react-native';
+import MyButton from './MyButton'
+import {ScrollView} from 'react-native-gesture-handler';
+// import {styles} from "../style/homeScreenNewStyle";
+import {ImageBackground as WebImageBackground} from "react-native-web";
+import {color} from "../style/common";
+const image = {uri: "https://reactjs.org/logo-og.png"};
+
+export default class lineCardArticle extends Component {
+    render() {
+        return (<View style={styles.articleImg}>
+            {Platform.OS === 'web' ? (<WebImageBackground source={image} style={styles.insideImg}>
+                <Text style={styles.insideTitleFirst}>No.209 | Hot News</Text>
+                <Text style={styles.insideMainTitle}>Inside the home land ok now hello world!</Text>
+                <View style={{
+                    flexDirection: "row",
+                    height: 100,
+                    padding: 20
+                }}>
+                    <View style={styles.cardTimeStyle}>
+                        <Text style={{color: 'white', }}>May.29th.2020</Text>
+                    </View>
+                    {/*<Button title="Start Read" color="white" onPress={() => Alert.alert('Right button pressed')} />*/}
+                    <MyButton
+                        text={'Read Now'}
+                        onPress={() => Alert.alert('Right button pressed')}
+                        bgColor={'green'}
+                        fColor={'white'}
+                        style={{borderRadius: 4}}
+                        size={20}
+                    />
+                </View>
+            </WebImageBackground>) : (<ImageBackground source={image} style={styles.insideImg}>
+                <Text style={styles.insideMainTitle}>Inside the home land ok now hello world!</Text>
+                <View style={{
+                    flexDirection: "row",
+                    justifyContent: 'space-between',
+                    height: 100,
+                    lineHeight: 100,
+                    position: 'relative',
+                    top: 260,
+                    left: -20,
+                    padding: 20
+                }}>
+                    <View style={styles.cardTimeStyle}>
+                        <Text style={{color: 'white', }}>May.29th.2020</Text>
+                    </View>
+                    {/*<Button title="Start Read" color="white" onPress={() => Alert.alert('Right button pressed')} />*/}
+                    <MyButton
+                        text={'Read Now'}
+                        onPress={() => Alert.alert('Right button pressed')}
+                        bgColor={'green'}
+                        fColor={'white'}
+                        style={{borderRadius: 4}}
+                        size={20}
+                    />
+                </View>
+
+            </ImageBackground>)}
+        </View>)
+    }
+}
 
 
-const win = Dimensions.get('window');
 const styles = StyleSheet.create({
 
     container: {
         flex: 1,
         backgroundColor: '#fff',
+        marginBottom: 20,
     },
     headView: {
         paddingLeft: 18,
@@ -22,36 +97,29 @@ const styles = StyleSheet.create({
         fontWeight: '600'
     },
     headerDes: {
-      fontSize: 16,
-      lineHeight: 16,
-      marginTop: 4
+        fontSize: 16,
+        lineHeight: 16,
+        marginTop: 4
     },
-    firstArticleImg: {
+    articleImg: {
+        marginBottom: 20,
+        height: 120,
+        marginLeft: 18,
+        marginRight: 18,
+        shadowOffset: {h:10,w:10},
+        backgroundColor: 'white',
+        shadowColor: 'gray',
         ...Platform.select({
             ios: {
                 width: null,
-                height: 440,
-                marginLeft: 18,
-                marginRight: 18,
-                backgroundColor: 'white',
-                shadowColor: "rgba(195, 60, 17, 0.5)",
-                shadowOffset: {h:10,w:10},
-
                 shadowRadius: 20,
                 shadowOpacity: 1,
-
                 elevation: 10,
                 borderRadius: 8,
                 overflow: 'hidden'
             },
             android: {
                 width: null,
-                height: 440,
-                marginLeft: 18,
-                marginRight: 18,
-                backgroundColor: 'white',
-                shadowColor: 'gray',
-                shadowOffset: {h:10,w:10},
                 shadowRadius: 3,
                 shadowOpacity: 0.8,
                 borderRadius: 8
@@ -73,8 +141,6 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
     },
-
-
     insideTitleFirst: {
         color: color.whiteFont,
         fontSize: 12,
@@ -200,7 +266,3 @@ const styles = StyleSheet.create({
         color: '#2e78b7',
     },
 });
-
-export {
-    styles
-}
