@@ -9,9 +9,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     headView: {
-        padding: 10,
-        paddingBottom: 20,
-        marginTop: 10
+        paddingLeft: 18,
+        paddingRight: 18,
+        paddingBottom: 10,
+        marginTop: 16
     },
     headerTitle: {
         fontSize: 20,
@@ -25,17 +26,53 @@ const styles = StyleSheet.create({
       marginTop: 4
     },
     firstArticleImg: {
-        width: null,
-        height: 460,
-        marginLeft: 10,
-        marginRight: 10,
-        backgroundColor: 'white',
-        shadowColor: 'gray',
-        shadowOffset: {h:10,w:10},
-        shadowRadius:3,
-        shadowOpacity:0.8,
-        borderRadius: 8
+        ...Platform.select({
+            ios: {
+                width: null,
+                height: 460,
+                marginLeft: 10,
+                marginRight: 10,
+                backgroundColor: 'white',
+                shadowColor: 'gray',
+                shadowOffset: {h:10,w:10},
+                shadowRadius:3,
+                shadowOpacity:0.8,
+                borderRadius: 8
+            },
+            android: {
+                width: null,
+                height: 460,
+                marginLeft: 10,
+                marginRight: 10,
+                backgroundColor: 'white',
+                shadowColor: 'gray',
+                shadowOffset: {h:10,w:10},
+                shadowRadius:3,
+                shadowOpacity:0.8,
+                borderRadius: 8
+            },
+            web: {
+                height: 320,
+                width: '90%',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                shadowColor: 'black',
+                shadowOpacity: 0.3,
+                shadowRadius: 1,
+                borderRadius: 8,
+            }
+        }),
     },
+    insideImg: {
+        flex: 1,
+        justifyContent: "center"
+    },
+
+
+
+
+
+
 
 
 

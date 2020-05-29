@@ -12,7 +12,8 @@ import {styles} from '../style/homeScreenNewStyle';
 import HomeDetail from "./HomeDetail";
 
 import {requestData} from '../redux/actions/userAction';
-
+import {ImageBackground} from "react-native-web";
+const image = { uri: "https://reactjs.org/logo-og.png" };
 
 class HomeScreenNew extends Component {
 
@@ -30,8 +31,10 @@ class HomeScreenNew extends Component {
                  </View>
 
                  {/* first article image */}
-                 <View style={styles.firstArticleImg}>
-                      <Text>9999</Text>
+                 <View style={styles.firstArticleImg} >
+                     <ImageBackground source={image} style={styles.insideImg} >
+                         <Text>Inside</Text>
+                     </ImageBackground>
                  </View>
 
                </ScrollView>
