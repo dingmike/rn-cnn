@@ -4,6 +4,7 @@ import {color, size, layout} from './common'
 
 const win = Dimensions.get('window');
 const styles = StyleSheet.create({
+
     container: {
         flex: 1,
         backgroundColor: '#fff',
@@ -30,25 +31,29 @@ const styles = StyleSheet.create({
             ios: {
                 width: null,
                 height: 460,
-                marginLeft: 10,
-                marginRight: 10,
+                marginLeft: 18,
+                marginRight: 18,
                 backgroundColor: 'white',
-                shadowColor: 'gray',
+                shadowColor: "rgba(195, 60, 17, 0.5)",
                 shadowOffset: {h:10,w:10},
-                shadowRadius:3,
-                shadowOpacity:0.8,
-                borderRadius: 8
+
+                shadowRadius: 20,
+                shadowOpacity: 1,
+
+                elevation: 10,
+                borderRadius: 8,
+                overflow: 'hidden'
             },
             android: {
                 width: null,
                 height: 460,
-                marginLeft: 10,
-                marginRight: 10,
+                marginLeft: 18,
+                marginRight: 18,
                 backgroundColor: 'white',
                 shadowColor: 'gray',
                 shadowOffset: {h:10,w:10},
-                shadowRadius:3,
-                shadowOpacity:0.8,
+                shadowRadius: 3,
+                shadowOpacity: 0.8,
                 borderRadius: 8
             },
             web: {
@@ -63,13 +68,25 @@ const styles = StyleSheet.create({
             }
         }),
     },
+
     insideImg: {
-        flex: 1,
-        justifyContent: "center"
+        // flex: 1,
+        width: '100%',
+        height: '100%',
     },
 
 
-
+    insideTitleFirst: {
+        color: color.whiteFont,
+        fontSize: 12,
+        padding: 10,
+    },
+    insideMainTitle: {
+        color: color.whiteFont,
+        fontSize: 18,
+        fontWeight: '500',
+        padding: 10,
+    },
 
 
 

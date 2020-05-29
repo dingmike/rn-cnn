@@ -71,7 +71,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(LinksScreen);
       />
     </ScrollView>
   );
-}
+}*/
 
 function OptionButton({ icon, label, onPress, isLastOption }) {
   return (
@@ -115,4 +115,4 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginTop: 1,
   },
-});*/
+});
