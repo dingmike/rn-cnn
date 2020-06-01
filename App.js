@@ -4,15 +4,21 @@ import React, { Component } from 'react';
 import {Platform, StatusBar, StyleSheet, Text, View, Image} from 'react-native';
 
 import useCachedResources from './hooks/useCachedResources';
+// Screen route
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import LinkingConfiguration from './navigation/LinkingConfiguration';
+
+// pages route
+import HomeDetail from "./screens/HomeDetail";
+import ArticleDetail from "./screens/pages/ArticleDetail";
+
 
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import {persistor, store} from './redux/persistStore'
 
 const Stack = createStackNavigator();
-import HomeDetail from "./screens/HomeDetail";
+
 
 export default function App(props) {
     const isLoadingComplete = useCachedResources();
@@ -28,6 +34,7 @@ export default function App(props) {
                             <Stack.Navigator>
                                 <Stack.Screen name="Root" component={BottomTabNavigator}/>
                                 <Stack.Screen name="HomeDetail" component={HomeDetail}/>
+                                <Stack.Screen name="ArticleDetail" component={ArticleDetail}/>
                              {/*   {PageRouters.forEach(item => {
                                     console.log(item)
                                  return <Stack.Screen name={item.name} component={HomeDetail}/>

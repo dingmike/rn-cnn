@@ -24,6 +24,11 @@ const image = {uri: "https://reactjs.org/logo-og.png"};
 import myUtils from '../utils/myUtils'
 
 export default class CardArticle extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+        };
+    }
     static defaultProps = {
         bgColor: '#000',
         fColor: '#fff',
@@ -34,9 +39,11 @@ export default class CardArticle extends Component {
         articleItem: PropTypes.object,
         articleTitle: PropTypes.string.isRequired,
         articleTotal: PropTypes.number.isRequired,
+        goToDetail: PropTypes.func.isRequired,
     }
     render() {
-        let {articleTitle, articleItem, articleTotal} = this.props;
+        // const {navigate} = this.props.navigation;
+        let {articleTitle, articleItem, articleTotal, goToDetail} = this.props;
         const DURATION = 10000;
         const PATTERN = [1000, 2000, 3000];
         return (<View style={styles.firstArticleImg}>
@@ -73,10 +80,7 @@ export default class CardArticle extends Component {
                     {/*<Button title="Start Read" color="white" onPress={() => Alert.alert('Right button pressed')} />*/}
                     <MyButton
                         text={'Read Now'}
-                        onPress={() => {
-                            Vibration.vibrate(PATTERN);
-                            Alert.alert('Right button pressed')
-                        }}
+                        onPress={goToDetail}
                         bgColor={'green'}
                         fColor={'white'}
                         style={{borderRadius: 4}}

@@ -8,6 +8,11 @@ import {connect} from "react-redux";
 import { Video } from 'expo-av';
 
 class ArticleDetail extends Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+        };
+    }
     render() {
         const {navigate } = this.props.navigation;
         console.log('article Detail page!')
@@ -18,7 +23,8 @@ class ArticleDetail extends Component{
                 <View>
 
                 </View>
-                <Text>Article details... {route.params.key}</Text>
+                <Text>Article details... </Text>
+                <Text>{route.params.article_title}</Text>
             </ScrollView>
         );
     }

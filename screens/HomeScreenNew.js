@@ -38,6 +38,7 @@ import {ImageBackground as WebImageBackground} from "react-native-web";
 
 
 class HomeScreenNew extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
@@ -110,15 +111,16 @@ class HomeScreenNew extends Component {
         });
     }
 
-    _renderItem = ({item}) => (
-        <CardArticle articleItem={item} articleTotal={this.state.totalCount} articleTitle={item.chinese_title}/>
+    _renderItem = ({item}) => {
+     return <CardArticle articleItem={item} goToDetail={()=> {this.props.navigation.navigate('ArticleDetail', { ...item })}} articleTotal={this.state.totalCount}
+                     articleTitle={item.chinese_title}/>
         /*<MyListItem
             id={item.id}
             onPressItem={this._onPressItem}
             selected={!!this.state.selected.get(item.id)}
             title={item.title}
         />*/
-    );
+    };
 
     _onEndReached() {         //上拉加载更多
         const {currentPage, totalCount, sourceData, isLoadMore} = this.state;
@@ -137,7 +139,7 @@ class HomeScreenNew extends Component {
     }
 
     render() {
-
+        // const {navigate} = this.props.navigation;
         return (<View style={styles.container}>
                 {/* header title */}
                 <View style={styles.headView}>
