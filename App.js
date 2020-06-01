@@ -1,7 +1,8 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import {Platform, StatusBar, StyleSheet, Text, View, Image} from 'react-native';
+import { Camera } from 'expo-camera';
 
 import useCachedResources from './hooks/useCachedResources';
 // Screen route
@@ -21,6 +22,7 @@ const Stack = createStackNavigator();
 
 
 export default function App(props) {
+
     const isLoadingComplete = useCachedResources();
     if (!isLoadingComplete) {
         return null;

@@ -1,24 +1,40 @@
 import { Ionicons } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
-import React, { Component } from 'react';
-import { StyleSheet, Text, View,Image } from 'react-native';
+import React, { Component, useState, useEffect } from 'react';
+import { StyleSheet, Text, View,Image, Button, TouchableOpacity } from 'react-native';
 import { RectButton, ScrollView } from 'react-native-gesture-handler';
 import {requestData} from "../../redux/actions/userAction";
 import {connect} from "react-redux";
 import RNGeolocationView from '../../components/RNGeolocationView'
 import { Video } from 'expo-av';
+import { Camera } from 'expo-camera';
 
 class ArticleDetail extends Component{
 
     constructor(props) {
         super(props);
         this.state = {
-            text1: '',
+            photos: [],
             text2: ''
         }
     }
 
     render() {
+        const [hasPermission, setHasPermission] = useState(null);
+        const [type, setType] = useState(Camera.Constants.Type.back);
+        useEffect(() => {
+            (async () => {
+                const { status } = await Camera.requestPermissionsAsync();
+                setHasPermission(status === 'granted');
+            })();
+        }, []);
+
+        if (hasPermission === null) {
+            return <View />;
+        }
+        if (hasPermission === false) {
+            return <Text>No access to camera</Text>;
+        }
         const {navigate } = this.props.navigation;
         console.log('article Detail page!')
         console.log(navigate)
@@ -31,6 +47,30 @@ class ArticleDetail extends Component{
                 <Text>Article details... </Text>
                 <Text>{route.params.article_title}</Text>
                 <RNGeolocationView/>
+                <Camera style={{ flex: 1 }} type={type}>
+                    <View
+                        style={{
+                            flex: 1,
+                            backgroundColor: 'transparent',
+                            flexDirection: 'row',
+                        }}>
+                        <TouchableOpacity
+                            style={{
+                                flex: 0.1,
+                                alignSelf: 'flex-end',
+                                alignItems: 'center',
+                            }}
+                            onPress={() => {
+                                setType(
+                                    type === Camera.Constants.Type.back
+                                        ? Camera.Constants.Type.front
+                                        : Camera.Constants.Type.back
+                                );
+                            }}>
+                            <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Flip </Text>
+                        </TouchableOpacity>
+                    </View>
+                </Camera>
             </ScrollView>
         );
     }
