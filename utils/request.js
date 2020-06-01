@@ -2,8 +2,9 @@ import axios from 'axios';
 // 跨域请求，允许保存cookie
 axios.defaults.withCredentials = false  // 如果为true 会报错 The value of the 'Access-Control-Allow-Origin' header in the response must
 const instance = axios.create({
-    baseURL: 'https://api.apiopen.top', // http://learn.fecstec.com/api/rsscontent/10?type=economistWord
-    timeout: 3000,
+    // baseURL: 'https://api.apiopen.top', // http://learn.fecstec.com/api/rsscontent/10?type=economistWord
+    baseURL: 'http://api.ngrok.tecfcs.com/rn', // http://learn.fecstec.com/api/rsscontent/10?type=economistWord
+    timeout: 8000,
     // headers: { 'X-Custom-Header': 'foobar' }
 });
 

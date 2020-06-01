@@ -21,6 +21,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {ImageBackground as WebImageBackground} from "react-native-web";
 import {color} from "../style/common";
 const image = {uri: "https://reactjs.org/logo-og.png"};
+import myUtils from '../utils/myUtils'
 
 export default class CardArticle extends Component {
     static defaultProps = {
@@ -29,40 +30,45 @@ export default class CardArticle extends Component {
         size: 10
     };
     static propTypes = {
-        //文本的样式
+        //文章数据
+        articleItem: PropTypes.object,
         articleTitle: PropTypes.string.isRequired,
+        articleTotal: PropTypes.number.isRequired,
     }
     render() {
-        let {articleTitle} = this.props
+        let {articleTitle, articleItem, articleTotal} = this.props;
         const DURATION = 10000;
         const PATTERN = [1000, 2000, 3000];
         return (<View style={styles.firstArticleImg}>
             {Platform.OS === 'web' ? (<WebImageBackground source={image} style={styles.insideImg}>
-                <Text style={styles.insideTitleFirst}>No.209 | Hot News</Text>
-                <Text style={styles.insideMainTitle}>Inside the home land ok now hello world!</Text>
+                <Text style={styles.insideTitleFirst}>{articleItem.articleCate.category_name} | 词数：{articleItem.wordNum}</Text>
+                <Text style={styles.insideMainTitle}>{articleItem.article_title}</Text>
                 <View style={{
                     flexDirection: "row",
                     height: 100,
                     padding: 20
                 }}>
-                    <View style={{backgroundColor: "blue", flex: 0.4}}></View>
-                    <View style={{backgroundColor: "red", flex: 0.4}}></View>
+                    <Text style={{color: 'white'}}>{myUtils.getEngDate(articleItem.meta.updateAt)}</Text>
+                   {/* <View style={{backgroundColor: "blue", flex: 0.4}}></View>
+                    <View style={{backgroundColor: "red", flex: 0.4}}></View>*/}
                 </View>
-            </WebImageBackground>) : (<ImageBackground source={image} style={styles.insideImg}>
-                <Text style={styles.insideTitleFirst}>No.209 | Hot News</Text>
-                <Text style={styles.insideMainTitle}>{articleTitle}</Text>
+            </WebImageBackground>) : (<ImageBackground source={{url:articleItem.articleImg}} style={styles.insideImg}>
+                <Text style={styles.insideTitleFirst}>{articleItem.articleCate.category_name} | 词数：{articleItem.wordNum}</Text>
+                <View style={styles.insideMainTitleView}>
+                    <Text  numberOfLines={2} style={styles.insideMainTitle}>{articleItem.chinese_title}</Text>
+                </View>
                 <View style={{
                     flexDirection: "row",
                     justifyContent: 'space-between',
                     height: 100,
                     lineHeight: 100,
                     position: 'relative',
-                    top: 260,
+                    top: 240,
                     left: -20,
                     padding: 20
                 }}>
                     <View style={styles.cardTimeStyle}>
-                        <Text style={{color: 'white', }}>May.29th.2020</Text>
+                        <Text style={{color: 'white', }}>{myUtils.getEngDate(articleItem.meta.updateAt)}</Text>
                     </View>
                     {/*<Button title="Start Read" color="white" onPress={() => Alert.alert('Right button pressed')} />*/}
                     <MyButton
@@ -154,10 +160,15 @@ const styles = StyleSheet.create({
         fontSize: 12,
         padding: 10,
     },
+    insideMainTitleView :{
+        width: '100%',
+        height: 80
+    },
     insideMainTitle: {
         color: color.whiteFont,
         fontSize: 20,
         fontWeight: '600',
+        lineHeight: 26 ,
         padding: 10,
     },
     cardTimeStyle:{
