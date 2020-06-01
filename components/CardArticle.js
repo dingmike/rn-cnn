@@ -60,33 +60,38 @@ export default class CardArticle extends Component {
                     <View style={{backgroundColor: "red", flex: 0.4}}></View>*/}
                 </View>
             </WebImageBackground>) : (<ImageBackground source={{url:articleItem.articleImg}} style={styles.insideImg}>
-                <Text style={styles.insideTitleFirst}>{articleItem.articleCate.category_name} | 词数：{articleItem.wordNum}</Text>
-                <View style={styles.insideMainTitleView}>
-                    <Text  numberOfLines={2} style={styles.insideMainTitle}>{articleItem.chinese_title}</Text>
-                </View>
-                <View style={{
-                    flexDirection: "row",
-                    justifyContent: 'space-between',
-                    height: 100,
-                    lineHeight: 100,
-                    position: 'relative',
-                    top: 240,
-                    left: -20,
-                    padding: 20
-                }}>
-                    <View style={styles.cardTimeStyle}>
-                        <Text style={{color: 'white', }}>{myUtils.getEngDate(articleItem.meta.updateAt)}</Text>
-                    </View>
-                    {/*<Button title="Start Read" color="white" onPress={() => Alert.alert('Right button pressed')} />*/}
-                    <MyButton
-                        text={'Read Now'}
-                        onPress={goToDetail}
-                        bgColor={'green'}
-                        fColor={'white'}
-                        style={{borderRadius: 4}}
-                        size={20}
-                    />
-                </View>
+
+               <View style={{ height: 440, flexDirection: 'column', justifyContent: 'space-between'}}>
+                   <View>
+                       <Text style={styles.insideTitleFirst}>{articleItem.articleCate.category_name} | 词数：{articleItem.wordNum}</Text>
+                       <View style={styles.insideMainTitleView}>
+                           <Text  numberOfLines={2} style={styles.insideMainTitle}>{articleItem.chinese_title}</Text>
+                       </View>
+                   </View>
+
+                   <View style={{
+                       flexDirection: "row",
+                       justifyContent: 'space-between',
+                       height: 100,
+                       lineHeight: 100,
+                       padding: 20
+                   }}>
+                       <View style={styles.cardTimeStyle}>
+                           <Text style={{color: 'white', }}>{myUtils.getEngDate(articleItem.meta.updateAt)}</Text>
+                       </View>
+                       {/*<Button title="Start Read" color="white" onPress={() => Alert.alert('Right button pressed')} />*/}
+                       <MyButton
+                           text={'Read Now'}
+                           onPress={goToDetail}
+                           bgColor={'green'}
+                           fColor={'white'}
+                           style={{borderRadius: 4}}
+                           size={20}
+                       />
+                   </View>
+               </View>
+
+
 
             </ImageBackground>)}
         </View>)
@@ -118,6 +123,7 @@ const styles = StyleSheet.create({
     firstArticleImg: {
         marginBottom: 20,
         height: 440,
+        // flexDirection: 'column',  justifyContent: 'space-between',
         marginLeft: 18,
         marginRight: 18,
         backgroundColor: 'white',
