@@ -8,11 +8,11 @@ import {connect} from "react-redux";
 import { Video } from 'expo-av';
 
 class ArticleDetail extends Component{
-    constructor(props) {
+    /*constructor(props) {
         super(props);
         this.state = {
         };
-    }
+    }*/
     render() {
         const {navigate } = this.props.navigation;
         console.log('article Detail page!')
