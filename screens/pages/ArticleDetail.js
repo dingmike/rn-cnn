@@ -5,14 +5,19 @@ import { StyleSheet, Text, View,Image } from 'react-native';
 import { RectButton, ScrollView } from 'react-native-gesture-handler';
 import {requestData} from "../../redux/actions/userAction";
 import {connect} from "react-redux";
+import RNGeolocationView from '../../components/RNGeolocationView'
 import { Video } from 'expo-av';
 
 class ArticleDetail extends Component{
-    /*constructor(props) {
+
+    constructor(props) {
         super(props);
         this.state = {
-        };
-    }*/
+            text1: '',
+            text2: ''
+        }
+    }
+
     render() {
         const {navigate } = this.props.navigation;
         console.log('article Detail page!')
@@ -25,6 +30,7 @@ class ArticleDetail extends Component{
                 </View>
                 <Text>Article details... </Text>
                 <Text>{route.params.article_title}</Text>
+                <RNGeolocationView/>
             </ScrollView>
         );
     }
