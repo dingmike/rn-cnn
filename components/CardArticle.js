@@ -78,7 +78,6 @@ export default class CardArticle extends Component {
                    }}>
                        <View style={styles.cardTimeStyle}>
                            <Text style={{color: 'white'}}>{myUtils.getEngDate(articleItem.meta.updateAt)}</Text>
-                           {/*<Text style={{color: 'white'}}>{articleItem.meta.updateAt}</Text>*/}
                        </View>
                        {/*<Button title="Start Read" color="white" onPress={() => Alert.alert('Right button pressed')} />*/}
                        <MyButton
@@ -91,8 +90,6 @@ export default class CardArticle extends Component {
                        />
                    </View>
                </View>
-
-
 
             </ImageBackground>)}
         </View>)

@@ -1,98 +1,17 @@
-import { Ionicons } from '@expo/vector-icons';
+import {Ionicons} from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
-import React, { Component, useState, useEffect } from 'react';
-import { StyleSheet, Text, View,Image, Button, TouchableOpacity } from 'react-native';
-import { RectButton, ScrollView } from 'react-native-gesture-handler';
+import React, {Component, useState, useEffect} from 'react';
+import {StyleSheet, Text, View, Image, Button, TouchableOpacity} from 'react-native';
+import {RectButton, ScrollView} from 'react-native-gesture-handler';
 import {requestData} from "../../redux/actions/userAction";
 import {connect} from "react-redux";
 import RNGeolocationView from '../../components/RNGeolocationView'
-import { Video } from 'expo-av';
-import { Camera } from 'expo-camera';
-
-class ArticleDetail extends Component{
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            photos: [],
-            text2: ''
-        }
-    }
-
-    render() {
-        const [hasPermission, setHasPermission] = useState(null);
-        const [type, setType] = useState(Camera.Constants.Type.back);
-        useEffect(() => {
-            (async () => {
-                const { status } = await Camera.requestPermissionsAsync();
-                setHasPermission(status === 'granted');
-            })();
-        }, []);
-
-        if (hasPermission === null) {
-            return <View />;
-        }
-        if (hasPermission === false) {
-            return <Text>No access to camera</Text>;
-        }
-        const {navigate } = this.props.navigation;
-        console.log('article Detail page!')
-        console.log(navigate)
-        let {flag,user, jokerVideo,route} = this.props;
-        return (
-            <ScrollView>
-                <View>
-
-                </View>
-                <Text>Article details... </Text>
-                <Text>{route.params.article_title}</Text>
-                <RNGeolocationView/>
-                <Camera style={{ flex: 1 }} type={type}>
-                    <View
-                        style={{
-                            flex: 1,
-                            backgroundColor: 'transparent',
-                            flexDirection: 'row',
-                        }}>
-                        <TouchableOpacity
-                            style={{
-                                flex: 0.1,
-                                alignSelf: 'flex-end',
-                                alignItems: 'center',
-                            }}
-                            onPress={() => {
-                                setType(
-                                    type === Camera.Constants.Type.back
-                                        ? Camera.Constants.Type.front
-                                        : Camera.Constants.Type.back
-                                );
-                            }}>
-                            <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Flip </Text>
-                        </TouchableOpacity>
-                    </View>
-                </Camera>
-            </ScrollView>
-        );
-    }
-}
-function mapStateToProps(state){
-    return {
-        flag: state.userReducer.flag,
-        user: state.userReducer.user,
-        jokerVideo: state.userReducer.jokerVideo
-    };
-}
-function mapDispatchToProps(dispatch){
-    return {
-        updateData: function(){
-            dispatch(requestData());
-        }
-    };
-}
-export default connect(mapStateToProps, mapDispatchToProps)(ArticleDetail);
+import OwnCamera from '../../components/OwnCamera'
+import {Video} from 'expo-av';
 
 
-function OptionButton({ icon, label, onPress, isLastOption }) {
+
+/*function OptionButton({ icon, label, onPress, isLastOption }) {
     return (
         <RectButton style={[styles.option, isLastOption && styles.lastOption]} onPress={onPress}>
             <View style={{ flexDirection: 'row' }}>
@@ -105,7 +24,63 @@ function OptionButton({ icon, label, onPress, isLastOption }) {
             </View>
         </RectButton>
     );
+}*/
+
+class ArticleDetail extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            photos: [],
+            text2: '',
+        }
+    }
+
+    componentDidMount() {
+
+    }
+
+    componentDidUpdate() {
+    }
+
+    render() {
+        const {navigate} = this.props.navigation;
+        console.log('article Detail page!')
+        console.log(navigate)
+        let {flag, user, jokerVideo, route} = this.props;
+        console.log(route.params.article_title)
+        return (
+        <ScrollView>
+            {/*<View>*/}
+            {/*</View>*/}
+            {/*<Text>Article details... </Text>*/}
+            {/*<Text>{route.params.article_title}</Text>*/}
+            <View style={{height: 500}}>
+                <OwnCamera/>
+            </View>
+        </ScrollView>
+        );
+    }
 }
+
+function mapStateToProps(state) {
+    return {
+        flag: state.userReducer.flag,
+        user: state.userReducer.user,
+        jokerVideo: state.userReducer.jokerVideo
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        updateData: function () {
+            dispatch(requestData());
+        }
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ArticleDetail);
+
 
 const styles = StyleSheet.create({
     container: {
@@ -133,5 +108,12 @@ const styles = StyleSheet.create({
         fontSize: 15,
         alignSelf: 'flex-start',
         marginTop: 1,
+    },
+    button: {
+        alignItems: 'center',
+        backgroundColor: '#DDDDDD',
+        padding: 10,
+        height: 40,
+        marginLeft: 50
     },
 });

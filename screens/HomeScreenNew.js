@@ -111,9 +111,14 @@ class HomeScreenNew extends Component {
         });
     }
 
+    _goToDetail(item) {
+        console.log(item)
+        this.props.navigation.navigate('ArticleDetail', { ...item })
+    }
+
     // 渲染卡片
     _renderItem = ({item}) => {
-     return <CardArticle articleItem={item} goToDetail={()=> {this.props.navigation.navigate('ArticleDetail', { ...item })}} articleTotal={this.state.totalCount}
+     return <CardArticle articleItem={item} goToDetail={() => this._goToDetail(item)} articleTotal={this.state.totalCount}
                      articleTitle={item.chinese_title}/>
         /*<MyListItem
             id={item.id}
@@ -160,7 +165,7 @@ class HomeScreenNew extends Component {
                         data={this.state.sourceData}
                         keyExtractor={(item, index) => index.toString()}       //不重复的key
                         renderItem={this._renderItem}
-                        ListEmptyComponent={<Text>暂无内容</Text>}
+                        ListEmptyComponent={<Text style={{textAlign: 'center'}}>暂无内容</Text>}
                         onEndReachedThreshold={0.5}
                         onEndReached={() => {
                             this._onEndReached()
