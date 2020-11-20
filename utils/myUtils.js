@@ -151,12 +151,18 @@ export default class myUtils {
   static getEngDate(data) {
     let dt = new Date();
     if(data) {
+      console.log(data)
+      data = data.replace(/-/g, "/"); // ios 中 ‘2020/11/13 21:23:55’
+      console.log(data)
       dt = new Date(data)
+      // dt = new Date('2020/11/13 21:23:55')
     }
     let m=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Spt","Oct","Nov","Dec"];
     let w=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
     let d=["st","nd","rd","th"];
+    console.log(dt)
     let mn=dt.getMonth();
+    // console.log(mn)
     let wn=dt.getDay();
     let dn=dt.getDate();
     let dns;
@@ -172,7 +178,6 @@ export default class myUtils {
     }
     return  m[mn]+ ". " + dn + dns + ". " + dt.getFullYear()
     // return  w[wn-1] + ', ' + m[mn]+ "." + dn + dns + "." + dt.getFullYear()
-    // document.write(m[mn]+" "+dn+dns+" " +w[wn-1]+" "+dt.getFullYear());
   }
 
   /**

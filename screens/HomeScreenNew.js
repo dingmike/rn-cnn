@@ -111,6 +111,7 @@ class HomeScreenNew extends Component {
         });
     }
 
+    // 渲染卡片
     _renderItem = ({item}) => {
      return <CardArticle articleItem={item} goToDetail={()=> {this.props.navigation.navigate('ArticleDetail', { ...item })}} articleTotal={this.state.totalCount}
                      articleTitle={item.chinese_title}/>
@@ -159,7 +160,7 @@ class HomeScreenNew extends Component {
                         data={this.state.sourceData}
                         keyExtractor={(item, index) => index.toString()}       //不重复的key
                         renderItem={this._renderItem}
-                        ListEmptyComponent={<Text>Kongkong</Text>}
+                        ListEmptyComponent={<Text>暂无内容</Text>}
                         onEndReachedThreshold={0.5}
                         onEndReached={() => {
                             this._onEndReached()
