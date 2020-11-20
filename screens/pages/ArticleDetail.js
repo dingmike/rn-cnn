@@ -87,19 +87,17 @@ class ArticleDetail extends Component {
 
        // EasyLoading.show('Loading...', -1, 'type');
 
-       EasyLoading.show('Loading...', 3000, 'type');
-       setTimeout(() => {
-           EasyLoading.show('Loading...', 3000);
-       }, 3000)
+       EasyLoading.show('Loading...', -1, 'type');
 
        let response = await articleApi.articleDetail({
            id: this.state.articleId,
        });
+       EasyLoading.dismiss()
        console.log(response,100)
        this.setState({
            articleDetail: response.data
        })
-       // EasyLoading.dismis('Loading...','type')
+
 
     }
     componentDidUpdate() {
