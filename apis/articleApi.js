@@ -8,6 +8,11 @@ export default {
             ...params
         })
     },
+    articleDetail(params) {
+        return Net.Get('/test/article/detail', {
+            ...params
+        })
+    },
 
     // 注册新用户
     newUser(params) {
