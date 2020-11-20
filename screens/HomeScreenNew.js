@@ -35,7 +35,7 @@ import {requestData} from '../redux/actions/userAction';
 import {ImageBackground as WebImageBackground} from "react-native-web";
 
 // import {BoxShadow} from 'react-native-shadow'
-
+import * as SecureStore from 'expo-secure-store';
 
 class HomeScreenNew extends Component {
 
@@ -140,8 +140,11 @@ class HomeScreenNew extends Component {
         }
     }
 
-    componentDidMount() {
-        this.getDataList();
+    async componentDidMount() {
+        await this.getDataList();
+        let right = await SecureStore.isAvailableAsync()
+        alert(right)
+        SecureStore.setItemAsync('_ok', '2342234', {})
     }
 
     render() {

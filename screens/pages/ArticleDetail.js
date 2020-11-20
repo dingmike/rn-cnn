@@ -8,7 +8,7 @@ import {connect} from "react-redux";
 import RNGeolocationView from '../../components/RNGeolocationView'
 import OwnCamera from '../../components/OwnCamera'
 import {Video} from 'expo-av';
-
+import * as SecureStore from 'expo-secure-store';
 
 
 /*function OptionButton({ icon, label, onPress, isLastOption }) {
@@ -36,8 +36,17 @@ class ArticleDetail extends Component {
         }
     }
 
-    componentDidMount() {
+   async componentDidMount() {
 
+        // let right = await SecureStore.isAvailableAsync()
+        // alert(right)
+       // SecureStore.setItemAsync('_ok', '2342234', {})
+       // alert(ok)
+    /*   SecureStore.getItemAsync('_ok', {}).then(res => {
+           alert(res)
+       })*/
+       let oknow =await SecureStore.getItemAsync('_ok', {})
+       alert(oknow)
     }
 
     componentDidUpdate() {
@@ -55,8 +64,11 @@ class ArticleDetail extends Component {
             {/*</View>*/}
             {/*<Text>Article details... </Text>*/}
             {/*<Text>{route.params.article_title}</Text>*/}
+            <View>
+                <Text></Text>
+            </View>
             <View style={{height: 500}}>
-                <OwnCamera/>
+
             </View>
         </ScrollView>
         );

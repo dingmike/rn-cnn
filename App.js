@@ -17,12 +17,14 @@ import ArticleDetail from "./screens/pages/ArticleDetail";
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import {persistor, store} from './redux/persistStore'
+import { enableScreens } from 'react-native-screens';
+
 
 const Stack = createStackNavigator();
 
 
 export default function App(props) {
-
+    enableScreens(); // react-native-screens provides native primitives to represent screens instead of plain <View> components in order to better take advantage of operating system behavior and optimizations around screens.
     const isLoadingComplete = useCachedResources();
     if (!isLoadingComplete) {
         return null;
@@ -49,7 +51,6 @@ export default function App(props) {
         );
     }
 }
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
