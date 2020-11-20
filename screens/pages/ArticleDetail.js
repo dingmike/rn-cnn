@@ -9,7 +9,14 @@ import RNGeolocationView from '../../components/RNGeolocationView'
 import OwnCamera from '../../components/OwnCamera'
 import {Video} from 'expo-av';
 import * as SecureStore from 'expo-secure-store';
-
+import {
+    Accelerometer,
+    Barometer,
+    Gyroscope,
+    Magnetometer,
+    MagnetometerUncalibrated,
+    Pedometer,
+} from 'expo-sensors'; // 手机传感器
 
 /*function OptionButton({ icon, label, onPress, isLastOption }) {
     return (
