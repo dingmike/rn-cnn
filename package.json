@@ -28,6 +28,7 @@
     "expo-permissions": "~9.3.0",
     "expo-secure-store": "~9.2.0",
     "expo-sensors": "~9.1.0",
+    "expo-speech": "~8.4.0",
     "expo-splash-screen": "^0.6.2",
     "expo-web-browser": "~8.5.0",
     "react": "~16.9.0",
