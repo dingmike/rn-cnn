@@ -54,35 +54,8 @@ class HomeScreenNew extends Component {
 
     async getDataList() {
         // const {dispatch, goBack, navigate, setParams} = this.props.navigation;
-        /*userApi.getMovieData().then(data => {
-
-            if(this.state.currentPage == 1){
-                this.setState({
-                    sourceData: data.result,
-                    totalCount: data.result.length,
-                    isRefreshing: false                 //有可能是下拉刷新
-                })
-            }else{
-                this.setState({
-                    sourceData: this.state.sourceData.concat(data.result),
-                    isLoadMore: false               //关闭正在加载更多
-                })
-            }
-
-        })*/
-
         try {
-
-            /*
-            * {
-                type: 'video',
-                page: this.state.currentPage,
-                count: 10
-            }*/
             // 请求接口，参数不用管；这里只需要主要  currentPage 和 pageSize即可 {page: 1, count: 2, type: 'video'}
-            this.setState({
-                loading: true
-            })
             let response = await articleApi.allArticleList({
                 page: this.state.currentPage,
                 limit: 5,
@@ -100,11 +73,10 @@ class HomeScreenNew extends Component {
             } else {
                 this.setState({
                     sourceData: this.state.sourceData.concat(response.data.docs),
-                    loading: false,
+                    // loading: false,
                     isLoadMore: false               //关闭正在加载更多
                 })
             }
-
         } catch (err) {
             Alert.alert(err.message)
         }
@@ -146,6 +118,9 @@ class HomeScreenNew extends Component {
     }
 
     async componentDidMount() {
+        this.setState({
+            loading: true
+        })
         await this.getDataList();
         let right = await SecureStore.isAvailableAsync()
         // alert(right)
@@ -164,12 +139,9 @@ class HomeScreenNew extends Component {
                         <Text style={styles.headerDes}>Read more, Learn more.</Text>
                     </View>
                 </View>
-
-                {/*  <CardArticle/>
-                <LineCardArticle/>
-                <LineCardArticle/>*/}
+                {/*<LineCardArticle/>*/}
+                {/*<LineCardArticle/>*/}
                 <View style={styles.articleList}>
-
                     <SkeletonContent
                         containerStyle={{flex: 1, width: '100%'}}
                         isLoading={this.state.loading}
