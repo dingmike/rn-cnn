@@ -20,8 +20,7 @@ import {PersistGate} from 'redux-persist/integration/react';
 import {persistor, store} from './redux/persistStore'
 // import { enableScreens } from 'react-native-screens';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-
-const Stack = createStackNavigator();
+import Navigation from './navigation';
 
 export default function App(props) {
     // enableScreens(); // react-native-screens provides native primitives to represent screens instead of plain <View> components in order to better take advantage of operating system behavior and optimizations around screens.
@@ -35,21 +34,11 @@ export default function App(props) {
             <Provider store={store}>
                 <PersistGate persistor={persistor}>
                     <SafeAreaProvider style={styles.container}>
+                        <Navigation colorScheme={colorScheme} />
                         {Platform.OS === 'ios' && <StatusBar
                             animated={true}
                             backgroundColor="#61dafb"
                             barStyle="dark-content"/>}
-                        <NavigationContainer linking={LinkingConfiguration}
-                                             theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-                            <Stack.Navigator screenOptions={{ headerShown: false }}>
-                                <Stack.Screen name="Root" component={BottomTabNavigator}/>
-                                <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
-                             {/*   {PageRouters.forEach(item => {
-                                    console.log(item)
-                                 return <Stack.Screen name={item.name} component={HomeDetail}/>
-                                })}*/}
-                            </Stack.Navigator>
-                        </NavigationContainer>
                     </SafeAreaProvider>
                 </PersistGate>
             </Provider>
