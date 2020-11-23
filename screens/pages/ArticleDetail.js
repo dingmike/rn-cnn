@@ -169,11 +169,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         paddingTop: Constants.statusBarHeight,
         // backgroundColor: '#ecf0f1',
-        padding: 8,
+        // padding: 8,
     },
     content: {
         flex: 1,
-
+        padding: 8
     },
     articleTitle: {
       fontSize: 20,

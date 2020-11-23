@@ -65,7 +65,7 @@ export default class CardArticle extends Component {
                    <View>
                        <Text style={styles.insideTitleFirst}>{articleItem.articleCate.category_name} | 词数：{articleItem.wordNum}</Text>
                        <View style={styles.insideMainTitleView}>
-                           <Text  numberOfLines={2} style={styles.insideMainTitle}>{articleItem.chinese_title}</Text>
+                           <Text numberOfLines={2} style={styles.insideMainTitle}>{articleItem.chinese_title}</Text>
                        </View>
                    </View>
 
