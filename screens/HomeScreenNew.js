@@ -173,11 +173,12 @@ class HomeScreenNew extends Component {
                     <SkeletonContent
                         containerStyle={{flex: 1, width: '100%'}}
                         isLoading={this.state.loading}
+                        animationType="pulse"
                         layout={[
-                            {key: 'someId', width: '90%', height: 30, marginBottom: 6, marginLeft: 10, marginRight: 10},
-                            {key: 'someOtherId', width: '90%', height: 500, marginBottom: 6, padding: 10}
-                        ]}
-                    >
+                            // {key: 'someId', width: Dimensions.get('window').width-40, height: 30, marginBottom: 10, marginLeft: 20, marginRight: 20},
+                            {key: 'someOtherId1', width: Dimensions.get('window').width-40, height: 420, marginBottom: 18, marginLeft: 20, marginRight: 20},
+                            {key: 'someOtherId2', width: Dimensions.get('window').width-40, height: 420, marginBottom: 18, marginLeft: 20, marginRight: 20}
+                        ]}>
                         <FlatList
                             data={this.state.sourceData}
                             keyExtractor={(item, index) => index.toString()}       //不重复的key
