@@ -43,6 +43,7 @@ class HomeScreenNew extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            loading: false,
             isRefreshing: false,            //控制下拉刷新
             isLoadMore: false,               //控制上拉加载
             currentPage: 1,             //当前请求的页数
@@ -79,6 +80,9 @@ class HomeScreenNew extends Component {
                 count: 10
             }*/
             // 请求接口，参数不用管；这里只需要主要  currentPage 和 pageSize即可 {page: 1, count: 2, type: 'video'}
+            this.setState({
+                loading: true
+            })
             let response = await articleApi.allArticleList({
                 page: this.state.currentPage,
                 limit: 5,
@@ -90,11 +94,13 @@ class HomeScreenNew extends Component {
                 this.setState({
                     sourceData: response.data.docs,
                     totalCount: response.data.total,
+                    loading: false,
                     isRefreshing: false                 //有可能是下拉刷新
                 })
             } else {
                 this.setState({
                     sourceData: this.state.sourceData.concat(response.data.docs),
+                    loading: false,
                     isLoadMore: false               //关闭正在加载更多
                 })
             }
@@ -114,37 +120,17 @@ class HomeScreenNew extends Component {
 
     _goToDetail(item) {
         console.log(item)
-        this.props.navigation.navigate('ArticleDetail', { ...item })
+        this.props.navigation.navigate('ArticleDetail', {...item})
     }
 
     // 渲染卡片
     _renderItem = ({item}) => {
-
         return (
-            <SkeletonContent
-                containerStyle={{ flex: 1, width: 300 }}
-                isLoading={false}
-                layout={[
-                    { key: 'someId', width: 220, height: 20, marginBottom: 6 },
-                    { key: 'someOtherId', width: 180, height: 20, marginBottom: 6 }
-                ]}
-            >
-                <CardArticle articleItem={item} goToDetail={() => this._goToDetail(item)} articleTotal={this.state.totalCount}
-                             articleTitle={item.chinese_title}/>
-            </SkeletonContent>
-
+            <CardArticle articleItem={item} goToDetail={() => this._goToDetail(item)}
+                         articleTotal={this.state.totalCount}
+                         articleTitle={item.chinese_title}/>
 
         )
-
-
-   /*  return <CardArticle articleItem={item} goToDetail={() => this._goToDetail(item)} articleTotal={this.state.totalCount}
-                     articleTitle={item.chinese_title}/>*/
-        /*<MyListItem
-            id={item.id}
-            onPressItem={this._onPressItem}
-            selected={!!this.state.selected.get(item.id)}
-            title={item.title}
-        />*/
     };
 
     _onEndReached() {         //上拉加载更多
@@ -162,7 +148,7 @@ class HomeScreenNew extends Component {
     async componentDidMount() {
         await this.getDataList();
         let right = await SecureStore.isAvailableAsync()
-        alert(right)
+        // alert(right)
         SecureStore.setItemAsync('_ok', '2342234', {})
     }
 
@@ -183,20 +169,31 @@ class HomeScreenNew extends Component {
                 <LineCardArticle/>
                 <LineCardArticle/>*/}
                 <View style={styles.articleList}>
-                    <FlatList
-                        data={this.state.sourceData}
-                        keyExtractor={(item, index) => index.toString()}       //不重复的key
-                        renderItem={this._renderItem}
-                        ListEmptyComponent={<Text style={{textAlign: 'center'}}>暂无内容</Text>}
-                        onEndReachedThreshold={0.5}
-                        onEndReached={() => {
-                            this._onEndReached()
-                        }}
-                        onRefresh={() => {
-                            this._onRefresh()
-                        }}
-                        refreshing={this.state.isRefreshing}
-                    />
+
+                    <SkeletonContent
+                        containerStyle={{flex: 1, width: '100%'}}
+                        isLoading={this.state.loading}
+                        layout={[
+                            {key: 'someId', width: '90%', height: 30, marginBottom: 6, marginLeft: 10, marginRight: 10},
+                            {key: 'someOtherId', width: '90%', height: 500, marginBottom: 6, padding: 10}
+                        ]}
+                    >
+                        <FlatList
+                            data={this.state.sourceData}
+                            keyExtractor={(item, index) => index.toString()}       //不重复的key
+                            renderItem={this._renderItem}
+                            ListEmptyComponent={<Text style={{textAlign: 'center'}}>暂无内容</Text>}
+                            onEndReachedThreshold={0.5}
+                            onEndReached={() => {
+                                this._onEndReached()
+                            }}
+                            onRefresh={() => {
+                                this._onRefresh()
+                            }}
+                            refreshing={this.state.isRefreshing}
+                        />
+                    </SkeletonContent>
+
                 </View>
             </View>
 
