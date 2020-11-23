@@ -36,6 +36,7 @@ import {ImageBackground as WebImageBackground} from "react-native-web";
 
 // import {BoxShadow} from 'react-native-shadow'
 import * as SecureStore from 'expo-secure-store';
+import SkeletonContent from 'react-native-skeleton-content';
 
 class HomeScreenNew extends Component {
 
@@ -118,8 +119,26 @@ class HomeScreenNew extends Component {
 
     // 渲染卡片
     _renderItem = ({item}) => {
-     return <CardArticle articleItem={item} goToDetail={() => this._goToDetail(item)} articleTotal={this.state.totalCount}
-                     articleTitle={item.chinese_title}/>
+
+        return (
+            <SkeletonContent
+                containerStyle={{ flex: 1, width: 300 }}
+                isLoading={false}
+                layout={[
+                    { key: 'someId', width: 220, height: 20, marginBottom: 6 },
+                    { key: 'someOtherId', width: 180, height: 20, marginBottom: 6 }
+                ]}
+            >
+                <CardArticle articleItem={item} goToDetail={() => this._goToDetail(item)} articleTotal={this.state.totalCount}
+                             articleTitle={item.chinese_title}/>
+            </SkeletonContent>
+
+
+        )
+
+
+   /*  return <CardArticle articleItem={item} goToDetail={() => this._goToDetail(item)} articleTotal={this.state.totalCount}
+                     articleTitle={item.chinese_title}/>*/
         /*<MyListItem
             id={item.id}
             onPressItem={this._onPressItem}
