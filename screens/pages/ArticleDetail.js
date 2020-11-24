@@ -316,11 +316,18 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         paddingLeft: 10,
-        height: 50,
+        height: 56,
         // borderColor: 'black',
         // borderWidth: 1,
         marginTop: 10,
-        width: Dimensions.get('window').width
+        width: Dimensions.get('window').width,
+        shadowOffset: {
+            width: -2,
+            height: 1
+        },
+        shadowColor: "black",
+        shadowOpacity: 0.4,
+        shadowRadius: 4,
     },
     headerSource: {
         height: 46,

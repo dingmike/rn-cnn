@@ -24,28 +24,7 @@ const image = {uri: "https://reactjs.org/logo-og.png"};
 export default class lineCardArticle extends Component {
     render() {
         return (<View style={styles.articleImg}>
-            {Platform.OS === 'web' ? (<WebImageBackground source={image} style={styles.insideImg}>
-                <Text style={styles.insideTitleFirst}>No.209 | Hot News</Text>
-                <Text style={styles.insideMainTitle}>Inside the home land ok now hello world!</Text>
-                <View style={{
-                    flexDirection: "row",
-                    height: 100,
-                    padding: 20
-                }}>
-                    <View style={styles.cardTimeStyle}>
-                        <Text style={{color: 'white', }}>May.29th.2020</Text>
-                    </View>
-                    {/*<Button title="Start Read" color="white" onPress={() => Alert.alert('Right button pressed')} />*/}
-                    <MyButton
-                        text={'Read Now'}
-                        onPress={() => Alert.alert('Right button pressed')}
-                        bgColor={'green'}
-                        fColor={'white'}
-                        style={{borderRadius: 4}}
-                        size={20}
-                    />
-                </View>
-            </WebImageBackground>) : (<ImageBackground source={image} style={styles.insideImg}>
+            <View source={image} style={styles.insideImg}>
                 <Text style={styles.insideMainTitle}>Inside the home land ok now hello world!</Text>
                 <View style={{
                     flexDirection: "row",
@@ -70,8 +49,7 @@ export default class lineCardArticle extends Component {
                         size={20}
                     />
                 </View>
-
-            </ImageBackground>)}
+            </View>
         </View>)
     }
 }
