@@ -16,7 +16,8 @@ import * as Speech from 'expo-speech';
 import HTML from 'react-native-render-html';
 import {Asset} from 'expo-asset';
 import {Loading, EasyLoading} from '../../components/EasyLoading'
-import {AntDesign} from '@expo/vector-icons';
+import SkeletonContent from 'react-native-skeleton-content';
+import {AntDesign, MaterialIcons, FontAwesome5} from '@expo/vector-icons';
 
 import {
     Accelerometer,
@@ -73,6 +74,7 @@ class ArticleDetail extends Component {
             articleId: route.params.id,
             articleDetail: {},
             resume: false,
+            loading: false,
             playStatus: 'pause',
             checked: '1',
             sourceCheckedColor: {
@@ -100,12 +102,17 @@ class ArticleDetail extends Component {
 
         // EasyLoading.show('Loading...', -1, 'type');
 
-        EasyLoading.show('Loading...', -1, 'type');
-
+        // EasyLoading.show('Loading...', -1, 'type'); // loading model
+        this.setState({
+            loading: true
+        })
         let response = await articleApi.articleDetail({
             id: this.state.articleId,
         });
-        EasyLoading.dismiss()
+        // EasyLoading.dismiss()
+        this.setState({
+            loading: false
+        })
         console.log(response, 100)
         this.setState({
             articleDetail: response.data
@@ -122,11 +129,8 @@ class ArticleDetail extends Component {
         this.setState({playStatus: playStatus});
         if (playStatus === 'play') {
             if (!this.state.resume) {
-                Speech.speak(content, {
-                    onStart(res) {
-
-                    }
-                });
+                Speech.stop();
+                Speech.speak(content);
             } else {
                 Speech.resume();
             }
@@ -135,8 +139,10 @@ class ArticleDetail extends Component {
             this.setState({
                 resume: true,
             })
-        } else if (playStatus === 'stop') {
+        } else if (playStatus === 'refresh') {
             Speech.stop();
+            Speech.speak(content);
+            this.setState({playStatus: 'play',  resume: false,});
         }
     }
 
@@ -153,6 +159,7 @@ class ArticleDetail extends Component {
                     color: 'black'
                 }
             })
+            this.scrollView.scrollTo({x:0,y: 0,animated:true});
         } else {
             this.setState({
                 checked: '2',
@@ -165,6 +172,7 @@ class ArticleDetail extends Component {
                     color: 'black'
                 },
             })
+            this.scrollView.scrollTo({x:0,y: 0,animated:true});
         }
 
     }
@@ -189,12 +197,22 @@ class ArticleDetail extends Component {
                             <Text style={[styles.headerText, this.state.translateCheckedColor]}>Translate</Text>
                         </TouchableOpacity>
                     </View>
-                    {playStatus === 'play' ?
-                        <AntDesign style={styles.playAudio} name="pausecircleo" size={28} color="black"
-                                   onPress={() => this.speak('pause', articleDetail.article_content)}/> :
-                        <AntDesign style={styles.playAudio} name="playcircleo" size={28} color="black"
-                                   onPress={() => this.speak('play', articleDetail.article_content)}/>}
 
+                    {playStatus === 'play' ?
+                        <TouchableOpacity onPress={() => this.speak('pause', articleDetail.article_content)}>
+                            <AntDesign style={styles.playAudio} name="pausecircleo" size={28} color="black"/>
+                        </TouchableOpacity> :
+                        <TouchableOpacity onPress={() => this.speak('play', articleDetail.article_content)}>
+                            <AntDesign style={styles.playAudio} name="playcircleo" size={28} color="black"/>
+                        </TouchableOpacity>}
+
+                   {/* <TouchableOpacity onPress={() => this.speak('stop', articleDetail.article_content)}>
+                        <FontAwesome5 style={styles.stopAudio} name="stop-circle" size={28} color="black" />
+                    </TouchableOpacity>*/}
+
+                    <TouchableOpacity onPress={() => this.speak('refresh', articleDetail.article_content)}>
+                        <MaterialIcons style={styles.refreshAudio} name="replay" size={28} color="black" />
+                    </TouchableOpacity>
                 </View>
                 {/* <View style={styles.container}>
                     <Button title="Press to hear some words" onPress={() => this.speak()} />
@@ -209,24 +227,55 @@ class ArticleDetail extends Component {
                     source={{ html: articleDetail.article_translate }}
                     style={{ marginTop: 20}}
                 />*/}
-                {checked === '1' ? <ScrollView style={styles.content}>
-                    <View style={styles.articleTitle}>
-                        <Text style={styles.articleTitle}>{articleDetail.article_title}</Text>
-                    </View>
 
-                    <View>
-                        <Text style={{fontSize: 18}}>
-                            {articleDetail.article_content}
-                        </Text>
-                    </View>
+                <SkeletonContent
+                    containerStyle={{flex: 1, width: Dimensions.get('window').width}}
+                    isLoading={this.state.loading}
+                    animationType="pulse"
+                    layout={[
+                        {
+                            key: 'title',
+                            width: Dimensions.get('window').width - 20,
+                            height: 50,
+                            marginBottom: 16,
+                            marginLeft: 10,
+                            marginTop: 10,
+                            marginRight: 10
+                        },
+                        {
+                            key: 'article',
+                            width: Dimensions.get('window').width - 20,
+                            height: 620,
+                            marginBottom: 18,
+                            marginLeft: 10,
+                            marginRight: 10
+                        },
+                        // {key: 'someOtherId2', width: Dimensions.get('window').width-40, height: 420, marginBottom: 18, marginLeft: 20, marginRight: 20}
+                    ]}>
 
-                    {/*<HTML html={articleDetail.article_content} imagesMaxWidth={Dimensions.get('window').width}/>*/}
-                </ScrollView> : <ScrollView style={styles.content}>
-                    <View>
-                        <Text style={styles.articleTitle}>{articleDetail.article_title}</Text>
-                    </View>
-                    <HTML html={articleDetail.article_translate} imagesMaxWidth={Dimensions.get('window').width}/>
-                </ScrollView>}
+                    {checked === '1' ? <ScrollView style={styles.content}
+                                                   ref={(r) => this.scrollView = r}>
+                        <View style={styles.articleTitle}>
+                            <Text style={styles.articleTitle}>{articleDetail.article_title}</Text>
+                        </View>
+
+                        <View>
+                            <Text style={{fontSize: 18}}>
+                                {articleDetail.article_content}
+                            </Text>
+                        </View>
+
+                        {/*<HTML html={articleDetail.article_content} imagesMaxWidth={Dimensions.get('window').width}/>*/}
+                    </ScrollView> : <ScrollView style={styles.content}>
+                        <View>
+                            <Text style={styles.articleTitle}>{articleDetail.article_title}</Text>
+                        </View>
+                        <HTML html={articleDetail.article_translate} imagesMaxWidth={Dimensions.get('window').width}/>
+                    </ScrollView>}
+
+
+                </SkeletonContent>
+
 
                 <Loading type={"type"} loadingStyle={{backgroundColor: "#ccc"}}/>
             </View>
@@ -301,9 +350,19 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginRight: 10
     },
+    refreshAudio: {
+        position: 'relative',
+        left: Dimensions.get('window').width / 2 - 90,
+        top: 10,
+    },
+    stopAudio: {
+        position: 'relative',
+        left: Dimensions.get('window').width / 2 - 120,
+        top: 10,
+    },
     playAudio: {
         position: 'relative',
-        left: Dimensions.get('window').width / 2 - 60,
+        left: Dimensions.get('window').width / 2 - 120,
         top: 10,
     },
     content: {
