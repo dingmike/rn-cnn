@@ -37,6 +37,7 @@ import {ImageBackground as WebImageBackground} from "react-native-web";
 // import {BoxShadow} from 'react-native-shadow'
 import * as SecureStore from 'expo-secure-store';
 import SkeletonContent from 'react-native-skeleton-content';
+import HomeLoadMoreFooter, {LOAD_MORE_STATE} from "../components/HomeLoadMoreFooter";
 
 class HomeScreenNew extends Component {
 
@@ -49,6 +50,8 @@ class HomeScreenNew extends Component {
             currentPage: 1,             //当前请求的页数
             totalCount: 0,              //数据总条数
             sourceData: [],             //列表数据
+            showFooter: LOAD_MORE_STATE.CANCEL,
+            noMoreData:false,
         };
     }
 
@@ -63,6 +66,14 @@ class HomeScreenNew extends Component {
                 articleCate: []
             }); //
             console.log(response.data)
+
+            if (0 === response.data.docs.length) {
+                // 全部数据加载完成,显示没有更多数据
+                this.setState({showFooter: LOAD_MORE_STATE.NO_MORE_DATA, noMoreData: true});
+            } else {
+                this.setState({showFooter: LOAD_MORE_STATE.CANCEL});
+            }
+
             if (this.state.currentPage == 1) {
                 this.setState({
                     sourceData: response.data.docs,
@@ -77,8 +88,15 @@ class HomeScreenNew extends Component {
                     isLoadMore: false               //关闭正在加载更多
                 })
             }
+
+            // 总数据量小于请求数据量
+            if(response.data.total <= 5) {
+                this.setState({showFooter: LOAD_MORE_STATE.CANCEL});
+            }
+
         } catch (err) {
-            Alert.alert(err.message)
+            // Alert.alert(err.message)
+            this.setState({showFooter: LOAD_MORE_STATE.CANCEL});
         }
     }
 
@@ -101,11 +119,19 @@ class HomeScreenNew extends Component {
             <CardArticle articleItem={item} goToDetail={() => this._goToDetail(item)}
                          articleTotal={this.state.totalCount}
                          articleTitle={item.chinese_title}/>
-
         )
     };
 
     _onEndReached() {         //上拉加载更多
+
+        if (this.state.showFooter !== LOAD_MORE_STATE.CANCEL || this.state.noMoreData) {
+            return;
+        }
+        //正在加载中
+        this.setState({showFooter: LOAD_MORE_STATE.REFRESHING});
+
+
+
         const {currentPage, totalCount, sourceData, isLoadMore} = this.state;
         if (sourceData.length < totalCount && !isLoadMore) {     //还有数据没有加载完，并且不是正在上拉加载更多
             this.setState({
@@ -126,7 +152,9 @@ class HomeScreenNew extends Component {
         // alert(right)
         SecureStore.setItemAsync('_ok', '2342234', {})
     }
-
+    renderFooter = () => {
+        return <HomeLoadMoreFooter state={this.state.showFooter}/>;
+    };
     render() {
         // const {navigate} = this.props.navigation;
         return (
@@ -144,7 +172,9 @@ class HomeScreenNew extends Component {
                     {/*<LineCardArticle/>*/}
                     <View style={styles.articleList}>
                         <SkeletonContent
-                            containerStyle={{flex: 1, width: '100%'}}
+                            containerStyle={{
+                                flex: 1,
+                                width: '100%'}}
                             isLoading={this.state.loading}
                             animationType="pulse"
                             layout={[
@@ -155,26 +185,37 @@ class HomeScreenNew extends Component {
                             ]}>
                             <FlatList
                                 data={this.state.sourceData}
-                                keyExtractor={(item, index) => item.id}       //不重复的key
+                                keyExtractor={(item, index) => item.id}
                                 renderItem={this._renderItem}
-                                ListEmptyComponent={<Text style={{textAlign: 'center'}}>暂无内容</Text>}
+                                ListFooterComponent={this.renderFooter}
+                                ListEmptyComponent={<Text style={{
+                                    textAlign: 'center',
+                                    marginTop: 40,}}>暂无内容</Text>}
                                 onEndReachedThreshold={0.5}
                                 onEndReached={() => {
                                     this._onEndReached()
                                 }}
+                                ListHeaderComponent={
+                                    <View style={{
+                                        height: 44,
+                                        justifyContent: 'center',
+                                        paddingLeft: 15,
+                                        backgroundColor: '#f3f4f6',
+                                    }}>
+                                        <Text style={{fontSize: 14, color: '#666666'}}>记得多多阅读哦！</Text>
+                                    </View>
+                                }
                                 onRefresh={() => {
                                     this._onRefresh()
                                 }}
                                 refreshing={this.state.isRefreshing}
                             />
                         </SkeletonContent>
-
                     </View>
             </SafeAreaView>
         )
     }
 }
-
 
 function mapStateToProps(state) {
     return {
