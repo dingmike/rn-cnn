@@ -14,7 +14,7 @@ import {
     ImageBackground,
     FlatList,
     SectionList,
-    StatusBar, Dimensions
+    StatusBar, Dimensions, SafeAreaView
 } from 'react-native';
 import MyButton from '../components/MyButton'
 import CardArticle from '../components/CardArticle'
@@ -129,50 +129,49 @@ class HomeScreenNew extends Component {
 
     render() {
         // const {navigate} = this.props.navigation;
-        return (<View style={styles.container}>
-                {/* header title */}
-                <View style={styles.headView}>
-                    <View>
-                        <Text style={styles.headerTitle}>Today Reading!</Text>
+        return (
+            <SafeAreaView style={styles.container}>
+                    {/* header title */}
+                    <View style={styles.headView}>
+                        <View>
+                            <Text style={styles.headerTitle}>Today Reading!</Text>
+                        </View>
+                        <View>
+                            <Text style={styles.headerDes}>Read more, Learn more.</Text>
+                        </View>
                     </View>
-                    <View>
-                        <Text style={styles.headerDes}>Read more, Learn more.</Text>
+                    {/*<LineCardArticle/>*/}
+                    {/*<LineCardArticle/>*/}
+                    <View style={styles.articleList}>
+                        <SkeletonContent
+                            containerStyle={{flex: 1, width: '100%'}}
+                            isLoading={this.state.loading}
+                            animationType="pulse"
+                            layout={[
+                                // {key: 'someId', width: Dimensions.get('window').width-40, height: 30, marginBottom: 10, marginLeft: 20, marginRight: 20},
+                                {key: 'someOtherId1', width: Dimensions.get('window').width-40, height: 200, marginBottom: 18, marginLeft: 20, marginRight: 20},
+                                {key: 'someOtherId2', width: Dimensions.get('window').width-40, height: 200, marginBottom: 18, marginLeft: 20, marginRight: 20},
+                                {key: 'someOtherId3', width: Dimensions.get('window').width-40, height: 200, marginBottom: 18, marginLeft: 20, marginRight: 20}
+                            ]}>
+                            <FlatList
+                                data={this.state.sourceData}
+                                keyExtractor={(item, index) => item.id}       //不重复的key
+                                renderItem={this._renderItem}
+                                ListEmptyComponent={<Text style={{textAlign: 'center'}}>暂无内容</Text>}
+                                onEndReachedThreshold={0.5}
+                                onEndReached={() => {
+                                    this._onEndReached()
+                                }}
+                                onRefresh={() => {
+                                    this._onRefresh()
+                                }}
+                                refreshing={this.state.isRefreshing}
+                            />
+                        </SkeletonContent>
+
                     </View>
-                </View>
-                {/*<LineCardArticle/>*/}
-                {/*<LineCardArticle/>*/}
-                <View style={styles.articleList}>
-                    <SkeletonContent
-                        containerStyle={{flex: 1, width: '100%'}}
-                        isLoading={this.state.loading}
-                        animationType="pulse"
-                        layout={[
-                            // {key: 'someId', width: Dimensions.get('window').width-40, height: 30, marginBottom: 10, marginLeft: 20, marginRight: 20},
-                            {key: 'someOtherId1', width: Dimensions.get('window').width-40, height: 420, marginBottom: 18, marginLeft: 20, marginRight: 20},
-                            {key: 'someOtherId2', width: Dimensions.get('window').width-40, height: 420, marginBottom: 18, marginLeft: 20, marginRight: 20}
-                        ]}>
-                        <FlatList
-                            data={this.state.sourceData}
-                            keyExtractor={(item, index) => index.toString()}       //不重复的key
-                            renderItem={this._renderItem}
-                            ListEmptyComponent={<Text style={{textAlign: 'center'}}>暂无内容</Text>}
-                            onEndReachedThreshold={0.5}
-                            onEndReached={() => {
-                                this._onEndReached()
-                            }}
-                            onRefresh={() => {
-                                this._onRefresh()
-                            }}
-                            refreshing={this.state.isRefreshing}
-                        />
-                    </SkeletonContent>
-
-                </View>
-            </View>
-
-
+            </SafeAreaView>
         )
-
     }
 }
 

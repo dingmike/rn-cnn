@@ -46,7 +46,7 @@ export default class CardArticle extends Component {
         let {articleTitle, articleItem, articleTotal, goToDetail} = this.props;
         const DURATION = 10000;
         const PATTERN = [1000, 2000, 3000];
-        return (<View style={styles.firstArticleImg}>
+        return (<TouchableOpacity style={styles.firstArticleImg} onPress={goToDetail}>
                <View style={{ height: 440, flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
 
                    <View style={styles.leftContent}>
@@ -65,27 +65,28 @@ export default class CardArticle extends Component {
 
                        <View style={{
                            flexDirection: "row",
-                           justifyContent: 'space-between',
-                           height: 100,
-                           lineHeight: 100,
-                           padding: 10
+                           justifyContent: 'flex-end',
+                           // height: 60,
+                           // lineHeight: 60,
+                           paddingRight: 20,
+                           marginTop: 50,
                        }}>
                            <View style={styles.cardTimeStyle}>
                                <Text style={{color: 'white'}}>{myUtils.getEngDate(articleItem.meta.updateAt)}</Text>
                            </View>
-                           <MyButton
+                           {/*<MyButton
                                text={'Read Now'}
                                onPress={goToDetail}
                                bgColor={'green'}
                                fColor={'white'}
-                               style={{borderRadius: 4, flex: 2}}
+                               style={{borderRadius: 4}}
                                size={20}
-                           />
+                           />*/}
                        </View>
                    </View>
 
                </View>
-        </View>)
+        </TouchableOpacity>)
     }
 }
 const styles = StyleSheet.create({
@@ -185,16 +186,16 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     cardTimeStyle:{
-        flex: 1,
-        height: 36,
-        paddingLeft: 10,
+        // flex: 1,
+        // height: 36,
+        // paddingLeft: 10,
         textAlign:'left',
         alignItems:'center',
         justifyContent:'center',
         textAlignVertical:'center',
         ...Platform.select({
             ios:{
-                lineHeight: 36,
+                // lineHeight: 36,
             },
             android:{
 

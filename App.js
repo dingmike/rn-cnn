@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Component, useState, useEffect } from 'react';
-import {Platform, StyleSheet, Text, View, Image} from 'react-native';
-import { Camera } from 'expo-camera';
+import {Platform, StyleSheet} from 'react-native';
 import useColorScheme from './hooks/useColorScheme';
 import useCachedResources from './hooks/useCachedResources';
 import {Provider} from 'react-redux';
@@ -22,9 +21,9 @@ export default function App(props) {
             <Provider store={store}>
                 <PersistGate persistor={persistor}>
                     <SafeAreaProvider style={styles.container}>
-                        <Navigation colorScheme={colorScheme} />
-                        <StatusBar/>
-                        {/*{Platform.OS === 'ios' && <StatusBar
+                            <Navigation colorScheme={colorScheme} />
+                            <StatusBar/>
+                            {/*{Platform.OS === 'ios' && <StatusBar
                             animated={true}
                             backgroundColor="#61dafb"
                             barStyle="dark-content"/>}*/}

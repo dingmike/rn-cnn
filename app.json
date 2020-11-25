@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "rn-cnn",
+    "name": "English-Ability",
     "slug": "react-native-cnn",
     "platforms": [
       "ios",
@@ -25,12 +25,14 @@
     ],
     "ios": {
       "supportsTablet": true,
+      "userInterfaceStyle": "light",
       "bundleIdentifier": "com.fecstec.englishreading",
       "buildNumber": "1.0.0"
     },
     "android": {
       "package": "com.fecstec.englishreading",
       "versionCode": 1,
+      "userInterfaceStyle": "dark",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
