@@ -130,8 +130,6 @@ class HomeScreenNew extends Component {
         //正在加载中
         this.setState({showFooter: LOAD_MORE_STATE.REFRESHING});
 
-
-
         const {currentPage, totalCount, sourceData, isLoadMore} = this.state;
         if (sourceData.length < totalCount && !isLoadMore) {     //还有数据没有加载完，并且不是正在上拉加载更多
             this.setState({

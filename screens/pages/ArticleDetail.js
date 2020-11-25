@@ -69,7 +69,6 @@ class ArticleDetail extends Component {
     constructor(props) {
         super(props);
         let {flag, user, jokerVideo, route} = this.props;
-        alert(JSON.stringify(route.params))
         this.state = {
             photos: [],
             articleId: route.params.id,
@@ -106,7 +105,6 @@ class ArticleDetail extends Component {
         this.setState({
             loading: true
         })
-        alert(JSON.stringify(this.state.articleId))
         let response = await articleApi.articleDetail({
             id: this.state.articleId,
         });
