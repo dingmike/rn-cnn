@@ -159,8 +159,9 @@ const styles = StyleSheet.create({
     articleImg: {
         width: '100%',
         height: '100%',
-        borderBottomLeftRadius: 8,
-        borderTopLeftRadius: 8
+        // borderBottomLeftRadius: 8,
+        // borderTopLeftRadius: 8,
+        borderRadius: 8,
     },
     insideImg: {
         // flex: 1,

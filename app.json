@@ -27,7 +27,10 @@
       "supportsTablet": true,
       "userInterfaceStyle": "light",
       "bundleIdentifier": "com.fecstec.englishreading",
-      "buildNumber": "1.0.0"
+      "buildNumber": "1.0.0",
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-3940256099942544~3347511713"
+      }
     },
     "android": {
       "package": "com.fecstec.englishreading",
@@ -36,6 +39,9 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
+      },
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-3940256099942544~3347511713"
       }
     },
     "web": {

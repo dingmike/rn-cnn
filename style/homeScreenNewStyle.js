@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     },
     articleList: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#f3f4f6',
         marginTop: 20,
         // marginLeft: 10,
         // marginRight: 10
@@ -20,6 +20,15 @@ const styles = StyleSheet.create({
         paddingLeft: 18,
         paddingRight: 18,
         // paddingBottom: 10,
+        marginTop: 16
+    },
+    adBanner: {
+        // paddingLeft: 18,
+        // paddingRight: 18,
+        // paddingBottom: 10,
+        width: Dimensions.get('window').width-40,
+        marginRight: 20,
+        marginLeft: 20,
         marginTop: 16
     },
     headerTitle: {

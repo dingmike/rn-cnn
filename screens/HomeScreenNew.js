@@ -33,6 +33,13 @@ import HomeDetail from "./HomeDetail";
 
 import {requestData} from '../redux/actions/userAction';
 import {ImageBackground as WebImageBackground} from "react-native-web";
+import {
+    AdMobBanner,
+    AdMobInterstitial,
+    PublisherBanner,
+    AdMobRewarded,
+    setTestDeviceIDAsync,
+} from 'expo-ads-admob';
 
 // import {BoxShadow} from 'react-native-shadow'
 import * as SecureStore from 'expo-secure-store';
@@ -53,6 +60,7 @@ class HomeScreenNew extends Component {
             showFooter: LOAD_MORE_STATE.CANCEL,
             noMoreData:false,
         };
+        this.bannerError = 'Ad error'
     }
 
     async getDataList() {
@@ -142,6 +150,8 @@ class HomeScreenNew extends Component {
     }
 
     async componentDidMount() {
+        // Set global test device ID
+        await setTestDeviceIDAsync('EMULATOR');
         this.setState({
             loading: true
         })
@@ -166,8 +176,7 @@ class HomeScreenNew extends Component {
                             <Text style={styles.headerDes}>Read more, Learn more.</Text>
                         </View>
                     </View>
-                    {/*<LineCardArticle/>*/}
-                    {/*<LineCardArticle/>*/}
+
                     <View style={styles.articleList}>
                         <SkeletonContent
                             containerStyle={{
@@ -195,12 +204,18 @@ class HomeScreenNew extends Component {
                                 }}
                                 ListHeaderComponent={
                                     <View style={{
-                                        height: 44,
+                                        height: 52,
+                                        alignItems: 'center',
                                         justifyContent: 'center',
-                                        paddingLeft: 15,
+                                        // paddingLeft: 60,
                                         backgroundColor: '#f3f4f6',
                                     }}>
-                                        <Text style={{fontSize: 14, color: '#666666'}}>记得多多阅读哦！</Text>
+                                        {/*<Text style={{fontSize: 14, color: '#666666'}}>记得多多阅读哦！</Text>*/}
+                                        <AdMobBanner
+                                            bannerSize="banner"
+                                            adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
+                                            servePersonalizedAds // true or false
+                                            onDidFailToReceiveAdWithError={this.bannerError} />
                                     </View>
                                 }
                                 onRefresh={() => {
