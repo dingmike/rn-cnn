@@ -29,14 +29,24 @@ class HomeLoadMoreFooter extends PureComponent {
                         backgroundColor:'#fff',
                         alignItems: 'center',
                     }}>
-                        <ActivityIndicator/>
-                        <Text style={{color: '#999999', fontSize: 13}}>{loadMoreTxt}</Text>
+                        <ActivityIndicator animating={true}
+                                                    color='red'
+                                                    size="small"/>
+                        <Text style={{
+                            color: '#999999',
+                            fontSize: 13}}>{loadMoreTxt}</Text>
                     </View>
                 }
                 {
                     state === LOAD_MORE_STATE.NO_MORE_DATA &&
-                    <View style={{height: 34, alignItems: 'center', justifyContent: 'center', backgroundColor:'#fff'}}>
-                        <Text style={{color: '#999999', fontSize: 13}}>{noMoreData}</Text>
+                    <View style={{
+                        height: 34,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor:'#fff'}}>
+                        <Text style={{
+                            color: '#999999',
+                            fontSize: 13}}>{noMoreData}</Text>
                     </View>
                 }
             </View>
