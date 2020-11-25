@@ -44,12 +44,6 @@ export function voiceOfArticle(context, audioArr) {
 
 
 export async function playAudio(contextArray, index, audioArr){
-    // myUtils.getAllNodeAndHighlight(contextArray[index])
-    /*    console.log(contextArray[index])
-        let wordsArr = contextArray[index].split(' ')
-        wordsArr.forEach(item => {
-            myUtils.getAllNodeAndHighlight(item)
-        })*/
     let audioUrl = makeAudioUrl(contextArray.length, contextArray[index], index)
     console.log(audioUrl)
     try {
@@ -78,16 +72,6 @@ export async function playAudio(contextArray, index, audioArr){
         // An error occurred!
         return Promise.reject(error);
     }
-
-
-   /* var audio = new Audio(audioUrl)
-    audio.addEventListener('ended', function(){
-        if (index < contextArray.length - 1){
-            playAudio(contextArray, index + 1, audioArr)
-        }
-    })
-    audio.play()
-    audioArr.push(audio)*/
 }
 
 export function makeAudioUrl(total, context, index){
