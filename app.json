@@ -40,7 +40,7 @@
     "android": {
       "package": "com.fecstec.englishreading",
       "versionCode": 1,
-      "userInterfaceStyle": "dark",
+      "userInterfaceStyle": "light",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"

@@ -17,6 +17,9 @@ import HTML from 'react-native-render-html';
 import {Asset} from 'expo-asset';
 import {Loading, EasyLoading} from '../../components/EasyLoading'
 import SkeletonContent from 'react-native-skeleton-content';
+// import ScrollableTabView from 'react-native-scrollable-tab-view';
+import FacebookTabBar from '../../components/FacebookTabBar';
+import ScrollableTabView from 'react-native-scrollable-tab-view';
 import {AntDesign, MaterialIcons, FontAwesome5} from '@expo/vector-icons';
 import {voiceOfArticle} from '../../utils/wordToVoice'
 
@@ -199,39 +202,61 @@ class ArticleDetail extends Component {
         // let {flag, user, jokerVideo, route} = this.props;
         // console.log(route.params.article_title)
         return (
-            <View style={styles.container}>
-                <View style={styles.header}>
-                    <View style={[styles.headerSource, this.state.sourceCheckedColor]}>
-                        <TouchableOpacity onPress={() => this.onPressSource('1')}>
-                            <Text style={[styles.headerText, this.state.sourceCheckedColor]}>Source</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={[styles.headerTrans, this.state.translateCheckedColor]}>
-                        <TouchableOpacity onPress={() => this.onPressSource('2')}>
-                            <Text style={[styles.headerText, this.state.translateCheckedColor]}>Translate</Text>
-                        </TouchableOpacity>
-                    </View>
+           /* <View style={styles.container}>
 
-                    {playStatus === 'play' ?
-                        <TouchableOpacity style={styles.playAudio} onPress={() => this.speak('pause', articleDetail.article_content)}>
-                            <AntDesign name="pausecircleo" size={28} color="black"/>
-                        </TouchableOpacity> :
-                        <TouchableOpacity style={styles.playAudio} onPress={() => this.speak('play', articleDetail.article_content)}>
-                            <AntDesign name="playcircleo" size={28} color="black"/>
-                        </TouchableOpacity>}
+                <SkeletonContent
+                    containerStyle={{flex: 1, width: Dimensions.get('window').width}}
+                    isLoading={this.state.loading}
+                    animationType="pulse"
+                    layout={[
+                        {
+                            key: 'title',
+                            width: Dimensions.get('window').width - 20,
+                            height: 50,
+                            marginBottom: 16,
+                            marginLeft: 10,
+                            marginTop: 10,
+                            marginRight: 10
+                        },
+                        // {key: 'someOtherId2', width: Dimensions.get('window').width-40, height: 420, marginBottom: 18, marginLeft: 20, marginRight: 20}
+                    ]}>
 
-                   {/* <TouchableOpacity onPress={() => this.speak('stop', articleDetail.article_content)}>
+                    <View style={styles.header}>
+                        <View style={[styles.headerSource, this.state.sourceCheckedColor]}>
+                            <TouchableOpacity onPress={() => this.onPressSource('1')}>
+                                <Text style={[styles.headerText, this.state.sourceCheckedColor]}>Source</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={[styles.headerTrans, this.state.translateCheckedColor]}>
+                            <TouchableOpacity onPress={() => this.onPressSource('2')}>
+                                <Text style={[styles.headerText, this.state.translateCheckedColor]}>Translate</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        {playStatus === 'play' ?
+                            <TouchableOpacity style={styles.playAudio} onPress={() => this.speak('pause', articleDetail.article_content)}>
+                                <AntDesign name="pausecircleo" size={28} color="black"/>
+                            </TouchableOpacity> :
+                            <TouchableOpacity style={styles.playAudio} onPress={() => this.speak('play', articleDetail.article_content)}>
+                                <AntDesign name="playcircleo" size={28} color="black"/>
+                            </TouchableOpacity>}
+
+                        {/!* <TouchableOpacity onPress={() => this.speak('stop', articleDetail.article_content)}>
                         <FontAwesome5 style={styles.stopAudio} name="stop-circle" size={28} color="black" />
-                    </TouchableOpacity>*/}
+                    </TouchableOpacity>*!/}
 
-                    {/*<TouchableOpacity style={styles.refreshAudio} onPress={() => this.speak('refresh', articleDetail.article_content)}>
+                        {/!*<TouchableOpacity style={styles.refreshAudio} onPress={() => this.speak('refresh', articleDetail.article_content)}>
                         <MaterialIcons name="replay" size={28} color="black" />
-                    </TouchableOpacity>*/}
-                </View>
-                {/* <View style={styles.container}>
+                    </TouchableOpacity>*!/}
+                    </View>
+
+                </SkeletonContent>
+
+
+                {/!* <View style={styles.container}>
                     <Button title="Press to hear some words" onPress={() => this.speak()} />
-                </View>*/}
-                {/*<WebView
+                </View>*!/}
+                {/!*<WebView
                     originWhitelist={['*']}
                     scalesPageToFit={true}
                     javaScriptEnabled={true} // 仅限Android平台。iOS平台JavaScript是默认开启的。
@@ -240,10 +265,10 @@ class ArticleDetail extends Component {
                     automaticallyAdjustContentInsets={true}
                     source={{ html: articleDetail.article_translate }}
                     style={{ marginTop: 20}}
-                />*/}
+                />*!/}
 
                 <SkeletonContent
-                    containerStyle={{flex: 1, width: Dimensions.get('window').width}}
+                    containerStyle={{flex: 7, width: Dimensions.get('window').width}}
                     isLoading={this.state.loading}
                     animationType="pulse"
                     layout={[
@@ -279,7 +304,7 @@ class ArticleDetail extends Component {
                             </Text>
                         </View>
 
-                        {/*<HTML html={articleDetail.article_content} imagesMaxWidth={Dimensions.get('window').width}/>*/}
+                        {/!*<HTML html={articleDetail.article_content} imagesMaxWidth={Dimensions.get('window').width}/>*!/}
                     </ScrollView> : <ScrollView style={styles.content}>
                         <View>
                             <Text style={styles.articleTitle}>{articleDetail.article_title}</Text>
@@ -292,7 +317,58 @@ class ArticleDetail extends Component {
 
 
                 <Loading type={"type"} loadingStyle={{backgroundColor: "#ccc"}}/>
-            </View>
+            </View>*/
+            <ScrollableTabView
+                style={{marginTop: 2 }}
+                initialPage={0}
+                renderTabBar={() => <FacebookTabBar />}
+            >
+                <ScrollView tabLabel="Source" style={styles.tabView}>
+                    <View style={styles.card}>
+                        <View style={styles.articleTitle}>
+                            <Text style={styles.articleTitle}>{articleDetail.article_title}</Text>
+                        </View>
+                        <View style={styles.articleContent}>
+                            <Text style={{fontSize: 18}}>
+                                {articleDetail.article_content}
+                            </Text>
+                        </View>
+                    </View>
+                </ScrollView>
+                <ScrollView tabLabel="Translate" style={styles.tabView}>
+                    <View style={styles.card}>
+                        <View>
+                            <Text style={styles.articleTitle}>{articleDetail.article_title}</Text>
+                        </View>
+                        <HTML html={articleDetail.article_translate} imagesMaxWidth={Dimensions.get('window').width}/>
+                    </View>
+                </ScrollView>
+                {/*<ScrollView tabLabel="ios-paper" style={styles.tabView}>
+                    <View style={styles.card}>
+                        <Text>News</Text>
+                    </View>
+                </ScrollView>
+                <ScrollView tabLabel="ios-people" style={styles.tabView}>
+                    <View style={styles.card}>
+                        <Text>Friends</Text>
+                    </View>
+                </ScrollView>
+                <ScrollView tabLabel="ios-chatboxes" style={styles.tabView}>
+                    <View style={styles.card}>
+                        <Text>Messenger</Text>
+                    </View>
+                </ScrollView>
+                <ScrollView tabLabel="ios-notifications" style={styles.tabView}>
+                    <View style={styles.card}>
+                        <Text>Notifications</Text>
+                    </View>
+                </ScrollView>
+                <ScrollView tabLabel="ios-list" style={styles.tabView}>
+                    <View style={styles.card}>
+                        <Text>Other nav</Text>
+                    </View>
+                </ScrollView>*/}
+            </ScrollableTabView>
         );
     }
 }
@@ -321,6 +397,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         justifyContent: 'center',
+        flexDirection: 'column', // 主轴Y
         // paddingTop: Constants.statusBarHeight,
         // backgroundColor: '#ecf0f1',
         // padding: 8,
@@ -392,7 +469,8 @@ const styles = StyleSheet.create({
         top: 10,
     },
     content: {
-        // flex: 6,
+        // flex: 12,
+        height: 400,
         padding: 8,
         width: Dimensions.get('window').width
     },
@@ -406,39 +484,23 @@ const styles = StyleSheet.create({
       marginBottom: 40
     },
 
-    paragraph: {
-        margin: 24,
-        fontSize: 18,
-        fontWeight: 'bold',
-        textAlign: 'center',
+
+
+    tabView: {
+        flex: 1,
+        // padding: 10,
+        // backgroundColor: 'rgba(0,0,0,0.01)',
     },
-    contentContainer: {
-        paddingTop: 15,
-    },
-    optionIconContainer: {
-        marginRight: 12,
-    },
-    option: {
-        backgroundColor: '#fdfdfd',
-        paddingHorizontal: 15,
-        paddingVertical: 15,
-        borderWidth: StyleSheet.hairlineWidth,
-        borderBottomWidth: 0,
-        borderColor: '#ededed',
-    },
-    lastOption: {
-        borderBottomWidth: StyleSheet.hairlineWidth,
-    },
-    optionText: {
-        fontSize: 15,
-        alignSelf: 'flex-start',
-        marginTop: 1,
-    },
-    button: {
-        alignItems: 'center',
-        backgroundColor: '#DDDDDD',
-        padding: 10,
-        height: 40,
-        marginLeft: 50
+    card: {
+        // borderWidth: 1,
+        // backgroundColor: '#fff',
+        // borderColor: 'rgba(0,0,0,0.1)',
+        // margin: 5,
+        // height: 150,
+        padding: 15,
+        shadowColor: '#ccc',
+        shadowOffset: { width: 2, height: 2, },
+        shadowOpacity: 0.5,
+        shadowRadius: 3,
     },
 });
