@@ -30,6 +30,11 @@
       "buildNumber": "1.0.0",
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-3940256099942544~3347511713"
+      },
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "audio"
+        ]
       }
     },
     "android": {

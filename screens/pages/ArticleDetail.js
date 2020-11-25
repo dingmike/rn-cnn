@@ -9,7 +9,7 @@ import {requestData} from "../../redux/actions/userAction";
 import {connect} from "react-redux";
 import RNGeolocationView from '../../components/RNGeolocationView'
 import OwnCamera from '../../components/OwnCamera'
-import {Video} from 'expo-av';
+import {Video, Audio } from 'expo-av';
 import * as SecureStore from 'expo-secure-store';
 import Constants from 'expo-constants';
 import * as Speech from 'expo-speech';
@@ -18,6 +18,8 @@ import {Asset} from 'expo-asset';
 import {Loading, EasyLoading} from '../../components/EasyLoading'
 import SkeletonContent from 'react-native-skeleton-content';
 import {AntDesign, MaterialIcons, FontAwesome5} from '@expo/vector-icons';
+import {voiceOfArticle} from '../../utils/wordToVoice'
+
 
 import {
     Accelerometer,
@@ -84,7 +86,8 @@ class ArticleDetail extends Component {
             translateCheckedColor: {
                 backgroundColor: 'white',
                 color: 'black'
-            }
+            },
+            audio: [],
         }
     }
 
@@ -121,7 +124,21 @@ class ArticleDetail extends Component {
     componentDidUpdate() {
     }
 
-    speak(playStatus, content) {
+    async speak(playStatus, content) {
+        if (playStatus === 'play') {
+            if(this.state.audio.length === 0) {
+                voiceOfArticle(content, this.state.audio);
+            }else {
+               await this.state.audio[this.state.audio.length-1].playAsync();
+            }
+            this.setState({playStatus: playStatus});
+        }else if(playStatus === 'pause') {
+            await this.state.audio[this.state.audio.length-1].pauseAsync();
+            this.setState({playStatus: playStatus});
+        }
+    }
+    speakOld(playStatus, content) {
+        alert(2)
         // let thingToSay = 'hello world welcome to my home!';
         this.setState({playStatus: playStatus});
         if (playStatus === 'play') {
@@ -196,20 +213,20 @@ class ArticleDetail extends Component {
                     </View>
 
                     {playStatus === 'play' ?
-                        <TouchableOpacity onPress={() => this.speak('pause', articleDetail.article_content)}>
-                            <AntDesign style={styles.playAudio} name="pausecircleo" size={28} color="black"/>
+                        <TouchableOpacity style={styles.playAudio} onPress={() => this.speak('pause', articleDetail.article_content)}>
+                            <AntDesign name="pausecircleo" size={28} color="black"/>
                         </TouchableOpacity> :
-                        <TouchableOpacity onPress={() => this.speak('play', articleDetail.article_content)}>
-                            <AntDesign style={styles.playAudio} name="playcircleo" size={28} color="black"/>
+                        <TouchableOpacity style={styles.playAudio} onPress={() => this.speak('play', articleDetail.article_content)}>
+                            <AntDesign name="playcircleo" size={28} color="black"/>
                         </TouchableOpacity>}
 
                    {/* <TouchableOpacity onPress={() => this.speak('stop', articleDetail.article_content)}>
                         <FontAwesome5 style={styles.stopAudio} name="stop-circle" size={28} color="black" />
                     </TouchableOpacity>*/}
 
-                    <TouchableOpacity onPress={() => this.speak('refresh', articleDetail.article_content)}>
-                        <MaterialIcons style={styles.refreshAudio} name="replay" size={28} color="black" />
-                    </TouchableOpacity>
+                    {/*<TouchableOpacity style={styles.refreshAudio} onPress={() => this.speak('refresh', articleDetail.article_content)}>
+                        <MaterialIcons name="replay" size={28} color="black" />
+                    </TouchableOpacity>*/}
                 </View>
                 {/* <View style={styles.container}>
                     <Button title="Press to hear some words" onPress={() => this.speak()} />
@@ -256,7 +273,7 @@ class ArticleDetail extends Component {
                             <Text style={styles.articleTitle}>{articleDetail.article_title}</Text>
                         </View>
 
-                        <View>
+                        <View style={styles.articleContent}>
                             <Text style={{fontSize: 18}}>
                                 {articleDetail.article_content}
                             </Text>
@@ -332,7 +349,10 @@ const styles = StyleSheet.create({
         // paddingRight: 10,
         // paddingTop: 10,
         // paddingBottom: 10,
-        padding: 12,
+        paddingHorizontal: 22,
+        paddingVertical: 10,
+        // padding: 12,
+        // lineHeight: 46,
         borderColor: '#ccc',
         borderWidth: 1,
         borderRadius: 5,
@@ -348,7 +368,9 @@ const styles = StyleSheet.create({
         // paddingRight: 10,
         // paddingTop: 10,
         // paddingBottom: 10,
-        padding: 12,
+        paddingHorizontal: 22,
+        paddingVertical: 10,
+        // padding: 12,
         borderColor: '#ccc',
         borderWidth: 1,
         borderRadius: 5,
@@ -380,7 +402,9 @@ const styles = StyleSheet.create({
         marginBottom: 5,
         fontWeight: 'bold',
     },
-
+    articleContent: {
+      marginBottom: 40
+    },
 
     paragraph: {
         margin: 24,
