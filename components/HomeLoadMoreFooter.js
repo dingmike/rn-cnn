@@ -16,6 +16,7 @@ export const LOAD_MORE_STATE = {
 class HomeLoadMoreFooter extends PureComponent {
     render() {
         let {state, loadMoreTxt = '正在加载更多...', noMoreData = '没有更多了'} = this.props;
+        console.log(state)
         return (
             <View>
                 {
@@ -30,10 +31,11 @@ class HomeLoadMoreFooter extends PureComponent {
                         alignItems: 'center',
                     }}>
                         <ActivityIndicator animating={true}
-                                                    color='red'
+                                                    color='black'
                                                     size="small"/>
                         <Text style={{
                             color: '#999999',
+                            paddingLeft: 10,
                             fontSize: 13}}>{loadMoreTxt}</Text>
                     </View>
                 }

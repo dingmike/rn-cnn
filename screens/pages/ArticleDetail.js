@@ -90,7 +90,6 @@ class ArticleDetail extends Component {
     }
 
     async componentDidMount() {
-
         // let right = await SecureStore.isAvailableAsync()
         // alert(right)
         // SecureStore.setItemAsync('_ok', '2342234', {})
@@ -119,8 +118,6 @@ class ArticleDetail extends Component {
         this.setState({
             articleDetail: response.data
         })
-
-
     }
 
     componentDidUpdate() {
