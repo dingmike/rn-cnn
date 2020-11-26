@@ -16,9 +16,10 @@ import {
     SectionList,
     StatusBar, Dimensions, SafeAreaView
 } from 'react-native';
-import MyButton from '../components/MyButton'
-import CardArticle from '../components/CardArticle'
-import LineCardArticle from '../components/LineCardArticle'
+import {BoxShadow} from 'react-native-shadow';
+import MyButton from '../components/MyButton';
+import CardArticle from '../components/CardArticle';
+import LineCardArticle from '../components/LineCardArticle';
 import {ScrollView} from 'react-native-gesture-handler';
 
 import {MonoText} from '../components/StyledText';
@@ -40,8 +41,6 @@ import {
     AdMobRewarded,
     setTestDeviceIDAsync,
 } from 'expo-ads-admob';
-
-// import {BoxShadow} from 'react-native-shadow'
 import * as SecureStore from 'expo-secure-store';
 import SkeletonContent from 'react-native-skeleton-content';
 import HomeLoadMoreFooter, {LOAD_MORE_STATE} from "../components/HomeLoadMoreFooter";
@@ -122,12 +121,32 @@ class HomeScreenNew extends Component {
     }
 
     // 渲染卡片
-    _renderItem = ({item}) => {
-        return (
-            <CardArticle articleItem={item} goToDetail={() => this._goToDetail(item)}
-                         articleTotal={this.state.totalCount}
-                         articleTitle={item.chinese_title}/>
-        )
+    renderItem = ({item,index}) => {
+        if((index+1) % 4 === 0) {
+            return (
+                <View style={{
+                    height: 52,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    // paddingLeft: 60,
+                    backgroundColor: '#f3f4f6',
+                }}>
+                    {/*<Text style={{fontSize: 14, color: '#666666'}}>记得多多阅读哦！</Text>*/}
+                    <AdMobBanner
+                        bannerSize="banner"
+                        adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
+                        servePersonalizedAds // true or false
+                        onDidFailToReceiveAdWithError={this.bannerError} />
+                </View>
+            )
+        }else {
+            return (
+                <CardArticle articleItem={item} goToDetail={() => this._goToDetail(item)}
+                             articleTotal={this.state.totalCount}
+                             articleTitle={item.chinese_title}/>
+            )
+        }
+
     };
 
     _onEndReached() {         //上拉加载更多
@@ -165,6 +184,17 @@ class HomeScreenNew extends Component {
     };
     render() {
         // const {navigate} = this.props.navigation;
+        const shadowOpt = {
+            width:160,
+            height:170,
+            color:"#000",
+            border:2,
+            radius:3,
+            opacity:0.2,
+            x:0,
+            y:3,
+            style:{marginVertical:5}
+        }
         return (
             <SafeAreaView style={styles.container}>
                     {/* header title */}
@@ -193,7 +223,7 @@ class HomeScreenNew extends Component {
                             <FlatList
                                 data={this.state.sourceData}
                                 keyExtractor={(item, index) => item.id}
-                                renderItem={this._renderItem}
+                                renderItem={this.renderItem}
                                 ListFooterComponent={this.renderFooter}
                                 ListEmptyComponent={<Text style={{
                                     textAlign: 'center',
@@ -204,18 +234,18 @@ class HomeScreenNew extends Component {
                                 }}
                                 ListHeaderComponent={
                                     <View style={{
-                                        height: 52,
+                                        height: 0,
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         // paddingLeft: 60,
                                         backgroundColor: '#f3f4f6',
                                     }}>
                                         {/*<Text style={{fontSize: 14, color: '#666666'}}>记得多多阅读哦！</Text>*/}
-                                        <AdMobBanner
+                                        {/*<AdMobBanner
                                             bannerSize="banner"
                                             adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
                                             servePersonalizedAds // true or false
-                                            onDidFailToReceiveAdWithError={this.bannerError} />
+                                            onDidFailToReceiveAdWithError={this.bannerError} />*/}
                                     </View>
                                 }
                                 onRefresh={() => {

@@ -27,7 +27,7 @@ class HomeLoadMoreFooter extends PureComponent {
                         flexDirection: 'row',
                         height: 34,
                         justifyContent: 'center',
-                        backgroundColor:'#fff',
+                        // backgroundColor:'#fff',
                         alignItems: 'center',
                     }}>
                         <ActivityIndicator animating={true}

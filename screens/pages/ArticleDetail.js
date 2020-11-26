@@ -318,6 +318,31 @@ class ArticleDetail extends Component {
 
                 <Loading type={"type"} loadingStyle={{backgroundColor: "#ccc"}}/>
             </View>*/
+
+            <SkeletonContent
+                containerStyle={{flex: 1, width: Dimensions.get('window').width}}
+                isLoading={this.state.loading}
+                animationType="pulse"
+                layout={[
+                    {
+                        key: 'title',
+                        width: Dimensions.get('window').width - 20,
+                        height: 50,
+                        marginBottom: 16,
+                        marginLeft: 10,
+                        marginTop: 10,
+                        marginRight: 10
+                    },
+                    {
+                        key: 'article',
+                        width: Dimensions.get('window').width - 20,
+                        height: 620,
+                        marginBottom: 18,
+                        marginLeft: 10,
+                        marginRight: 10
+                    },
+                    // {key: 'someOtherId2', width: Dimensions.get('window').width-40, height: 420, marginBottom: 18, marginLeft: 20, marginRight: 20}
+                ]}>
             <ScrollableTabView
                 style={{marginTop: 2 }}
                 initialPage={0}
@@ -369,6 +394,7 @@ class ArticleDetail extends Component {
                     </View>
                 </ScrollView>*/}
             </ScrollableTabView>
+            </SkeletonContent>
         );
     }
 }

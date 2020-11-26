@@ -12,24 +12,17 @@ const styles = StyleSheet.create({
     articleList: {
         flex: 1,
         backgroundColor: '#f3f4f6',
-        marginTop: 20,
+        // marginTop: 20,
         // marginLeft: 10,
         // marginRight: 10
     },
     headView: {
         paddingLeft: 18,
         paddingRight: 18,
+        height: 40,
         // paddingBottom: 10,
-        marginTop: 16
-    },
-    adBanner: {
-        // paddingLeft: 18,
-        // paddingRight: 18,
-        // paddingBottom: 10,
-        width: Dimensions.get('window').width-40,
-        marginRight: 20,
-        marginLeft: 20,
-        marginTop: 16
+        marginTop: 16,
+        marginBottom: 10,
     },
     headerTitle: {
         fontSize: 20,
@@ -41,6 +34,15 @@ const styles = StyleSheet.create({
       fontSize: 16,
       lineHeight: 16,
       marginTop: 4
+    },
+    adBanner: {
+        // paddingLeft: 18,
+        // paddingRight: 18,
+        // paddingBottom: 10,
+        width: Dimensions.get('window').width-40,
+        marginRight: 20,
+        marginLeft: 20,
+        marginTop: 16
     },
     firstArticleImg: {
         ...Platform.select({
