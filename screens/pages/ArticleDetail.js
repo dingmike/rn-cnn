@@ -17,6 +17,13 @@ import HTML from 'react-native-render-html';
 import {Asset} from 'expo-asset';
 import {Loading, EasyLoading} from '../../components/EasyLoading'
 import SkeletonContent from 'react-native-skeleton-content';
+import {
+    AdMobBanner,
+    AdMobInterstitial,
+    PublisherBanner,
+    AdMobRewarded,
+    setTestDeviceIDAsync,
+} from 'expo-ads-admob';
 import FacebookTabBar from '../../components/FacebookTabBar';
 // import ScrollableTabView from 'react-native-scrollable-tab-view';
 import ScrollableTabView from '../../components/ScrollableTabView/index';
@@ -92,9 +99,20 @@ class ArticleDetail extends Component {
             },
             audio: [],
         }
+        this.bannerError = 'Ad error'
     }
 
     async componentDidMount() {
+        await setTestDeviceIDAsync('EMULATOR');
+        // await AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/1033173712'); // Test ID, Replace with your-admob-unit-id
+        // await AdMobInterstitial.requestAdAsync({ servePersonalizedAds: true});
+        // await AdMobInterstitial.showAdAsync();
+
+        // reward ad
+        await AdMobRewarded.setAdUnitID('ca-app-pub-3940256099942544/5224354917'); // Test ID, Replace with your-admob-unit-id
+        await AdMobRewarded.requestAdAsync();
+        await AdMobRewarded.showAdAsync();
+
         // let right = await SecureStore.isAvailableAsync()
         // alert(right)
         // SecureStore.setItemAsync('_ok', '2342234', {})
@@ -193,7 +211,9 @@ class ArticleDetail extends Component {
         }
 
     }
+    adMobEvent() {
 
+    }
     render() {
         const {navigate} = this.props.navigation;
         const {articleDetail, checked, playStatus} = this.state;
@@ -357,6 +377,19 @@ class ArticleDetail extends Component {
                             <Text style={{fontSize: 18}}>
                                 {articleDetail.article_content}
                             </Text>
+                            <View style={{
+                                height: 52,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                // paddingLeft: 60,
+                                backgroundColor: '#f3f4f6',
+                            }}>
+                            <PublisherBanner
+                                bannerSize="banner"
+                                adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
+                                onDidFailToReceiveAdWithError={this.bannerError}
+                                onAdMobDispatchAppEvent={this.adMobEvent} />
+                            </View>
                         </View>
                     </View>
                 </ScrollView>

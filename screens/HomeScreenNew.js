@@ -128,7 +128,7 @@ class HomeScreenNew extends Component {
                     height: 52,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    // paddingLeft: 60,
+                    marginBottom: 20,
                     backgroundColor: '#f3f4f6',
                 }}>
                     {/*<Text style={{fontSize: 14, color: '#666666'}}>记得多多阅读哦！</Text>*/}
