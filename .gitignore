@@ -12,3 +12,4 @@ yarn.lock
 .idea/
 # macOS
 .DS_Store
+react-native-cnn.jks
