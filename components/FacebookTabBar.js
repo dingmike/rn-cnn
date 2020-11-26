@@ -24,7 +24,7 @@ class FacebookTabBar extends React.Component {
         this._listener = this.props.scrollValue.addListener(this.setAnimationValue.bind(this));
     }
 
-    setAnimationValue({ value, }) {
+    setAnimationValue({value,}) {
         this.icons.forEach((icon, i) => {
             const progress = (value - i >= 0 && value - i <= 1) ? value - i : 1;
             icon.setNativeProps({
@@ -44,16 +44,22 @@ class FacebookTabBar extends React.Component {
     }
 
     render() {
-        return <View style={[styles.tabs, this.props.style, ]}>
+        return <View style={[styles.tabs, this.props.style,]}>
             {this.props.tabs.map((tab, i) => {
                 return <TouchableOpacity key={tab} onPress={() => this.props.goToPage(i)} style={styles.tab}>
-                   {/* <Icon
+                    {/* <Icon
                         name={tab}
                         size={30}
                         color={this.props.activeTab === i ? 'rgb(59,89,152)' : 'rgb(204,204,204)'}
                         ref={(icon) => { this.icons[i] = icon; }}
                     />*/}
-                    <Text ref={(icon) => { this.icons[i] = icon; }} style={{fontSize: 18, fontWeight: 'bold', color: this.props.activeTab === i ? 'rgb(0,121,222)' : 'rgb(132,132,132)'}}>{tab}</Text>
+                    <Text ref={(icon) => {
+                        this.icons[i] = icon;
+                    }} style={{
+                        fontSize: 18,
+                        fontWeight: 'bold',
+                        color: this.props.activeTab === i ? 'rgb(0,121,222)' : 'rgb(132,132,132)'
+                    }}>{tab}</Text>
                 </TouchableOpacity>;
             })}
         </View>;

@@ -17,9 +17,9 @@ import HTML from 'react-native-render-html';
 import {Asset} from 'expo-asset';
 import {Loading, EasyLoading} from '../../components/EasyLoading'
 import SkeletonContent from 'react-native-skeleton-content';
-// import ScrollableTabView from 'react-native-scrollable-tab-view';
 import FacebookTabBar from '../../components/FacebookTabBar';
-import ScrollableTabView from 'react-native-scrollable-tab-view';
+// import ScrollableTabView from 'react-native-scrollable-tab-view';
+import ScrollableTabView from '../../components/ScrollableTabView/index';
 import {AntDesign, MaterialIcons, FontAwesome5} from '@expo/vector-icons';
 import {voiceOfArticle} from '../../utils/wordToVoice'
 
