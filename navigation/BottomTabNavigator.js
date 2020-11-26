@@ -62,9 +62,10 @@ function getHeaderTitle(route) {
     }
 }*/
 
-import { Ionicons } from '@expo/vector-icons';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
+import {Ionicons} from '@expo/vector-icons';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import {createStackNavigator} from '@react-navigation/stack';
 import * as React from 'react';
 import TabBarIcon from '../components/TabBarIcon';
 import Colors from '../constants/Colors';
@@ -76,34 +77,64 @@ import HomeScreenNew from '../screens/HomeScreenNew';
 import LinksScreen from '../screens/LinksScreen';
 import ArticleDetail from "../screens/pages/ArticleDetail";
 // import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import {Alert, Button, Text, TouchableOpacity, View, StyleSheet, Dimensions} from "react-native";
+import {AntDesign} from '@expo/vector-icons';
+// const BottomTab = createBottomTabNavigator();
 
-const BottomTab = createBottomTabNavigator();
+
+const Drawer = createDrawerNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
 export default function BottomTabNavigator({navigation, route}) {
+
     const colorScheme = useColorScheme();
     // Set the header title on the parent stack navigator depending on the
     // currently active tab. Learn more in the documentation:
     // https://reactnavigation.org/docs/en/screen-options-resolution.html https://reactnavigation.org/docs/bottom-tab-navigator#!
+    //点击子页面时隐藏底部导航栏
+
+    console.log(navigation)
+    const routeName = getFocusedRouteNameFromRoute(route);
+    console.log(routeName)
     return (
-        <BottomTab.Navigator
+        /* <BottomTab.Navigator
+             initialRouteName={INITIAL_ROUTE_NAME}
+             tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
+             <BottomTab.Screen
+                 name="Home"
+                 component={TabOneNavigator}
+                 options={{
+                     tabBarIcon: ({ color, focused }) => <TabBarIcon focused={focused} color={color}  name="md-book" />,
+                 }}
+             />
+             <BottomTab.Screen
+                 name="My"
+                 component={TabTwoNavigator}
+                 options={{
+                     tabBarIcon: ({ color, focused }) => <TabBarIcon focused={focused} color={color} name="md-person"/>,
+                 }}
+             />
+         </BottomTab.Navigator>*/
+        <Drawer.Navigator
             initialRouteName={INITIAL_ROUTE_NAME}
-            tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
-            <BottomTab.Screen
+            tabBarOptions={{activeTintColor: Colors[colorScheme].tint}}>
+            <Drawer.Screen
                 name="Home"
                 component={TabOneNavigator}
                 options={{
-                    tabBarIcon: ({ color, focused }) => <TabBarIcon focused={focused} color={color}  name="md-book" />,
+                    tabBarIcon: ({color, focused}) => <TabBarIcon focused={focused} color={color} name="md-book"/>,
                 }}
             />
-            <BottomTab.Screen
+            <Drawer.Screen
                 name="My"
                 component={TabTwoNavigator}
                 options={{
-                    tabBarIcon: ({ color, focused }) => <TabBarIcon focused={focused} color={color} name="md-person"/>,
+                    tabBarIcon: ({color, focused}) => <TabBarIcon focused={focused} color={color} name="md-person"/>,
                 }}
             />
-        </BottomTab.Navigator>
+        </Drawer.Navigator>
     );
+
 }
 
 
@@ -117,9 +148,72 @@ function TabOneNavigator() {
             <TabHomeStack.Screen
                 name="TabHomeScreen"
                 component={HomeScreenNew}
-                options={{ headerTitle: 'English Ability' }}
+                // options={{ headerTitle: 'English Ability' }}
+                options={{
+                    headerTitle: 'English Ability',
+                    header: ({scene, previous, navigation}) => {
+                        // should:  headerShown = true
+                        const {options} = scene.descriptor;
+                        const title =
+                            options.headerTitle !== undefined
+                                ? options.headerTitle
+                                : options.title !== undefined
+                                ? options.title
+                                : scene.route.name;
+
+                        return (
+                                <View style={{
+                                    width:  Dimensions.get('window').width,
+                                    marginTop: 40,
+                                    height: 56,
+                                    flexDirection: 'row',
+                                    backgroundColor: 'white',
+                                    alignItems: "center",
+                                    justifyContent: 'flex-start',
+                                    borderBottomColor: '#e2e0e0',
+                                    borderBottomWidth: 1,
+                                    shadowColor: 'black',  //  阴影颜色
+                                    shadowOffset: { width: 0, height: 0 },  // 阴影偏移
+                                    shadowOpacity: 1,  // 阴影不透明度
+                                    shadowRadius: 4,  //  圆角
+                                }}>
+                                    <TouchableOpacity style={{
+                                        padding: 10,
+                                        marginTop: 5
+                                    }} onPress={scene.descriptor.navigation.toggleDrawer}>
+                                        <AntDesign name="bars" size={28} color="black"/>
+                                    </TouchableOpacity>
+                                    <View style={{
+                                        padding: 10,
+                                        marginTop: 5
+                                    }}>
+                                        <Text style={{fontSize: 20}}>{title}</Text>
+                                    </View>
+
+                                </View>
+                            /*<View
+                                title={title}
+                                leftButton={
+                                    previous ? <Button onPress={navigation.goBack} title={'hello'} /> : undefined
+                                }
+                                style={options.headerStyle}
+                            />*/
+                        );
+                    },
+                    /* headerLeft: ({ scene, previous, navigation }) => {
+                         return (
+                             <TouchableOpacity style={{padding: 10,
+                                 marginTop: 5}} onPress={(scene)=> {
+                                 navigation.openDrawer();
+                             }}>
+                                 <AntDesign name="bars" size={28} color="black" />
+                             </TouchableOpacity>
+
+                         )
+                     },*/
+                }}
             />
-            <TabHomeStack.Screen name="ArticleDetail" component={ArticleDetail} options={{ title: 'Detail' }}/>
+            <TabHomeStack.Screen name="ArticleDetail" component={ArticleDetail} options={{title: 'Detail'}}/>
         </TabHomeStack.Navigator>
     );
 }
@@ -132,8 +226,12 @@ function TabTwoNavigator() {
             <TabMyStack.Screen
                 name="TabMyScreen"
                 component={HomeScreen}
-                options={{ headerTitle: 'English Ability' }}
+                options={{headerTitle: 'English Ability'}}
             />
         </TabMyStack.Navigator>
     );
 }
+
+const styles = StyleSheet.create({
+
+});

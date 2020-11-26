@@ -73,7 +73,7 @@ class ArticleDetail extends Component {
     static propTypes = {
         // eventListeners: PropTypes.arrayOf(PropTypes.object),
         // articleDetail: PropTypes.object.isRequired,
-        articleId: PropTypes.string.isRequired,
+        // articleId: PropTypes.string.isRequired,
         // height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         // width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         // isStopped: PropTypes.bool,
@@ -399,6 +399,13 @@ class ArticleDetail extends Component {
             >
                 <ScrollView tabLabel="Source" style={styles.tabView}>
                     <View style={styles.card}>
+                        {playStatus === 'play' ?
+                            <TouchableOpacity style={styles.playAudio} onPress={() => this.speak('pause', articleDetail.article_content)}>
+                                <AntDesign name="pausecircleo" size={28} color="black"/>
+                            </TouchableOpacity> :
+                            <TouchableOpacity style={styles.playAudio} onPress={() => this.speak('play', articleDetail.article_content)}>
+                                <AntDesign name="playcircleo" size={28} color="black"/>
+                            </TouchableOpacity>}
                         <View style={styles.articleTitle}>
                             <Text style={styles.articleTitle}>{articleDetail.article_title}</Text>
                         </View>

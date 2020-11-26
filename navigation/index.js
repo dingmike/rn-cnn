@@ -10,6 +10,7 @@ import LinkingConfiguration from "./LinkingConfiguration";
 import BottomTabNavigator from "./BottomTabNavigator";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import React from "react";
+import {Button, View} from "react-native";
 
 const Stack = createStackNavigator();
 
@@ -19,7 +20,7 @@ export default function Navigation({ colorScheme }) {
         <NavigationContainer linking={LinkingConfiguration}
                              theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="Root" component={BottomTabNavigator}/>
+                <Stack.Screen name="Home" component={BottomTabNavigator}/>
                 <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
                 {/*   {PageRouters.forEach(item => {
                                     console.log(item)
