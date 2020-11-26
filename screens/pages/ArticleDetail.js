@@ -2,7 +2,17 @@ import {Ionicons} from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
 import React, {Component, useState, useEffect} from 'react';
 import PropTypes from 'prop-types'
-import {StyleSheet, Text, View, Image, Button, TouchableOpacity, Dimensions} from 'react-native';
+import {
+    StyleSheet,
+    Text,
+    View,
+    Image,
+    Button,
+    TouchableOpacity,
+    Dimensions,
+    Modal,
+    Alert, TouchableHighlight
+} from 'react-native';
 import {WebView} from 'react-native-webview';
 import {RectButton, ScrollView} from 'react-native-gesture-handler';
 import {requestData} from "../../redux/actions/userAction";
@@ -62,7 +72,7 @@ class ArticleDetail extends Component {
 // 对props 进行类型检测，如果使用typeScript有内置的
     static propTypes = {
         // eventListeners: PropTypes.arrayOf(PropTypes.object),
-        articleDetail: PropTypes.object.isRequired,
+        // articleDetail: PropTypes.object.isRequired,
         articleId: PropTypes.string.isRequired,
         // height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         // width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -85,6 +95,7 @@ class ArticleDetail extends Component {
             photos: [],
             articleId: route.params.id,
             articleDetail: {},
+            modalVisible: false,
             resume: false,
             loading: false,
             playStatus: 'pause',
@@ -108,10 +119,7 @@ class ArticleDetail extends Component {
         // await AdMobInterstitial.requestAdAsync({ servePersonalizedAds: true});
         // await AdMobInterstitial.showAdAsync();
 
-        // reward ad
-        await AdMobRewarded.setAdUnitID('ca-app-pub-3940256099942544/5224354917'); // Test ID, Replace with your-admob-unit-id
-        await AdMobRewarded.requestAdAsync();
-        await AdMobRewarded.showAdAsync();
+
 
         // let right = await SecureStore.isAvailableAsync()
         // alert(right)
@@ -211,12 +219,32 @@ class ArticleDetail extends Component {
         }
 
     }
+    async changeTab({i, ref}) {
+        if(i === 1){
+            this.setModalVisible(true)
+            // reward ad
+            await AdMobRewarded.setAdUnitID('ca-app-pub-3940256099942544/5224354917'); // Test ID, Replace with your-admob-unit-id
+            await AdMobRewarded.requestAdAsync({servePersonalizedAds: true});
+
+            // rewardedVideoDidLoad rewardedVideoDidOpen rewardedVideoDidStart
+            AdMobRewarded.addEventListener('rewardedVideoDidOpen',() => {
+
+            })
+            await AdMobRewarded.showAdAsync();
+
+        }
+    }
     adMobEvent() {
 
     }
+    setModalVisible(visible) {
+        this.setState((prevState, pros) => ({
+            modalVisible: visible
+        }));
+    }
     render() {
         const {navigate} = this.props.navigation;
-        const {articleDetail, checked, playStatus} = this.state;
+        const {articleDetail, checked, playStatus, modalVisible} = this.state;
         console.log('article Detail page!')
         console.log(navigate)
         // let {flag, user, jokerVideo, route} = this.props;
@@ -366,6 +394,7 @@ class ArticleDetail extends Component {
             <ScrollableTabView
                 style={{marginTop: 2 }}
                 initialPage={0}
+                onChangeTab={this.changeTab.bind(this)}
                 renderTabBar={() => <FacebookTabBar />}
             >
                 <ScrollView tabLabel="Source" style={styles.tabView}>
@@ -381,7 +410,8 @@ class ArticleDetail extends Component {
                                 height: 52,
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                // paddingLeft: 60,
+                                marginTop: 20,
+                                marginBottom: 20,
                                 backgroundColor: '#f3f4f6',
                             }}>
                             <PublisherBanner
@@ -390,6 +420,15 @@ class ArticleDetail extends Component {
                                 onDidFailToReceiveAdWithError={this.bannerError}
                                 onAdMobDispatchAppEvent={this.adMobEvent} />
                             </View>
+                            <TouchableHighlight
+                                style={styles.openButton}
+                                onPress={() => {
+                                    this.setModalVisible(true);
+                                }}>
+                                <Text style={styles.textStyle}>Show Modal</Text>
+                            </TouchableHighlight>
+
+
                         </View>
                     </View>
                 </ScrollView>
@@ -399,8 +438,46 @@ class ArticleDetail extends Component {
                             <Text style={styles.articleTitle}>{articleDetail.article_title}</Text>
                         </View>
                         <HTML html={articleDetail.article_translate} imagesMaxWidth={Dimensions.get('window').width}/>
+                        <View style={{
+                            height: 52,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginTop: 20,
+                            marginBottom: 20,
+                            backgroundColor: '#f3f4f6',
+                        }}>
+                            <PublisherBanner
+                                bannerSize="banner"
+                                adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
+                                onDidFailToReceiveAdWithError={this.bannerError}
+                                onAdMobDispatchAppEvent={this.adMobEvent} />
+                        </View>
                     </View>
+                    {/* you should watch the reward vide first!*/}
+                    <Modal
+                        animationType="fade"
+                        transparent={true}
+                        hardwareAccelerated={true}
+                        visible={modalVisible}
+                        onRequestClose={() => {
+                            this.setModalVisible(false); // android back button close the modal.
+                        }}>
+                        <View style={styles.centeredView}>
+                            <View style={styles.modalView}>
+                                <Text style={styles.modalText}>Watch the Video first!</Text>
+
+                                <TouchableHighlight
+                                    style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
+                                    onPress={() => {
+                                        this.setModalVisible(!modalVisible);
+                                    }}>
+                                    <Text style={styles.textStyle}>Hide Modal</Text>
+                                </TouchableHighlight>
+                            </View>
+                        </View>
+                    </Modal>
                 </ScrollView>
+
                 {/*<ScrollView tabLabel="ios-paper" style={styles.tabView}>
                     <View style={styles.card}>
                         <Text>News</Text>
@@ -561,5 +638,42 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 2, height: 2, },
         shadowOpacity: 0.5,
         shadowRadius: 3,
+    },
+
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    openButton: {
+        backgroundColor: '#F194FF',
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+    },
+    textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: 'center',
     },
 });
