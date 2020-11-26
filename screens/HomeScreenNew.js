@@ -234,7 +234,7 @@ class HomeScreenNew extends Component {
                                 }}
                                 ListHeaderComponent={
                                     <View style={{
-                                        height: 0,
+                                        height: 20,
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         // paddingLeft: 60,

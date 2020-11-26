@@ -392,10 +392,10 @@ class ArticleDetail extends Component {
                     // {key: 'someOtherId2', width: Dimensions.get('window').width-40, height: 420, marginBottom: 18, marginLeft: 20, marginRight: 20}
                 ]}>
             <ScrollableTabView
-                style={{marginTop: 2 }}
+                style={{marginTop: 2}}
                 initialPage={0}
                 onChangeTab={this.changeTab.bind(this)}
-                renderTabBar={() => <FacebookTabBar />}
+                renderTabBar={() => <FacebookTabBar style={{backgroundColor: '#fff'}} />}
             >
                 <ScrollView tabLabel="Source" style={styles.tabView}>
                     <View style={styles.card}>
@@ -432,7 +432,7 @@ class ArticleDetail extends Component {
                         </View>
                     </View>
                 </ScrollView>
-                <ScrollView tabLabel="Translate" style={styles.tabView}>
+                <ScrollView tabLabel="Translation" style={styles.tabView}>
                     <View style={styles.card}>
                         <View>
                             <Text style={styles.articleTitle}>{articleDetail.article_title}</Text>

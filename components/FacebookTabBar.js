@@ -58,7 +58,7 @@ class FacebookTabBar extends React.Component {
                     }} style={{
                         fontSize: 18,
                         fontWeight: 'bold',
-                        color: this.props.activeTab === i ? 'rgb(0,121,222)' : 'rgb(132,132,132)'
+                        color: this.props.activeTab === i ? 'rgb(39,151,252)' : 'rgb(132,132,132)'
                     }}>{tab}</Text>
                 </TouchableOpacity>;
             })}
