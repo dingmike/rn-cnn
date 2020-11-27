@@ -103,7 +103,6 @@ export default function BottomTabNavigator({navigation, route}) {
     // currently active tab. Learn more in the documentation:
     // https://reactnavigation.org/docs/en/screen-options-resolution.html https://reactnavigation.org/docs/bottom-tab-navigator#!
     //点击子页面时隐藏底部导航栏
-
     console.log(navigation)
     const routeName = getFocusedRouteNameFromRoute(route);
     console.log(routeName)
@@ -128,6 +127,7 @@ export default function BottomTabNavigator({navigation, route}) {
          </BottomTab.Navigator>*/
         <Drawer.Navigator
             initialRouteName={INITIAL_ROUTE_NAME}
+            drawerType={Dimensions.get('window').width >= 768 ? 'permanent' : 'slide'}
             tabBarOptions={{activeTintColor: Colors[colorScheme].tint}}>
             <Drawer.Screen
                 name="Home"
@@ -178,6 +178,7 @@ function TabOneNavigator() {
                         paddingTop: Constants.statusBarHeight,
                         flexDirection: 'row',
                         marginTop: 10,
+                        elevation: 4, // android shadowbox
                     },
                     barStyle: colorScheme === 'dark' ? 'light-content' : 'dark-content',
                     header: ({scene, previous, navigation}) => {

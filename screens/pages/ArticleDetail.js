@@ -110,8 +110,9 @@ class ArticleDetail extends Component {
                 color: 'black'
             },
             audio: [],
+            showedAd: false,
         }
-        this.bannerError = 'Ad error'
+        this.bannerError = 'Ad error';
     }
 
     async componentDidMount() {
@@ -223,16 +224,6 @@ class ArticleDetail extends Component {
     async changeTab({i, ref}) {
         if (i === 1) {
             this.setModalVisible(true)
-            // reward ad
-            await AdMobRewarded.setAdUnitID('ca-app-pub-3940256099942544/5224354917'); // Test ID, Replace with your-admob-unit-id
-            await AdMobRewarded.requestAdAsync({servePersonalizedAds: true});
-
-            // rewardedVideoDidLoad rewardedVideoDidOpen rewardedVideoDidStart
-            AdMobRewarded.addEventListener('rewardedVideoDidOpen', () => {
-
-            })
-            await AdMobRewarded.showAdAsync();
-
         }
     }
 
@@ -240,7 +231,28 @@ class ArticleDetail extends Component {
 
     }
 
+
+   async _rewardVideo() {
+        // reward ad
+        await AdMobRewarded.setAdUnitID('ca-app-pub-3940256099942544/5224354917'); // Test ID, Replace with your-admob-unit-id
+        await AdMobRewarded.requestAdAsync({servePersonalizedAds: true});
+
+        // rewardedVideoDidLoad rewardedVideoDidOpen rewardedVideoDidStart
+        AdMobRewarded.addEventListener('rewardedVideoDidOpen', () => {
+
+        })
+        await AdMobRewarded.showAdAsync();
+    }
+
     setModalVisible(visible) {
+        if(!visible && !this.state.showedAd) {
+             this._rewardVideo().then(res => {
+                this.showedAd = true;
+                this.setState({
+                    showedAd: true
+                })
+            })
+        }
         this.setState((prevState, pros) => ({
             modalVisible: visible
         }));
@@ -249,129 +261,12 @@ class ArticleDetail extends Component {
     render() {
         const colorScheme = Appearance.getColorScheme();
         const {navigate} = this.props.navigation;
-        const {articleDetail, checked, playStatus, modalVisible} = this.state;
+        const {articleDetail, checked, playStatus, modalVisible, showedAd} = this.state;
         console.log('article Detail page!')
         console.log(navigate)
         // let {flag, user, jokerVideo, route} = this.props;
         // console.log(route.params.article_title)
         return (
-            /* <View style={styles.container}>
-
-                 <SkeletonContent
-                     containerStyle={{flex: 1, width: Dimensions.get('window').width}}
-                     isLoading={this.state.loading}
-                     animationType="pulse"
-                     layout={[
-                         {
-                             key: 'title',
-                             width: Dimensions.get('window').width - 20,
-                             height: 50,
-                             marginBottom: 16,
-                             marginLeft: 10,
-                             marginTop: 10,
-                             marginRight: 10
-                         },
-                         // {key: 'someOtherId2', width: Dimensions.get('window').width-40, height: 420, marginBottom: 18, marginLeft: 20, marginRight: 20}
-                     ]}>
-
-                     <View style={styles.header}>
-                         <View style={[styles.headerSource, this.state.sourceCheckedColor]}>
-                             <TouchableOpacity onPress={() => this.onPressSource('1')}>
-                                 <Text style={[styles.headerText, this.state.sourceCheckedColor]}>Source</Text>
-                             </TouchableOpacity>
-                         </View>
-                         <View style={[styles.headerTrans, this.state.translateCheckedColor]}>
-                             <TouchableOpacity onPress={() => this.onPressSource('2')}>
-                                 <Text style={[styles.headerText, this.state.translateCheckedColor]}>Translate</Text>
-                             </TouchableOpacity>
-                         </View>
-
-                         {playStatus === 'play' ?
-                             <TouchableOpacity style={styles.playAudio} onPress={() => this.speak('pause', articleDetail.article_content)}>
-                                 <AntDesign name="pausecircleo" size={28} color="black"/>
-                             </TouchableOpacity> :
-                             <TouchableOpacity style={styles.playAudio} onPress={() => this.speak('play', articleDetail.article_content)}>
-                                 <AntDesign name="playcircleo" size={28} color="black"/>
-                             </TouchableOpacity>}
-
-                         {/!* <TouchableOpacity onPress={() => this.speak('stop', articleDetail.article_content)}>
-                         <FontAwesome5 style={styles.stopAudio} name="stop-circle" size={28} color="black" />
-                     </TouchableOpacity>*!/}
-
-                         {/!*<TouchableOpacity style={styles.refreshAudio} onPress={() => this.speak('refresh', articleDetail.article_content)}>
-                         <MaterialIcons name="replay" size={28} color="black" />
-                     </TouchableOpacity>*!/}
-                     </View>
-
-                 </SkeletonContent>
-
-
-                 {/!* <View style={styles.container}>
-                     <Button title="Press to hear some words" onPress={() => this.speak()} />
-                 </View>*!/}
-                 {/!*<WebView
-                     originWhitelist={['*']}
-                     scalesPageToFit={true}
-                     javaScriptEnabled={true} // 仅限Android平台。iOS平台JavaScript是默认开启的。
-                     domStorageEnabled={true} // 适用于安卓a
-                     scrollEnabled={true}
-                     automaticallyAdjustContentInsets={true}
-                     source={{ html: articleDetail.article_translate }}
-                     style={{ marginTop: 20}}
-                 />*!/}
-
-                 <SkeletonContent
-                     containerStyle={{flex: 7, width: Dimensions.get('window').width}}
-                     isLoading={this.state.loading}
-                     animationType="pulse"
-                     layout={[
-                         {
-                             key: 'title',
-                             width: Dimensions.get('window').width - 20,
-                             height: 50,
-                             marginBottom: 16,
-                             marginLeft: 10,
-                             marginTop: 10,
-                             marginRight: 10
-                         },
-                         {
-                             key: 'article',
-                             width: Dimensions.get('window').width - 20,
-                             height: 620,
-                             marginBottom: 18,
-                             marginLeft: 10,
-                             marginRight: 10
-                         },
-                         // {key: 'someOtherId2', width: Dimensions.get('window').width-40, height: 420, marginBottom: 18, marginLeft: 20, marginRight: 20}
-                     ]}>
-
-                     {checked === '1' ? <ScrollView style={styles.content}
-                                                    ref={(r) => this.scrollView = r}>
-                         <View style={styles.articleTitle}>
-                             <Text style={styles.articleTitle}>{articleDetail.article_title}</Text>
-                         </View>
-
-                         <View style={styles.articleContent}>
-                             <Text style={{fontSize: 18}}>
-                                 {articleDetail.article_content}
-                             </Text>
-                         </View>
-
-                         {/!*<HTML html={articleDetail.article_content} imagesMaxWidth={Dimensions.get('window').width}/>*!/}
-                     </ScrollView> : <ScrollView style={styles.content}>
-                         <View>
-                             <Text style={styles.articleTitle}>{articleDetail.article_title}</Text>
-                         </View>
-                         <HTML html={articleDetail.article_translate} imagesMaxWidth={Dimensions.get('window').width}/>
-                     </ScrollView>}
-
-
-                 </SkeletonContent>
-
-
-                 <Loading type={"type"} loadingStyle={{backgroundColor: "#ccc"}}/>
-             </View>*/
-
             <SkeletonContent
                 containerStyle={{flex: 1,
                     width: Dimensions.get('window').width}}
@@ -427,7 +322,7 @@ class ArticleDetail extends Component {
                     style={{marginTop: 2}}
                     initialPage={0}
                     onChangeTab={this.changeTab.bind(this)}
-                    renderTabBar={() => <FacebookTabBar style={{backgroundColor: '#fff'}}/>}
+                    renderTabBar={() => <FacebookTabBar style={{backgroundColor: colorScheme === 'dark' ? '#1a1a1a' : '#fff'}}/>}
                 >
                     <ScrollView tabLabel="Source" style={styles.tabView}>
                         <View style={{
@@ -443,19 +338,22 @@ class ArticleDetail extends Component {
                             </View>
 
                             <View style={styles.articlePlugin}>
-
-                                <View>
-                                    <Text style={styles.articlePluginText}>Level: {articleDetail.article_grade}</Text>
+                                <View style={styles.pluginBox}>
+                                    <Text style={styles.articlePluginText}>Words: {articleDetail.wordNum}</Text>
+                                </View>
+                                <View style={styles.pluginBox}>
+                                    <Text style={styles.articlePluginText}>Level: {articleDetail.article_grade + 1}</Text>
                                 </View>
 
-                                <View>
+                                <View style={styles.pluginBox}>
                                     <Text style={styles.articlePluginText}>Tag: {articleDetail.articleTag}</Text>
                                 </View>
 
-                                <View>
+                                <View style={styles.pluginBox}>
                                     <Text style={styles.articlePluginText}>Source: {articleDetail.article_author}</Text>
                                 </View>
-                                <View style={styles.articleAudio}>
+                                <View style={{...styles.articleAudio,
+                                    ...styles.pluginBox}}>
                                     {playStatus === 'play' ?
                                         <TouchableOpacity style={styles.playAudio}
                                                           onPress={() => this.speak('pause', articleDetail.article_content)}>
@@ -501,7 +399,7 @@ class ArticleDetail extends Component {
                                     marginTop: 20,
                                     marginBottom: 20,
                                     color: 'white',
-                                    backgroundColor: '#f3f4f6',
+                                    // backgroundColor: '#f3f4f6',
                                 }}>
                                     <PublisherBanner
                                         bannerSize="banner"
@@ -509,13 +407,14 @@ class ArticleDetail extends Component {
                                         onDidFailToReceiveAdWithError={this.bannerError}
                                         onAdMobDispatchAppEvent={this.adMobEvent}/>
                                 </View>
-                                <TouchableHighlight
+                                {/*favour it!*/}
+                                {/*<TouchableHighlight
                                     style={styles.openButton}
                                     onPress={() => {
-                                        this.setModalVisible(true);
+
                                     }}>
-                                    <Text style={styles.textStyle}>Show Modal</Text>
-                                </TouchableHighlight>
+                                    <Text style={styles.textStyle}>Like it!</Text>
+                                </TouchableHighlight>*/}
 
 
                             </View>
@@ -551,7 +450,7 @@ class ArticleDetail extends Component {
                             animationType="fade"
                             transparent={true}
                             hardwareAccelerated={true}
-                            visible={modalVisible}
+                            visible={modalVisible && !showedAd}
                             onRequestClose={() => {
                                 this.setModalVisible(false); // android back button close the modal.
                             }}>
@@ -559,15 +458,14 @@ class ArticleDetail extends Component {
                                 <View style={styles.modalView}>
                                     <Text style={styles.modalText}>Watch the Ad Video first, then back to
                                         translation,Video is loading...</Text>
-
-                                    <TouchableHighlight
-                                        style={{...styles.openButton,
-                                            backgroundColor: '#2196F3'}}
-                                        onPress={() => {
-                                            this.setModalVisible(!modalVisible);
-                                        }}>
-                                        <Text style={styles.textStyle}>Hide Modal</Text>
-                                    </TouchableHighlight>
+                                        <TouchableHighlight
+                                            style={{...styles.openButton,
+                                                backgroundColor: '#2196F3'}}
+                                            onPress={() => {
+                                                this.setModalVisible(!modalVisible);
+                                            }}>
+                                            <Text style={styles.textStyle}>Ok</Text>
+                                        </TouchableHighlight>
                                 </View>
                             </View>
                         </Modal>
@@ -716,8 +614,11 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        flexWrap: 'nowrap',
+        flexWrap: 'wrap',
         alignItems: 'center', // 属性定义项目在交叉轴上如何对齐
+    },
+    pluginBox:{
+      paddingRight: 20,
     },
     articlePluginText: {
         fontSize: 14,
@@ -789,7 +690,7 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     openButton: {
-        backgroundColor: '#F194FF',
+        backgroundColor: '#f38624',
         borderRadius: 20,
         padding: 10,
         elevation: 2,
@@ -798,6 +699,7 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         textAlign: 'center',
+        width: 100,
     },
     modalText: {
         marginBottom: 15,
