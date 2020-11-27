@@ -97,6 +97,7 @@ class ArticleDetail extends Component {
             articleId: route.params.id,
             articleDetail: {},
             modalVisible: false,
+            alertModalVisible: false,
             resume: false,
             loading: true,
             playStatus: 'pause',
@@ -232,21 +233,31 @@ class ArticleDetail extends Component {
     }
 
 
-   async _rewardVideo() {
+    async _rewardVideo() {
         // reward ad
         await AdMobRewarded.setAdUnitID('ca-app-pub-3940256099942544/5224354917'); // Test ID, Replace with your-admob-unit-id
         await AdMobRewarded.requestAdAsync({servePersonalizedAds: true});
 
         // rewardedVideoDidLoad rewardedVideoDidOpen rewardedVideoDidStart
         AdMobRewarded.addEventListener('rewardedVideoDidOpen', () => {
+                // alert('You can close it! Press the top right close button!')
+        })
+        AdMobRewarded.addEventListener('rewardedVideoDidComplete', () => {
 
+        })
+        AdMobRewarded.addEventListener('rewardedVideoDidClose', () => {
+            this.setAlertModalVisible(true)
         })
         await AdMobRewarded.showAdAsync();
     }
-
+    setAlertModalVisible(visible) {
+        this.setState((prevState, pros) => ({
+            alertModalVisible: visible
+        }));
+    }
     setModalVisible(visible) {
-        if(!visible && !this.state.showedAd) {
-             this._rewardVideo().then(res => {
+        if (!visible && !this.state.showedAd) {
+            this._rewardVideo().then(res => {
                 this.showedAd = true;
                 this.setState({
                     showedAd: true
@@ -261,15 +272,17 @@ class ArticleDetail extends Component {
     render() {
         const colorScheme = Appearance.getColorScheme();
         const {navigate} = this.props.navigation;
-        const {articleDetail, checked, playStatus, modalVisible, showedAd} = this.state;
+        const {articleDetail, checked, playStatus, modalVisible, showedAd, alertModalVisible} = this.state;
         console.log('article Detail page!')
         console.log(navigate)
         // let {flag, user, jokerVideo, route} = this.props;
         // console.log(route.params.article_title)
         return (
             <SkeletonContent
-                containerStyle={{flex: 1,
-                    width: Dimensions.get('window').width}}
+                containerStyle={{
+                    flex: 1,
+                    width: Dimensions.get('window').width
+                }}
                 isLoading={this.state.loading}
                 animationType="shiver"
                 animationDirection="horizontalLeft"
@@ -322,7 +335,8 @@ class ArticleDetail extends Component {
                     style={{marginTop: 2}}
                     initialPage={0}
                     onChangeTab={this.changeTab.bind(this)}
-                    renderTabBar={() => <FacebookTabBar style={{backgroundColor: colorScheme === 'dark' ? '#1a1a1a' : '#fff'}}/>}
+                    renderTabBar={() => <FacebookTabBar
+                        style={{backgroundColor: colorScheme === 'dark' ? '#1a1a1a' : '#fff'}}/>}
                 >
                     <ScrollView tabLabel="Source" style={styles.tabView}>
                         <View style={{
@@ -342,7 +356,8 @@ class ArticleDetail extends Component {
                                     <Text style={styles.articlePluginText}>Words: {articleDetail.wordNum}</Text>
                                 </View>
                                 <View style={styles.pluginBox}>
-                                    <Text style={styles.articlePluginText}>Level: {articleDetail.article_grade + 1}</Text>
+                                    <Text
+                                        style={styles.articlePluginText}>Level: {articleDetail.article_grade + 1}</Text>
                                 </View>
 
                                 <View style={styles.pluginBox}>
@@ -352,8 +367,10 @@ class ArticleDetail extends Component {
                                 <View style={styles.pluginBox}>
                                     <Text style={styles.articlePluginText}>Source: {articleDetail.article_author}</Text>
                                 </View>
-                                <View style={{...styles.articleAudio,
-                                    ...styles.pluginBox}}>
+                                <View style={{
+                                    ...styles.articleAudio,
+                                    ...styles.pluginBox
+                                }}>
                                     {playStatus === 'play' ?
                                         <TouchableOpacity style={styles.playAudio}
                                                           onPress={() => this.speak('pause', articleDetail.article_content)}>
@@ -416,7 +433,6 @@ class ArticleDetail extends Component {
                                     <Text style={styles.textStyle}>Like it!</Text>
                                 </TouchableHighlight>*/}
 
-
                             </View>
                         </View>
                     </ScrollView>
@@ -452,49 +468,49 @@ class ArticleDetail extends Component {
                             hardwareAccelerated={true}
                             visible={modalVisible && !showedAd}
                             onRequestClose={() => {
-                                this.setModalVisible(false); // android back button close the modal.
+                                this.setModalVisible(!modalVisible); // android back button close the modal.
                             }}>
                             <View style={styles.centeredView}>
                                 <View style={styles.modalView}>
                                     <Text style={styles.modalText}>Watch the Ad Video first, then back to
-                                        translation,Video is loading...</Text>
-                                        <TouchableHighlight
-                                            style={{...styles.openButton,
-                                                backgroundColor: '#2196F3'}}
-                                            onPress={() => {
-                                                this.setModalVisible(!modalVisible);
-                                            }}>
-                                            <Text style={styles.textStyle}>Ok</Text>
-                                        </TouchableHighlight>
+                                        translation,Thank you!</Text>
+                                    <TouchableHighlight
+                                        style={{
+                                            ...styles.openButton,
+                                            backgroundColor: '#2196F3'
+                                        }}
+                                        onPress={() => {
+                                            this.setModalVisible(!modalVisible);
+                                        }}>
+                                        <Text style={styles.textStyle}>Ok</Text>
+                                    </TouchableHighlight>
+                                </View>
+                            </View>
+                        </Modal>
+                        <Modal
+                            animationType="fade"
+                            transparent={true}
+                            hardwareAccelerated={true}
+                            visible={alertModalVisible}
+                            onRequestClose={() => {
+                                 this.setAlertModalVisible(false)
+                            }}>
+                            <View style={styles.centeredView}>
+
+                                <View style={styles.modalView}>
+                                    <Text style={styles.modalText}>Thank you for your help!</Text>
+                                    <TouchableHighlight
+                                        style={{ ...styles.openButton,
+                                            backgroundColor: '#2196F3' }}
+                                        onPress={() => {
+                                            this.setAlertModalVisible(false);
+                                        }}>
+                                        <Text style={styles.textStyle}>Close</Text>
+                                    </TouchableHighlight>
                                 </View>
                             </View>
                         </Modal>
                     </ScrollView>
-                    {/*<ScrollView tabLabel="ios-paper" style={styles.tabView}>
-                    <View style={styles.card}>
-                        <Text>News</Text>
-                    </View>
-                </ScrollView>
-                <ScrollView tabLabel="ios-people" style={styles.tabView}>
-                    <View style={styles.card}>
-                        <Text>Friends</Text>
-                    </View>
-                </ScrollView>
-                <ScrollView tabLabel="ios-chatboxes" style={styles.tabView}>
-                    <View style={styles.card}>
-                        <Text>Messenger</Text>
-                    </View>
-                </ScrollView>
-                <ScrollView tabLabel="ios-notifications" style={styles.tabView}>
-                    <View style={styles.card}>
-                        <Text>Notifications</Text>
-                    </View>
-                </ScrollView>
-                <ScrollView tabLabel="ios-list" style={styles.tabView}>
-                    <View style={styles.card}>
-                        <Text>Other nav</Text>
-                    </View>
-                </ScrollView>*/}
                 </ScrollableTabView>
             </SkeletonContent>
         );
@@ -617,8 +633,8 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         alignItems: 'center', // 属性定义项目在交叉轴上如何对齐
     },
-    pluginBox:{
-      paddingRight: 20,
+    pluginBox: {
+        paddingRight: 20,
     },
     articlePluginText: {
         fontSize: 14,
