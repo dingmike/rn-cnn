@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux';
 import {
@@ -8,22 +8,15 @@ import {
     Text,
     TouchableOpacity,
     View,
-    Button,
-    Alert,
-    ImageBackground,
-    FlatList,
-    SectionList,
-    StatusBar, Dimensions,Vibration
 } from 'react-native';
-import MyButton from './MyButton'
-import {ScrollView} from 'react-native-gesture-handler';
-// import {styles} from "../style/homeScreenNewStyle";
+// import MyButton from './MyButton'
+// import {ScrollView} from 'react-native-gesture-handler';
 import {ImageBackground as WebImageBackground} from "react-native-web";
 import {color} from "../style/common";
 const image = {uri: "https://reactjs.org/logo-og.png"};
 import myUtils from '../utils/myUtils'
 
-export default class CardArticle extends Component {
+export default class CardArticle extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
