@@ -216,12 +216,23 @@ function TabOneNavigator() {
                                     <Text style={{fontSize: 18, fontWeight: '500',
                                         color: options.headerStyle.color}}>{title}</Text>
                                 </View>
-                                <View style={{
+                                <TouchableOpacity  style={{
                                     flex: 1,
                                     paddingBottom: 10,
+                                    alignItems: "center",
                                     paddingHorizontal: 10,
+                                }} onPress={()=>{
+                                    // navigation
+                                  navigation.navigate('About', {})
                                 }}>
-                                </View>
+                                    <Ionicons
+                                        name="md-information-circle"
+                                        size={24}
+                                        style={{ marginBottom: -3 }}
+                                        // color={props.focused ? Colors.tabIconSelected : Colors.tabIconDefault}
+                                        color="#00000"
+                                    />
+                                </TouchableOpacity>
                             </SafeAreaView>
                         );
                     },
@@ -303,12 +314,13 @@ function TabTwoNavigator() {
                                     <Text style={{fontSize: 18, fontWeight: '500',
                                         color: options.headerStyle.color}}>{title}</Text>
                                 </View>
-                                <View style={{
+                                <TouchableOpacity  style={{
                                     flex: 1,
                                     paddingBottom: 10,
                                     paddingHorizontal: 10,
                                 }}>
-                                </View>
+
+                                </TouchableOpacity>
                             </SafeAreaView>
                         );
                     },

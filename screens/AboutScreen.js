@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {Component} from "react";
 
-class NotFoundScreen extends Component{
+class AboutScreen extends Component{
   constructor(props) {
     super(props);
     this.state = {
@@ -42,4 +42,4 @@ const styles = StyleSheet.create({
     color: '#2e78b7',
   },
 });
-export default NotFoundScreen;
+export default AboutScreen;
