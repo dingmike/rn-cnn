@@ -175,9 +175,9 @@ function TabOneNavigator() {
                         alignItems: "center",
                         justifyContent: 'flex-start',
                         width: Dimensions.get('window').width,
-                        paddingTop: Constants.statusBarHeight,
+                        paddingTop: Constants.statusBarHeight + 10,
                         flexDirection: 'row',
-                        marginTop: 10,
+                        // marginTop: 10,
                         elevation: 4, // android shadowbox
                     },
                     barStyle: colorScheme === 'dark' ? 'light-content' : 'dark-content',
@@ -263,9 +263,10 @@ function TabTwoNavigator() {
                         alignItems: "center",
                         justifyContent: 'flex-start',
                         width: Dimensions.get('window').width,
-                        paddingTop: Constants.statusBarHeight,
+                        paddingTop: Constants.statusBarHeight + 10,
                         flexDirection: 'row',
-                        marginTop: 10,
+                        // marginTop: 10,
+                        elevation: 4, // android shadowbox
                     },
                     header: ({scene, previous, navigation}) => {
                         const {options} = scene.descriptor;
