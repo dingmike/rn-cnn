@@ -443,7 +443,7 @@ class ArticleDetail extends Component {
 
 
                             <View style={styles.articleBrief}>
-                                <Text style={{ fontSize: 18,
+                                <Text style={{ fontSize: 16,
                                     color: '#767676',}}>
                                     {articleDetail.article_brief}
                                 </Text>
@@ -452,6 +452,7 @@ class ArticleDetail extends Component {
                             <View style={styles.articleContent}>
                                 <Text style={{
                                     fontSize: 18,
+                                    fontFamily: 'nyt-cheltenham',
                                     color: colorScheme === 'dark' ? '#a5a5a5' : 'black'
                                 }}>
                                     {articleDetail.article_content}
@@ -667,6 +668,7 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         marginBottom: 5,
         fontWeight: 'bold',
+        lineHeight: 26,
     },
     articlePlugin: {
         // height: 50,
