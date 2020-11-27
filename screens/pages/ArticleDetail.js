@@ -11,7 +11,7 @@ import {
     TouchableOpacity,
     Dimensions,
     Modal,
-    Alert, TouchableHighlight
+    Alert, TouchableHighlight, Appearance
 } from 'react-native';
 import {WebView} from 'react-native-webview';
 import {RectButton, ScrollView} from 'react-native-gesture-handler';
@@ -19,7 +19,7 @@ import {requestData} from "../../redux/actions/userAction";
 import {connect} from "react-redux";
 import RNGeolocationView from '../../components/RNGeolocationView'
 import OwnCamera from '../../components/OwnCamera'
-import {Video, Audio } from 'expo-av';
+import {Video, Audio} from 'expo-av';
 import * as SecureStore from 'expo-secure-store';
 import Constants from 'expo-constants';
 import * as Speech from 'expo-speech';
@@ -49,7 +49,8 @@ import {
     MagnetometerUncalibrated,
     Pedometer,
 } from 'expo-sensors';
-import articleApi from "../../apis/articleApi"; // 手机传感器
+import articleApi from "../../apis/articleApi";
+import useColorScheme from "../../hooks/useColorScheme";
 
 /*function OptionButton({ icon, label, onPress, isLastOption }) {
     return (
@@ -120,7 +121,6 @@ class ArticleDetail extends Component {
         // await AdMobInterstitial.showAdAsync();
 
 
-
         // let right = await SecureStore.isAvailableAsync()
         // alert(right)
         // SecureStore.setItemAsync('_ok', '2342234', {})
@@ -155,19 +155,19 @@ class ArticleDetail extends Component {
 
     async speak(playStatus, content) {
         if (playStatus === 'play') {
-            if(this.state.audio.length === 0) {
+            if (this.state.audio.length === 0) {
                 voiceOfArticle(content, this.state.audio);
-            }else {
-               await this.state.audio[this.state.audio.length-1].playAsync();
+            } else {
+                await this.state.audio[this.state.audio.length - 1].playAsync();
             }
             this.setState({playStatus: playStatus});
-        }else if(playStatus === 'pause') {
-            await this.state.audio[this.state.audio.length-1].pauseAsync();
+        } else if (playStatus === 'pause') {
+            await this.state.audio[this.state.audio.length - 1].pauseAsync();
             this.setState({playStatus: playStatus});
         }
     }
+
     speakOld(playStatus, content) {
-        alert(2)
         // let thingToSay = 'hello world welcome to my home!';
         this.setState({playStatus: playStatus});
         if (playStatus === 'play') {
@@ -185,7 +185,7 @@ class ArticleDetail extends Component {
         } else if (playStatus === 'refresh') {
             Speech.stop();
             Speech.speak(content);
-            this.setState({playStatus: 'play',  resume: false,});
+            this.setState({playStatus: 'play', resume: false,});
         }
     }
 
@@ -202,7 +202,7 @@ class ArticleDetail extends Component {
                     color: 'black'
                 }
             })
-            this.scrollView.scrollTo({x:0,y: 0,animated:true});
+            this.scrollView.scrollTo({x: 0, y: 0, animated: true});
         } else {
             this.setState({
                 checked: '2',
@@ -215,34 +215,39 @@ class ArticleDetail extends Component {
                     color: 'black'
                 },
             })
-            this.scrollView.scrollTo({x:0,y: 0,animated:true});
+            this.scrollView.scrollTo({x: 0, y: 0, animated: true});
         }
 
     }
+
     async changeTab({i, ref}) {
-        if(i === 1){
+        if (i === 1) {
             this.setModalVisible(true)
             // reward ad
             await AdMobRewarded.setAdUnitID('ca-app-pub-3940256099942544/5224354917'); // Test ID, Replace with your-admob-unit-id
             await AdMobRewarded.requestAdAsync({servePersonalizedAds: true});
 
             // rewardedVideoDidLoad rewardedVideoDidOpen rewardedVideoDidStart
-            AdMobRewarded.addEventListener('rewardedVideoDidOpen',() => {
+            AdMobRewarded.addEventListener('rewardedVideoDidOpen', () => {
 
             })
             await AdMobRewarded.showAdAsync();
 
         }
     }
+
     adMobEvent() {
 
     }
+
     setModalVisible(visible) {
         this.setState((prevState, pros) => ({
             modalVisible: visible
         }));
     }
+
     render() {
+        const colorScheme = Appearance.getColorScheme();
         const {navigate} = this.props.navigation;
         const {articleDetail, checked, playStatus, modalVisible} = this.state;
         console.log('article Detail page!')
@@ -250,122 +255,122 @@ class ArticleDetail extends Component {
         // let {flag, user, jokerVideo, route} = this.props;
         // console.log(route.params.article_title)
         return (
-           /* <View style={styles.container}>
+            /* <View style={styles.container}>
 
-                <SkeletonContent
-                    containerStyle={{flex: 1, width: Dimensions.get('window').width}}
-                    isLoading={this.state.loading}
-                    animationType="pulse"
-                    layout={[
-                        {
-                            key: 'title',
-                            width: Dimensions.get('window').width - 20,
-                            height: 50,
-                            marginBottom: 16,
-                            marginLeft: 10,
-                            marginTop: 10,
-                            marginRight: 10
-                        },
-                        // {key: 'someOtherId2', width: Dimensions.get('window').width-40, height: 420, marginBottom: 18, marginLeft: 20, marginRight: 20}
-                    ]}>
+                 <SkeletonContent
+                     containerStyle={{flex: 1, width: Dimensions.get('window').width}}
+                     isLoading={this.state.loading}
+                     animationType="pulse"
+                     layout={[
+                         {
+                             key: 'title',
+                             width: Dimensions.get('window').width - 20,
+                             height: 50,
+                             marginBottom: 16,
+                             marginLeft: 10,
+                             marginTop: 10,
+                             marginRight: 10
+                         },
+                         // {key: 'someOtherId2', width: Dimensions.get('window').width-40, height: 420, marginBottom: 18, marginLeft: 20, marginRight: 20}
+                     ]}>
 
-                    <View style={styles.header}>
-                        <View style={[styles.headerSource, this.state.sourceCheckedColor]}>
-                            <TouchableOpacity onPress={() => this.onPressSource('1')}>
-                                <Text style={[styles.headerText, this.state.sourceCheckedColor]}>Source</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={[styles.headerTrans, this.state.translateCheckedColor]}>
-                            <TouchableOpacity onPress={() => this.onPressSource('2')}>
-                                <Text style={[styles.headerText, this.state.translateCheckedColor]}>Translate</Text>
-                            </TouchableOpacity>
-                        </View>
+                     <View style={styles.header}>
+                         <View style={[styles.headerSource, this.state.sourceCheckedColor]}>
+                             <TouchableOpacity onPress={() => this.onPressSource('1')}>
+                                 <Text style={[styles.headerText, this.state.sourceCheckedColor]}>Source</Text>
+                             </TouchableOpacity>
+                         </View>
+                         <View style={[styles.headerTrans, this.state.translateCheckedColor]}>
+                             <TouchableOpacity onPress={() => this.onPressSource('2')}>
+                                 <Text style={[styles.headerText, this.state.translateCheckedColor]}>Translate</Text>
+                             </TouchableOpacity>
+                         </View>
 
-                        {playStatus === 'play' ?
-                            <TouchableOpacity style={styles.playAudio} onPress={() => this.speak('pause', articleDetail.article_content)}>
-                                <AntDesign name="pausecircleo" size={28} color="black"/>
-                            </TouchableOpacity> :
-                            <TouchableOpacity style={styles.playAudio} onPress={() => this.speak('play', articleDetail.article_content)}>
-                                <AntDesign name="playcircleo" size={28} color="black"/>
-                            </TouchableOpacity>}
+                         {playStatus === 'play' ?
+                             <TouchableOpacity style={styles.playAudio} onPress={() => this.speak('pause', articleDetail.article_content)}>
+                                 <AntDesign name="pausecircleo" size={28} color="black"/>
+                             </TouchableOpacity> :
+                             <TouchableOpacity style={styles.playAudio} onPress={() => this.speak('play', articleDetail.article_content)}>
+                                 <AntDesign name="playcircleo" size={28} color="black"/>
+                             </TouchableOpacity>}
 
-                        {/!* <TouchableOpacity onPress={() => this.speak('stop', articleDetail.article_content)}>
-                        <FontAwesome5 style={styles.stopAudio} name="stop-circle" size={28} color="black" />
-                    </TouchableOpacity>*!/}
+                         {/!* <TouchableOpacity onPress={() => this.speak('stop', articleDetail.article_content)}>
+                         <FontAwesome5 style={styles.stopAudio} name="stop-circle" size={28} color="black" />
+                     </TouchableOpacity>*!/}
 
-                        {/!*<TouchableOpacity style={styles.refreshAudio} onPress={() => this.speak('refresh', articleDetail.article_content)}>
-                        <MaterialIcons name="replay" size={28} color="black" />
-                    </TouchableOpacity>*!/}
-                    </View>
+                         {/!*<TouchableOpacity style={styles.refreshAudio} onPress={() => this.speak('refresh', articleDetail.article_content)}>
+                         <MaterialIcons name="replay" size={28} color="black" />
+                     </TouchableOpacity>*!/}
+                     </View>
 
-                </SkeletonContent>
-
-
-                {/!* <View style={styles.container}>
-                    <Button title="Press to hear some words" onPress={() => this.speak()} />
-                </View>*!/}
-                {/!*<WebView
-                    originWhitelist={['*']}
-                    scalesPageToFit={true}
-                    javaScriptEnabled={true} // 仅限Android平台。iOS平台JavaScript是默认开启的。
-                    domStorageEnabled={true} // 适用于安卓a
-                    scrollEnabled={true}
-                    automaticallyAdjustContentInsets={true}
-                    source={{ html: articleDetail.article_translate }}
-                    style={{ marginTop: 20}}
-                />*!/}
-
-                <SkeletonContent
-                    containerStyle={{flex: 7, width: Dimensions.get('window').width}}
-                    isLoading={this.state.loading}
-                    animationType="pulse"
-                    layout={[
-                        {
-                            key: 'title',
-                            width: Dimensions.get('window').width - 20,
-                            height: 50,
-                            marginBottom: 16,
-                            marginLeft: 10,
-                            marginTop: 10,
-                            marginRight: 10
-                        },
-                        {
-                            key: 'article',
-                            width: Dimensions.get('window').width - 20,
-                            height: 620,
-                            marginBottom: 18,
-                            marginLeft: 10,
-                            marginRight: 10
-                        },
-                        // {key: 'someOtherId2', width: Dimensions.get('window').width-40, height: 420, marginBottom: 18, marginLeft: 20, marginRight: 20}
-                    ]}>
-
-                    {checked === '1' ? <ScrollView style={styles.content}
-                                                   ref={(r) => this.scrollView = r}>
-                        <View style={styles.articleTitle}>
-                            <Text style={styles.articleTitle}>{articleDetail.article_title}</Text>
-                        </View>
-
-                        <View style={styles.articleContent}>
-                            <Text style={{fontSize: 18}}>
-                                {articleDetail.article_content}
-                            </Text>
-                        </View>
-
-                        {/!*<HTML html={articleDetail.article_content} imagesMaxWidth={Dimensions.get('window').width}/>*!/}
-                    </ScrollView> : <ScrollView style={styles.content}>
-                        <View>
-                            <Text style={styles.articleTitle}>{articleDetail.article_title}</Text>
-                        </View>
-                        <HTML html={articleDetail.article_translate} imagesMaxWidth={Dimensions.get('window').width}/>
-                    </ScrollView>}
+                 </SkeletonContent>
 
 
-                </SkeletonContent>
+                 {/!* <View style={styles.container}>
+                     <Button title="Press to hear some words" onPress={() => this.speak()} />
+                 </View>*!/}
+                 {/!*<WebView
+                     originWhitelist={['*']}
+                     scalesPageToFit={true}
+                     javaScriptEnabled={true} // 仅限Android平台。iOS平台JavaScript是默认开启的。
+                     domStorageEnabled={true} // 适用于安卓a
+                     scrollEnabled={true}
+                     automaticallyAdjustContentInsets={true}
+                     source={{ html: articleDetail.article_translate }}
+                     style={{ marginTop: 20}}
+                 />*!/}
+
+                 <SkeletonContent
+                     containerStyle={{flex: 7, width: Dimensions.get('window').width}}
+                     isLoading={this.state.loading}
+                     animationType="pulse"
+                     layout={[
+                         {
+                             key: 'title',
+                             width: Dimensions.get('window').width - 20,
+                             height: 50,
+                             marginBottom: 16,
+                             marginLeft: 10,
+                             marginTop: 10,
+                             marginRight: 10
+                         },
+                         {
+                             key: 'article',
+                             width: Dimensions.get('window').width - 20,
+                             height: 620,
+                             marginBottom: 18,
+                             marginLeft: 10,
+                             marginRight: 10
+                         },
+                         // {key: 'someOtherId2', width: Dimensions.get('window').width-40, height: 420, marginBottom: 18, marginLeft: 20, marginRight: 20}
+                     ]}>
+
+                     {checked === '1' ? <ScrollView style={styles.content}
+                                                    ref={(r) => this.scrollView = r}>
+                         <View style={styles.articleTitle}>
+                             <Text style={styles.articleTitle}>{articleDetail.article_title}</Text>
+                         </View>
+
+                         <View style={styles.articleContent}>
+                             <Text style={{fontSize: 18}}>
+                                 {articleDetail.article_content}
+                             </Text>
+                         </View>
+
+                         {/!*<HTML html={articleDetail.article_content} imagesMaxWidth={Dimensions.get('window').width}/>*!/}
+                     </ScrollView> : <ScrollView style={styles.content}>
+                         <View>
+                             <Text style={styles.articleTitle}>{articleDetail.article_title}</Text>
+                         </View>
+                         <HTML html={articleDetail.article_translate} imagesMaxWidth={Dimensions.get('window').width}/>
+                     </ScrollView>}
 
 
-                <Loading type={"type"} loadingStyle={{backgroundColor: "#ccc"}}/>
-            </View>*/
+                 </SkeletonContent>
+
+
+                 <Loading type={"type"} loadingStyle={{backgroundColor: "#ccc"}}/>
+             </View>*/
 
             <SkeletonContent
                 containerStyle={{flex: 1, width: Dimensions.get('window').width}}
@@ -391,28 +396,100 @@ class ArticleDetail extends Component {
                     },
                     // {key: 'someOtherId2', width: Dimensions.get('window').width-40, height: 420, marginBottom: 18, marginLeft: 20, marginRight: 20}
                 ]}>
-            <ScrollableTabView
-                style={{marginTop: 2}}
-                initialPage={0}
-                onChangeTab={this.changeTab.bind(this)}
-                renderTabBar={() => <FacebookTabBar style={{backgroundColor: '#fff'}} />}
-            >
-                <ScrollView tabLabel="Source" style={styles.tabView}>
-                    <View style={styles.card}>
-                        {playStatus === 'play' ?
-                            <TouchableOpacity style={styles.playAudio} onPress={() => this.speak('pause', articleDetail.article_content)}>
-                                <AntDesign name="pausecircleo" size={28} color="black"/>
-                            </TouchableOpacity> :
-                            <TouchableOpacity style={styles.playAudio} onPress={() => this.speak('play', articleDetail.article_content)}>
-                                <AntDesign name="playcircleo" size={28} color="black"/>
-                            </TouchableOpacity>}
-                        <View style={styles.articleTitle}>
-                            <Text style={styles.articleTitle}>{articleDetail.article_title}</Text>
+                <ScrollableTabView
+                    style={{marginTop: 2}}
+                    initialPage={0}
+                    onChangeTab={this.changeTab.bind(this)}
+                    renderTabBar={() => <FacebookTabBar style={{backgroundColor: '#fff'}}/>}
+                >
+                    <ScrollView tabLabel="Source" style={styles.tabView}>
+                        <View style={{
+                            ...styles.card,
+                            backgroundColor: colorScheme === 'dark' ? '#1a1a1a' : '#fff'
+                        }}>
+
+                            <View style={styles.articleTitle}>
+                                <Text style={{
+                                    ...styles.articleTitle,
+                                    color: colorScheme === 'dark' ? '#a5a5a5' : 'black'
+                                }}>{articleDetail.article_title}</Text>
+                            </View>
+
+                            <View style={styles.articlePlugin}>
+
+                                <View>
+                                    <Text style={styles.articlePluginText}>Level: {articleDetail.article_grade}</Text>
+                                </View>
+
+                                <View>
+                                    <Text style={styles.articlePluginText}>Tag: {articleDetail.articleTag}</Text>
+                                </View>
+
+                                <View>
+                                    <Text style={styles.articlePluginText}>Source: {articleDetail.article_author}</Text>
+                                </View>
+                                <View style={styles.articleAudio}>
+                                    {playStatus === 'play' ?
+                                        <TouchableOpacity style={styles.playAudio}
+                                                          onPress={() => this.speak('pause', articleDetail.article_content)}>
+                                            <AntDesign name="pausecircleo" size={28} color="green"/>
+                                        </TouchableOpacity> :
+                                        <TouchableOpacity style={styles.playAudio}
+                                                          onPress={() => this.speak('play', articleDetail.article_content)}>
+                                            <AntDesign name="playcircleo" size={28} color="green"/>
+                                        </TouchableOpacity>}
+                                </View>
+                            </View>
+
+
+                            <View style={styles.articleBrief}>
+                                <Text style={{ fontSize: 18,
+                                    color: '#767676',}}>
+                                    {articleDetail.article_brief}
+                                </Text>
+                            </View>
+
+                            <View style={styles.articleContent}>
+                                <Text style={{
+                                    fontSize: 18,
+                                    color: colorScheme === 'dark' ? '#a5a5a5' : 'black'
+                                }}>
+                                    {articleDetail.article_content}
+                                </Text>
+                                <View style={{
+                                    height: 52,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    marginTop: 20,
+                                    marginBottom: 20,
+                                    color: 'white',
+                                    backgroundColor: '#f3f4f6',
+                                }}>
+                                    <PublisherBanner
+                                        bannerSize="banner"
+                                        adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
+                                        onDidFailToReceiveAdWithError={this.bannerError}
+                                        onAdMobDispatchAppEvent={this.adMobEvent}/>
+                                </View>
+                                <TouchableHighlight
+                                    style={styles.openButton}
+                                    onPress={() => {
+                                        this.setModalVisible(true);
+                                    }}>
+                                    <Text style={styles.textStyle}>Show Modal</Text>
+                                </TouchableHighlight>
+
+
+                            </View>
                         </View>
-                        <View style={styles.articleContent}>
-                            <Text style={{fontSize: 18}}>
-                                {articleDetail.article_content}
-                            </Text>
+                    </ScrollView>
+                    <ScrollView tabLabel="Translation" style={styles.tabView}>
+                        <View style={styles.card}>
+                            <View>
+                                <Text style={styles.articleTitle}>{articleDetail.article_title}</Text>
+                            </View>
+                            <HTML html={articleDetail.article_translate}
+                                  imagesMaxWidth={Dimensions.get('window').width}/>
                             <View style={{
                                 height: 52,
                                 alignItems: 'center',
@@ -421,71 +498,39 @@ class ArticleDetail extends Component {
                                 marginBottom: 20,
                                 backgroundColor: '#f3f4f6',
                             }}>
-                            <PublisherBanner
-                                bannerSize="banner"
-                                adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
-                                onDidFailToReceiveAdWithError={this.bannerError}
-                                onAdMobDispatchAppEvent={this.adMobEvent} />
-                            </View>
-                            <TouchableHighlight
-                                style={styles.openButton}
-                                onPress={() => {
-                                    this.setModalVisible(true);
-                                }}>
-                                <Text style={styles.textStyle}>Show Modal</Text>
-                            </TouchableHighlight>
-
-
-                        </View>
-                    </View>
-                </ScrollView>
-                <ScrollView tabLabel="Translation" style={styles.tabView}>
-                    <View style={styles.card}>
-                        <View>
-                            <Text style={styles.articleTitle}>{articleDetail.article_title}</Text>
-                        </View>
-                        <HTML html={articleDetail.article_translate} imagesMaxWidth={Dimensions.get('window').width}/>
-                        <View style={{
-                            height: 52,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            marginTop: 20,
-                            marginBottom: 20,
-                            backgroundColor: '#f3f4f6',
-                        }}>
-                            <PublisherBanner
-                                bannerSize="banner"
-                                adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
-                                onDidFailToReceiveAdWithError={this.bannerError}
-                                onAdMobDispatchAppEvent={this.adMobEvent} />
-                        </View>
-                    </View>
-                    {/* you should watch the reward vide first!*/}
-                    <Modal
-                        animationType="fade"
-                        transparent={true}
-                        hardwareAccelerated={true}
-                        visible={modalVisible}
-                        onRequestClose={() => {
-                            this.setModalVisible(false); // android back button close the modal.
-                        }}>
-                        <View style={styles.centeredView}>
-                            <View style={styles.modalView}>
-                                <Text style={styles.modalText}>Watch the Video first!</Text>
-
-                                <TouchableHighlight
-                                    style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
-                                    onPress={() => {
-                                        this.setModalVisible(!modalVisible);
-                                    }}>
-                                    <Text style={styles.textStyle}>Hide Modal</Text>
-                                </TouchableHighlight>
+                                <PublisherBanner
+                                    bannerSize="banner"
+                                    adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
+                                    onDidFailToReceiveAdWithError={this.bannerError}
+                                    onAdMobDispatchAppEvent={this.adMobEvent}/>
                             </View>
                         </View>
-                    </Modal>
-                </ScrollView>
+                        {/* you should watch the reward vide first!*/}
+                        <Modal
+                            animationType="fade"
+                            transparent={true}
+                            hardwareAccelerated={true}
+                            visible={modalVisible}
+                            onRequestClose={() => {
+                                this.setModalVisible(false); // android back button close the modal.
+                            }}>
+                            <View style={styles.centeredView}>
+                                <View style={styles.modalView}>
+                                    <Text style={styles.modalText}>Watch the Video first!</Text>
 
-                {/*<ScrollView tabLabel="ios-paper" style={styles.tabView}>
+                                    <TouchableHighlight
+                                        style={{...styles.openButton, backgroundColor: '#2196F3'}}
+                                        onPress={() => {
+                                            this.setModalVisible(!modalVisible);
+                                        }}>
+                                        <Text style={styles.textStyle}>Hide Modal</Text>
+                                    </TouchableHighlight>
+                                </View>
+                            </View>
+                        </Modal>
+                    </ScrollView>
+
+                    {/*<ScrollView tabLabel="ios-paper" style={styles.tabView}>
                     <View style={styles.card}>
                         <Text>News</Text>
                     </View>
@@ -510,7 +555,7 @@ class ArticleDetail extends Component {
                         <Text>Other nav</Text>
                     </View>
                 </ScrollView>*/}
-            </ScrollableTabView>
+                </ScrollableTabView>
             </SkeletonContent>
         );
     }
@@ -597,19 +642,19 @@ const styles = StyleSheet.create({
         marginRight: 10
     },
     refreshAudio: {
-        position: 'relative',
-        left: Dimensions.get('window').width / 2 - 90,
-        top: 10,
+        // position: 'relative',
+        // left: Dimensions.get('window').width / 2 - 90,
+        // top: 10,
     },
     stopAudio: {
-        position: 'relative',
-        left: Dimensions.get('window').width / 2 - 120,
-        top: 10,
+        // position: 'relative',
+        // left: Dimensions.get('window').width / 2 - 120,
+        // top: 10,
     },
     playAudio: {
-        position: 'relative',
-        left: Dimensions.get('window').width / 2 - 120,
-        top: 10,
+        // position: 'relative',
+        // left: Dimensions.get('window').width / 2 - 120,
+        // top: 10,
     },
     content: {
         // flex: 12,
@@ -623,10 +668,28 @@ const styles = StyleSheet.create({
         marginBottom: 5,
         fontWeight: 'bold',
     },
-    articleContent: {
-      marginBottom: 40
+    articlePlugin: {
+        // height: 50,
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        flexWrap: 'nowrap',
+        alignItems: 'center', // 属性定义项目在交叉轴上如何对齐
     },
+    articlePluginText: {
+      fontSize: 14,
+        color: '#767676',
+    },
+    articleAudio:{
 
+    },
+    articleBrief:{
+        marginVertical: 10,
+    },
+    articleContent: {
+        marginBottom: 40,
+        // backgroundColor: '#f3f4f6',
+    },
 
 
     tabView: {
@@ -641,10 +704,11 @@ const styles = StyleSheet.create({
         // margin: 5,
         // height: 150,
         padding: 15,
-        shadowColor: '#ccc',
-        shadowOffset: { width: 2, height: 2, },
-        shadowOpacity: 0.5,
-        shadowRadius: 3,
+        // shadowColor: '#ccc',
+        // shadowOffset: { width: 2, height: 2, },
+        // shadowOpacity: 0.5,
+        // shadowRadius: 3,
+        backgroundColor: '#000'
     },
 
     centeredView: {

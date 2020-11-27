@@ -78,10 +78,21 @@ import LinksScreen from '../screens/LinksScreen';
 import ArticleDetail from "../screens/pages/ArticleDetail";
 // import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
-import {Alert, Button, Text, TouchableOpacity, View, StyleSheet, Dimensions} from "react-native";
+import {
+    Alert,
+    Button,
+    Text,
+    TouchableOpacity,
+    View,
+    StyleSheet,
+    Dimensions,
+    NativeModules,
+    SafeAreaView, StatusBar
+} from "react-native";
 import {AntDesign} from '@expo/vector-icons';
 // const BottomTab = createBottomTabNavigator();
-
+import Constants from "expo-constants";
+import {NavigationContainer, DefaultTheme, DarkTheme} from '@react-navigation/native';
 
 const Drawer = createDrawerNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
@@ -137,12 +148,13 @@ export default function BottomTabNavigator({navigation, route}) {
 
 }
 
-
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
 const TabHomeStack = createStackNavigator();
+const styleTypes = ['default', 'dark-content', 'light-content'];
 
 function TabOneNavigator() {
+    const colorScheme = useColorScheme();
     return (
         <TabHomeStack.Navigator>
             <TabHomeStack.Screen
@@ -151,8 +163,24 @@ function TabOneNavigator() {
                 // options={{ headerTitle: 'English Ability' }}
                 options={{
                     headerTitle: 'English Ability',
+                    headerStyle: {
+                        backgroundColor: colorScheme === 'dark' ? 'black' : 'white',
+                        color: colorScheme === 'dark' ? 'white' : 'black',
+                        borderBottomColor: colorScheme === 'dark' ? '#505050' : '#ccc',
+                        shadowColor:  colorScheme === 'dark' ? '#808080' : 'black',
+                        borderBottomWidth: 1,
+                        shadowOffset: {width: 0, height: 0},
+                        shadowOpacity: 1,
+                        shadowRadius: 4,
+                        alignItems: "center",
+                        justifyContent: 'flex-start',
+                        width: Dimensions.get('window').width,
+                        paddingTop: Constants.statusBarHeight,
+                        flexDirection: 'row',
+                        marginTop: 10,
+                    },
+                    barStyle: colorScheme === 'dark' ? 'light-content' : 'dark-content',
                     header: ({scene, previous, navigation}) => {
-                        // should:  headerShown = true
                         const {options} = scene.descriptor;
                         const title =
                             options.headerTitle !== undefined
@@ -162,42 +190,35 @@ function TabOneNavigator() {
                                 : scene.route.name;
 
                         return (
+                            <SafeAreaView style={{
+                                ...options.headerStyle
+                            }}>
+                                <StatusBar backgroundColor="white" barStyle={options.barStyle}/>
+                                <TouchableOpacity style={{
+                                    paddingBottom: 10,
+                                    paddingHorizontal: 10,
+                                    flex: 1,
+                                    // marginTop: 5
+                                }} onPress={scene.descriptor.navigation.toggleDrawer}>
+                                    <AntDesign name="bars" size={28} color={options.headerStyle.color}/>
+                                </TouchableOpacity>
                                 <View style={{
-                                    width:  Dimensions.get('window').width,
-                                    marginTop: 40,
-                                    height: 56,
-                                    flexDirection: 'row',
-                                    backgroundColor: 'white',
+                                    paddingBottom: 10,
+                                    paddingHorizontal: 10,
+                                    flex: 6,
+                                    // marginTop: 5
                                     alignItems: "center",
-                                    justifyContent: 'flex-start',
-                                    borderBottomColor: '#e2e0e0',
-                                    borderBottomWidth: 1,
-                                    shadowColor: 'black',  //  阴影颜色
-                                    shadowOffset: { width: 0, height: 0 },  // 阴影偏移
-                                    shadowOpacity: 1,  // 阴影不透明度
-                                    shadowRadius: 4,  //  圆角
                                 }}>
-                                    <TouchableOpacity style={{
-                                        padding: 10,
-                                        marginTop: 5
-                                    }} onPress={scene.descriptor.navigation.toggleDrawer}>
-                                        <AntDesign name="bars" size={28} color="black"/>
-                                    </TouchableOpacity>
-                                    <View style={{
-                                        padding: 10,
-                                        marginTop: 5
-                                    }}>
-                                        <Text style={{fontSize: 20}}>{title}</Text>
-                                    </View>
-
+                                    <Text style={{fontSize: 18, fontWeight: '500',
+                                        color: options.headerStyle.color}}>{title}</Text>
                                 </View>
-                            /*<View
-                                title={title}
-                                leftButton={
-                                    previous ? <Button onPress={navigation.goBack} title={'hello'} /> : undefined
-                                }
-                                style={options.headerStyle}
-                            />*/
+                                <View style={{
+                                    flex: 1,
+                                    paddingBottom: 10,
+                                    paddingHorizontal: 10,
+                                }}>
+                                </View>
+                            </SafeAreaView>
                         );
                     },
                     /* headerLeft: ({ scene, previous, navigation }) => {
@@ -221,17 +242,86 @@ function TabOneNavigator() {
 const TabMyStack = createStackNavigator();
 
 function TabTwoNavigator() {
+    const colorScheme = useColorScheme();
     return (
         <TabMyStack.Navigator>
             <TabMyStack.Screen
                 name="TabMyScreen"
                 component={HomeScreen}
-                options={{headerTitle: 'English Ability'}}
+                options={{
+                    headerTitle: 'My Center',
+                    headerStyle: {
+                        backgroundColor: colorScheme === 'dark' ? 'black' : 'white',
+                        color: colorScheme === 'dark' ? 'white' : 'black',
+                        borderBottomColor: colorScheme === 'dark' ? '#505050' : '#ccc',
+                        shadowColor:  colorScheme === 'dark' ? '#808080' : 'black',
+                        borderBottomWidth: 1,
+                        shadowOffset: {width: 0, height: 0},
+                        shadowOpacity: 1,
+                        shadowRadius: 4,
+                        alignItems: "center",
+                        justifyContent: 'flex-start',
+                        width: Dimensions.get('window').width,
+                        paddingTop: Constants.statusBarHeight,
+                        flexDirection: 'row',
+                        marginTop: 10,
+                    },
+                    header: ({scene, previous, navigation}) => {
+                        const {options} = scene.descriptor;
+                        const title =
+                            options.headerTitle !== undefined
+                                ? options.headerTitle
+                                : options.title !== undefined
+                                ? options.title
+                                : scene.route.name;
+                        return (
+                            <SafeAreaView
+                                          style={{
+                                              ...options.headerStyle
+                                          }}>
+                                <StatusBar backgroundColor="white" barStyle={styleTypes[1]}/>
+                                <TouchableOpacity style={{
+                                    paddingBottom: 10,
+                                    paddingHorizontal: 10,
+                                    flex: 1,
+                                    // marginTop: 5
+                                }} onPress={scene.descriptor.navigation.toggleDrawer}>
+                                    <AntDesign name="bars" size={28} color={options.headerStyle.color}/>
+                                </TouchableOpacity>
+                                <View style={{
+                                    paddingBottom: 10,
+                                    paddingHorizontal: 10,
+                                    flex: 6,
+                                    // marginTop: 5
+                                    alignItems: "center",
+                                }}>
+                                    <Text style={{fontSize: 18, fontWeight: '500',
+                                        color: options.headerStyle.color}}>{title}</Text>
+                                </View>
+                                <View style={{
+                                    flex: 1,
+                                    paddingBottom: 10,
+                                    paddingHorizontal: 10,
+                                }}>
+                                </View>
+                            </SafeAreaView>
+                        );
+                    },
+                    /* headerLeft: ({ scene, previous, navigation }) => {
+                         return (
+                             <TouchableOpacity style={{padding: 10,
+                                 marginTop: 5}} onPress={(scene)=> {
+                                 navigation.openDrawer();
+                             }}>
+                                 <AntDesign name="bars" size={28} color="black" />
+                             </TouchableOpacity>
+
+                         )
+                     },*/
+                }}
             />
         </TabMyStack.Navigator>
     );
 }
 
-const styles = StyleSheet.create({
-
-});
+const styles = StyleSheet.create({});
