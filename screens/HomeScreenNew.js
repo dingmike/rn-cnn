@@ -50,7 +50,7 @@ class HomeScreenNew extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: false,
+            loading: true,
             isRefreshing: false,            //控制下拉刷新
             isLoadMore: false,               //控制上拉加载
             currentPage: 1,             //当前请求的页数
@@ -213,7 +213,10 @@ class HomeScreenNew extends Component {
                                 flex: 1,
                                 width: '100%'}}
                             isLoading={this.state.loading}
-                            animationType="pulse"
+                            animationType="shiver"
+                            animationDirection="horizontalLeft"
+                            boneColor="#dedede"
+                            highlightColor="#f7f7f7"
                             layout={[
                                 // {key: 'someId', width: Dimensions.get('window').width-40, height: 30, marginBottom: 10, marginLeft: 20, marginRight: 20},
                                 {key: 'someOtherId1', width: Dimensions.get('window').width-40, height: 200, marginBottom: 18, marginLeft: 20, marginRight: 20},

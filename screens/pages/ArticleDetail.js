@@ -98,7 +98,7 @@ class ArticleDetail extends Component {
             articleDetail: {},
             modalVisible: false,
             resume: false,
-            loading: false,
+            loading: true,
             playStatus: 'pause',
             checked: '1',
             sourceCheckedColor: {
@@ -373,28 +373,55 @@ class ArticleDetail extends Component {
              </View>*/
 
             <SkeletonContent
-                containerStyle={{flex: 1, width: Dimensions.get('window').width}}
+                containerStyle={{flex: 1,
+                    width: Dimensions.get('window').width}}
                 isLoading={this.state.loading}
-                animationType="pulse"
+                animationType="shiver"
+                animationDirection="horizontalLeft"
+                boneColor="#dedede"
+                highlightColor="#f7f7f7"
                 layout={[
                     {
-                        key: 'title',
+                        key: 'tabs',
                         width: Dimensions.get('window').width - 20,
-                        height: 50,
+                        height: 40,
                         marginBottom: 16,
                         marginLeft: 10,
                         marginTop: 10,
                         marginRight: 10
                     },
                     {
-                        key: 'article',
+                        key: 'title',
                         width: Dimensions.get('window').width - 20,
-                        height: 620,
+                        height: 50,
                         marginBottom: 18,
                         marginLeft: 10,
                         marginRight: 10
                     },
-                    // {key: 'someOtherId2', width: Dimensions.get('window').width-40, height: 420, marginBottom: 18, marginLeft: 20, marginRight: 20}
+                    {
+                        key: 'articlePlugin',
+                        width: Dimensions.get('window').width - 20,
+                        height: 65,
+                        marginBottom: 18,
+                        marginLeft: 10,
+                        marginRight: 10
+                    },
+                    {
+                        key: 'articlePhoto',
+                        width: Dimensions.get('window').width - 20,
+                        height: 200,
+                        marginBottom: 18,
+                        marginLeft: 10,
+                        marginRight: 10
+                    },
+                    {
+                        key: 'article',
+                        width: Dimensions.get('window').width - 20,
+                        height: 300,
+                        marginBottom: 18,
+                        marginLeft: 10,
+                        marginRight: 10
+                    },
                 ]}>
                 <ScrollableTabView
                     style={{marginTop: 2}}
@@ -443,11 +470,20 @@ class ArticleDetail extends Component {
 
 
                             <View style={styles.articleBrief}>
-                                <Text style={{ fontSize: 16,
+                                <Text style={{
+                                    fontSize: 14,
                                     fontFamily: 'nyt-cheltenham',
-                                    color: '#767676',}}>
+                                    color: '#9a9a9a',
+                                }}>
                                     {articleDetail.article_brief}
                                 </Text>
+                            </View>
+
+                            <View style={styles.articleImageView}>
+                                <Image
+                                    style={styles.articleImg}
+                                    source={{uri: articleDetail.articleImg}}
+                                />
                             </View>
 
                             <View style={styles.articleContent}>
@@ -486,7 +522,10 @@ class ArticleDetail extends Component {
                         </View>
                     </ScrollView>
                     <ScrollView tabLabel="Translation" style={styles.tabView}>
-                        <View style={styles.card}>
+                        <View style={{
+                            ...styles.card,
+                            backgroundColor: colorScheme === 'dark' ? '#1a1a1a' : '#fff'
+                        }}>
                             <View>
                                 <Text style={styles.articleTitle}>{articleDetail.article_title}</Text>
                             </View>
@@ -518,10 +557,12 @@ class ArticleDetail extends Component {
                             }}>
                             <View style={styles.centeredView}>
                                 <View style={styles.modalView}>
-                                    <Text style={styles.modalText}>Watch the Video first!</Text>
+                                    <Text style={styles.modalText}>Watch the Ad Video first, then back to
+                                        translation,Video is loading...</Text>
 
                                     <TouchableHighlight
-                                        style={{...styles.openButton, backgroundColor: '#2196F3'}}
+                                        style={{...styles.openButton,
+                                            backgroundColor: '#2196F3'}}
                                         onPress={() => {
                                             this.setModalVisible(!modalVisible);
                                         }}>
@@ -531,7 +572,6 @@ class ArticleDetail extends Component {
                             </View>
                         </Modal>
                     </ScrollView>
-
                     {/*<ScrollView tabLabel="ios-paper" style={styles.tabView}>
                     <View style={styles.card}>
                         <Text>News</Text>
@@ -680,16 +720,29 @@ const styles = StyleSheet.create({
         alignItems: 'center', // 属性定义项目在交叉轴上如何对齐
     },
     articlePluginText: {
-      fontSize: 14,
-        color: '#767676',
+        fontSize: 14,
+        color: '#9a9a9a',
+        fontFamily: 'nyt-cheltenham',
     },
-    articleAudio:{
-
-    },
-    articleBrief:{
+    articleAudio: {},
+    articleBrief: {
         marginVertical: 10,
     },
+    articleImageView: {
+        // width: Dimensions.get('window').width,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 200,
+    },
+    articleImg: {
+        width: '100%',
+        height: '100%',
+        // borderBottomLeftRadius: 8,
+        // borderTopLeftRadius: 8,
+        borderRadius: 8,
+    },
     articleContent: {
+        marginTop: 10,
         marginBottom: 40,
         // backgroundColor: '#f3f4f6',
     },
@@ -711,7 +764,7 @@ const styles = StyleSheet.create({
         // shadowOffset: { width: 2, height: 2, },
         // shadowOpacity: 0.5,
         // shadowRadius: 3,
-        backgroundColor: '#000'
+        // backgroundColor: '#000'
     },
 
     centeredView: {
