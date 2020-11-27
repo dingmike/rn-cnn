@@ -127,20 +127,23 @@ export default function BottomTabNavigator({navigation, route}) {
          </BottomTab.Navigator>*/
         <Drawer.Navigator
             initialRouteName={INITIAL_ROUTE_NAME}
+            drawerStyle={Dimensions.get('window').width >= 768  ? null : { width: '40%',  backgroundColor: '#fff', }}
             drawerType={Dimensions.get('window').width >= 768 ? 'permanent' : 'slide'}
-            tabBarOptions={{activeTintColor: Colors[colorScheme].tint}}>
+            drawerContentOptions={{activeTintColor: Colors[colorScheme].tint,
+                activeBackgroundColor: Colors[colorScheme].background, inactiveTintColor: Colors[colorScheme].inSelectText }}
+            >
             <Drawer.Screen
                 name="Home"
                 component={TabOneNavigator}
                 options={{
-                    tabBarIcon: ({color, focused}) => <TabBarIcon focused={focused} color={color} name="md-book"/>,
+                    drawerIcon: ({color, focused}) => <TabBarIcon focused={focused} color={color} name="md-book"/>,
                 }}
             />
             <Drawer.Screen
                 name="My"
                 component={TabTwoNavigator}
                 options={{
-                    tabBarIcon: ({color, focused}) => <TabBarIcon focused={focused} color={color} name="md-person"/>,
+                    drawerIcon: ({color, focused}) => <TabBarIcon focused={focused} color={color} name="md-person"/>,
                 }}
             />
         </Drawer.Navigator>
