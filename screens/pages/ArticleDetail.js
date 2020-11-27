@@ -444,6 +444,7 @@ class ArticleDetail extends Component {
 
                             <View style={styles.articleBrief}>
                                 <Text style={{ fontSize: 16,
+                                    fontFamily: 'nyt-cheltenham',
                                     color: '#767676',}}>
                                     {articleDetail.article_brief}
                                 </Text>
@@ -497,7 +498,7 @@ class ArticleDetail extends Component {
                                 justifyContent: 'center',
                                 marginTop: 20,
                                 marginBottom: 20,
-                                backgroundColor: '#f3f4f6',
+                                backgroundColor: colorScheme === 'dark' ? '#1a1a1a' : '#fff'
                             }}>
                                 <PublisherBanner
                                     bannerSize="banner"
