@@ -243,7 +243,7 @@ class ArticleDetail extends Component {
                 // alert('You can close it! Press the top right close button!')
         })
         AdMobRewarded.addEventListener('rewardedVideoDidComplete', () => {
-
+            this.setAlertModalVisible(true)
         })
         AdMobRewarded.addEventListener('rewardedVideoDidClose', () => {
             this.setAlertModalVisible(true)
@@ -252,13 +252,14 @@ class ArticleDetail extends Component {
     }
     setAlertModalVisible(visible) {
         this.setState((prevState, pros) => ({
-            alertModalVisible: visible
+            alertModalVisible: visible,
+            showedAd: true // play reward video once
         }));
     }
     setModalVisible(visible) {
         if (!visible && !this.state.showedAd) {
             this._rewardVideo().then(res => {
-                this.showedAd = true;
+                // android cannot callback
                 this.setState({
                     showedAd: true
                 })
