@@ -1,0 +1,6 @@
+module Pods_EnglishAbility {
+  umbrella header "Pods-EnglishAbility-umbrella.h"
+
+  export *
+  module * { export * }
+}

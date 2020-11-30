@@ -4,6 +4,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "web": "expo start --web",
+    "eject": "expo eject",
     "test": "jest --watchAll"
   },
   "jest": {
@@ -65,5 +66,7 @@
     "jest-expo": "~39.0.0",
     "typescript": "~3.9.5"
   },
-  "private": true
+  "private": true,
+  "name": "epocnn-main",
+  "version": "1.0.0"
 }

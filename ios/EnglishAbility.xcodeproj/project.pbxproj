@@ -315,6 +315,8 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				CODE_SIGN_ENTITLEMENTS = EnglishAbility/englishreading.entitlements;
 			};
 			name = Debug;
 		};
@@ -338,6 +340,8 @@
 				PRODUCT_NAME = englishreading;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				CODE_SIGN_ENTITLEMENTS = EnglishAbility/englishreading.entitlements;
 			};
 			name = Release;
 		};
@@ -398,8 +402,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.fecstec.englishreading";
-				PRODUCT_NAME = englishreading;
+				CODE_SIGN_ENTITLEMENTS = EnglishAbility/englishreading.entitlements;
 			};
 			name = Debug;
 		};
@@ -453,8 +456,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.fecstec.englishreading";
-				PRODUCT_NAME = englishreading;
+				CODE_SIGN_ENTITLEMENTS = EnglishAbility/englishreading.entitlements;
 			};
 			name = Release;
 		};
