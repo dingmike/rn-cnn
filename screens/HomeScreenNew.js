@@ -44,6 +44,8 @@ import {
 import * as SecureStore from 'expo-secure-store';
 import SkeletonContent from 'react-native-skeleton-content';
 import HomeLoadMoreFooter, {LOAD_MORE_STATE} from "../components/HomeLoadMoreFooter";
+import ToastExample from '../components/ToastExample';
+
 
 class HomeScreenNew extends Component {
 
@@ -178,6 +180,8 @@ class HomeScreenNew extends Component {
         let right = await SecureStore.isAvailableAsync()
         // alert(right)
         SecureStore.setItemAsync('_ok', '2342234', {})
+
+        ToastExample.show('Awesome', ToastExample.SHORT);
     }
     renderFooter = () => {
         return <HomeLoadMoreFooter state={this.state.showFooter}/>;
