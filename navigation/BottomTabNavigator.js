@@ -127,7 +127,7 @@ export default function BottomTabNavigator({navigation, route}) {
          </BottomTab.Navigator>*/
         <Drawer.Navigator
             initialRouteName={INITIAL_ROUTE_NAME}
-            drawerStyle={Dimensions.get('window').width >= 768  ? null : { width: '40%',  backgroundColor: '#fff', }}
+            drawerStyle={Dimensions.get('window').width >= 768  ? null : { width: '50%',  backgroundColor: '#fff', }}
             drawerType={Dimensions.get('window').width >= 768 ? 'permanent' : 'slide'}
             drawerContentOptions={{activeTintColor: Colors[colorScheme].tint,
                 activeBackgroundColor: Colors[colorScheme].background, inactiveTintColor: Colors[colorScheme].inSelectText }}

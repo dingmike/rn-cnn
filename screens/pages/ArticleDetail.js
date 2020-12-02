@@ -33,6 +33,7 @@ import {
     PublisherBanner,
     AdMobRewarded,
     setTestDeviceIDAsync,
+    isAvailableAsync,
 } from 'expo-ads-admob';
 import FacebookTabBar from '../../components/FacebookTabBar';
 // import ScrollableTabView from 'react-native-scrollable-tab-view';
@@ -115,9 +116,18 @@ class ArticleDetail extends Component {
         }
         this.bannerError = 'Ad error';
     }
-
+    async componentWillUnmount() {
+        await this.state.audio[this.state.audio.length - 1].stopAsync();
+    }
     async componentDidMount() {
-        await setTestDeviceIDAsync('EMULATOR');
+        // adMode 是否可用
+        let enableAdMod = await isAvailableAsync();
+
+
+
+        // await setTestDeviceIDAsync('EMULATOR');
+
+
         // await AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/1033173712'); // Test ID, Replace with your-admob-unit-id
         // await AdMobInterstitial.requestAdAsync({ servePersonalizedAds: true});
         // await AdMobInterstitial.showAdAsync();
@@ -137,7 +147,8 @@ class ArticleDetail extends Component {
 
         // EasyLoading.show('Loading...', -1, 'type'); // loading model
         this.setState({
-            loading: true
+            loading: true,
+            enableAdMod: enableAdMod,
         })
         let response = await articleApi.articleDetail({
             id: this.state.articleId,
@@ -191,37 +202,6 @@ class ArticleDetail extends Component {
         }
     }
 
-    onPressSource(check) {
-        if (check === '1') {
-            this.setState({
-                checked: '1',
-                sourceCheckedColor: {
-                    backgroundColor: 'green',
-                    color: 'white'
-                },
-                translateCheckedColor: {
-                    backgroundColor: 'white',
-                    color: 'black'
-                }
-            })
-            this.scrollView.scrollTo({x: 0, y: 0, animated: true});
-        } else {
-            this.setState({
-                checked: '2',
-                translateCheckedColor: {
-                    backgroundColor: 'green',
-                    color: 'white'
-                },
-                sourceCheckedColor: {
-                    backgroundColor: 'white',
-                    color: 'black'
-                },
-            })
-            this.scrollView.scrollTo({x: 0, y: 0, animated: true});
-        }
-
-    }
-
     async changeTab({i, ref}) {
         if (i === 1) {
             this.setModalVisible(true)
@@ -229,25 +209,24 @@ class ArticleDetail extends Component {
     }
 
     adMobEvent() {
-
+      console.log('adMod event now!')
     }
-
-
     async _rewardVideo() {
         // reward ad
-        await AdMobRewarded.setAdUnitID('ca-app-pub-3940256099942544/5224354917'); // Test ID, Replace with your-admob-unit-id
+        // await AdMobRewarded.setAdUnitID('ca-app-pub-3940256099942544/5224354917'); // Test ID, Replace with your-admob-unit-id
+        await AdMobRewarded.setAdUnitID('ca-app-pub-8394017801211473/9105006274'); // My ID, Replace with your-admob-unit-id
         await AdMobRewarded.requestAdAsync({servePersonalizedAds: true});
 
         // rewardedVideoDidLoad rewardedVideoDidOpen rewardedVideoDidStart
         AdMobRewarded.addEventListener('rewardedVideoDidOpen', () => {
                 // alert('You can close it! Press the top right close button!')
-        })
+        });
         AdMobRewarded.addEventListener('rewardedVideoDidComplete', () => {
             this.setAlertModalVisible(true)
-        })
+        });
         AdMobRewarded.addEventListener('rewardedVideoDidClose', () => {
             this.setAlertModalVisible(true)
-        })
+        });
         await AdMobRewarded.showAdAsync();
     }
     setAlertModalVisible(visible) {
@@ -274,8 +253,6 @@ class ArticleDetail extends Component {
         const colorScheme = Appearance.getColorScheme();
         const {navigate} = this.props.navigation;
         const {articleDetail, checked, playStatus, modalVisible, showedAd, alertModalVisible} = this.state;
-        console.log('article Detail page!')
-        console.log(navigate)
         // let {flag, user, jokerVideo, route} = this.props;
         // console.log(route.params.article_title)
         return (
@@ -421,7 +398,7 @@ class ArticleDetail extends Component {
                                 }}>
                                     <PublisherBanner
                                         bannerSize="banner"
-                                        adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
+                                        adUnitID="ca-app-pub-8394017801211473/9802994365" // Test ID, Replace with your-admob-unit-id
                                         onDidFailToReceiveAdWithError={this.bannerError}
                                         onAdMobDispatchAppEvent={this.adMobEvent}/>
                                 </View>
@@ -457,7 +434,7 @@ class ArticleDetail extends Component {
                             }}>
                                 <PublisherBanner
                                     bannerSize="banner"
-                                    adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
+                                    adUnitID="ca-app-pub-8394017801211473/9802994365" // Test ID, Replace with your-admob-unit-id
                                     onDidFailToReceiveAdWithError={this.bannerError}
                                     onAdMobDispatchAppEvent={this.adMobEvent}/>
                             </View>
@@ -535,7 +512,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArticleDetail);
-
 
 const styles = StyleSheet.create({
     container: {

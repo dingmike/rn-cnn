@@ -27,14 +27,12 @@ export function voiceOfArticle(context, audioArr) {
     // console.log(contextArray)
     // playAudio(contextArray, 0)
 
-    let contextArray = context
-    console.log(contextArray)
+    let contextArray = context;
     // contextArray = contextArray.match(/(\w+[\s]*){1,20}/g)   // 1-20个字符分隔开
-    contextArray = contextArray.split(/[.?:!`]/g)   // 使用符號分割开
-    console.log(contextArray)
+    contextArray = contextArray.split(/[.?:!`]/g) ;  // 使用符號分割开
     contextArray = contextArray.filter(item => {
         return item !== ''
-    })
+    });
     playAudio(contextArray, 0, audioArr).then(soundObject => {
 
     }).catch(error => {
@@ -44,7 +42,7 @@ export function voiceOfArticle(context, audioArr) {
 
 
 export async function playAudio(contextArray, index, audioArr){
-    let audioUrl = makeAudioUrl(contextArray.length, contextArray[index], index)
+    let audioUrl = makeAudioUrl(contextArray.length, contextArray[index], index);
     console.log(audioUrl)
     try {
         const soundObject = new Audio.Sound();
