@@ -230,7 +230,7 @@ function TabOneNavigator() {
                                         size={24}
                                         style={{ marginBottom: -3 }}
                                         // color={props.focused ? Colors.tabIconSelected : Colors.tabIconDefault}
-                                        color="#00000"
+                                        color="#000"
                                     />
                                 </TouchableOpacity>
                             </SafeAreaView>

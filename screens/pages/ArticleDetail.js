@@ -476,7 +476,7 @@ class ArticleDetail extends Component {
                             <View style={styles.centeredView}>
 
                                 <View style={styles.modalView}>
-                                    <Text style={styles.modalText}>Thank you for your help!</Text>
+                                    <Text style={styles.modalText}>Thank you!</Text>
                                     <TouchableHighlight
                                         style={{ ...styles.openButton,
                                             backgroundColor: '#2196F3' }}

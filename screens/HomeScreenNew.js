@@ -191,7 +191,7 @@ class HomeScreenNew extends Component {
         const shadowOpt = {
             width:160,
             height:170,
-            color:"#000",
+            color:"#00000",
             border:2,
             radius:3,
             opacity:0.2,
@@ -247,7 +247,6 @@ class HomeScreenNew extends Component {
                                         // paddingLeft: 60,
                                         backgroundColor: '#f3f4f6',
                                     }}>
-                                        {/*<Text style={{fontSize: 14, color: '#666666'}}>记得多多阅读哦！</Text>*/}
                                         {/*<AdMobBanner
                                             bannerSize="banner"
                                             adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
