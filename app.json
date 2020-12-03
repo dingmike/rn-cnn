@@ -29,7 +29,7 @@
       "bundleIdentifier": "com.fecstec.englishreading",
       "buildNumber": "1.0.0",
       "config": {
-        "googleMobileAdsAppId": "ca-app-pub-8394017801211473~4526616958"
+        "googleMobileAdsAppId": "ca-app-pub-3940256099942544~3347511713"
       },
       "infoPlist": {
         "UIBackgroundModes": [
@@ -46,7 +46,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "config": {
-        "googleMobileAdsAppId": "ca-app-pub-8394017801211473~4526616958"
+        "googleMobileAdsAppId": "ca-app-pub-3940256099942544~3347511713"
       }
     },
     "web": {

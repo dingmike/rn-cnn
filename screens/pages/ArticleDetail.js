@@ -213,8 +213,8 @@ class ArticleDetail extends Component {
     }
     async _rewardVideo() {
         // reward ad
-        // await AdMobRewarded.setAdUnitID('ca-app-pub-3940256099942544/5224354917'); // Test ID, Replace with your-admob-unit-id
-        await AdMobRewarded.setAdUnitID('ca-app-pub-8394017801211473/9105006274'); // My ID, Replace with your-admob-unit-id
+        await AdMobRewarded.setAdUnitID('ca-app-pub-3940256099942544/5224354917'); // Test ID, Replace with your-admob-unit-id
+        // await AdMobRewarded.setAdUnitID('ca-app-pub-8394017801211473/9105006274'); // My ID, Replace with your-admob-unit-id
         await AdMobRewarded.requestAdAsync({servePersonalizedAds: true});
 
         // rewardedVideoDidLoad rewardedVideoDidOpen rewardedVideoDidStart
@@ -398,7 +398,7 @@ class ArticleDetail extends Component {
                                 }}>
                                     <PublisherBanner
                                         bannerSize="banner"
-                                        adUnitID="ca-app-pub-8394017801211473/9802994365" // Test ID, Replace with your-admob-unit-id
+                                        adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
                                         onDidFailToReceiveAdWithError={this.bannerError}
                                         onAdMobDispatchAppEvent={this.adMobEvent}/>
                                 </View>
@@ -434,7 +434,7 @@ class ArticleDetail extends Component {
                             }}>
                                 <PublisherBanner
                                     bannerSize="banner"
-                                    adUnitID="ca-app-pub-8394017801211473/9802994365" // Test ID, Replace with your-admob-unit-id
+                                    adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
                                     onDidFailToReceiveAdWithError={this.bannerError}
                                     onAdMobDispatchAppEvent={this.adMobEvent}/>
                             </View>
