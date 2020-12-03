@@ -12,6 +12,7 @@ class AboutScreen extends Component{
     const {navigation} =  this.props;
     return (
         <View style={styles.container}>
+          <Text style={styles.headerTitle}>Welcome to English Ability</Text>
           <Text style={styles.title}>Let's learn English in the simplest way!</Text>
           <Text style={styles.contentDes}>
             Read an English article every day to understand the world in the simplest way!
@@ -35,10 +36,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 20,
   },
-  title: {
-    fontSize: 20,
+  headerTitle: {
+    fontSize: 22,
     fontWeight: 'bold',
-    paddingVertical: 20,
+    paddingVertical: 15,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    // paddingVertical: 20,
   },
   contentDes: {
     fontSize: 16,

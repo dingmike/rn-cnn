@@ -139,13 +139,13 @@ export default function BottomTabNavigator({navigation, route}) {
                     drawerIcon: ({color, focused}) => <TabBarIcon focused={focused} color={color} name="md-book"/>,
                 }}
             />
-            <Drawer.Screen
+           {/* <Drawer.Screen
                 name="My"
                 component={TabTwoNavigator}
                 options={{
                     drawerIcon: ({color, focused}) => <TabBarIcon focused={focused} color={color} name="md-person"/>,
                 }}
-            />
+            />*/}
         </Drawer.Navigator>
     );
 
