@@ -2,6 +2,7 @@
   "expo": {
     "name": "English-Ability",
     "slug": "react-native-cnn",
+    "sdkVersion": "39.0.0",
     "platforms": [
       "ios",
       "android",
