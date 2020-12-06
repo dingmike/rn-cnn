@@ -65,7 +65,7 @@ export default class CardArticle extends PureComponent {
                            marginTop: 50,
                        }}>
                            <View style={styles.cardTimeStyle}>
-                               <Text style={{color: 'white'}}>{myUtils.getEngDate(articleItem.meta.updateAt)}</Text>
+                               <Text style={{color: 'white',fontFamily: 'NotoSerif_400Regular'}}>{myUtils.getEngDate(articleItem.meta.updateAt)}</Text>
                            </View>
                            {/*<MyButton
                                text={'Read Now'}
@@ -167,6 +167,7 @@ const styles = StyleSheet.create({
         color: color.whiteFont,
         fontSize: 12,
         padding: 10,
+        fontFamily: 'NotoSerif_400Regular'
     },
     insideMainTitleView :{
         width: '100%',

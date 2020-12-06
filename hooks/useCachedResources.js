@@ -21,6 +21,7 @@ export default function useCachedResources() {
           ...Ionicons.font,
           'nyt-cheltenham': require('../assets/fonts/Cheltenham-ITC-Bold-BT.ttf'),
         });
+
       } catch (e) {
         // We might want to provide this error information to an error reporting service
         console.warn(e);

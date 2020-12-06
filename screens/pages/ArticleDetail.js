@@ -323,7 +323,7 @@ class ArticleDetail extends Component {
                         }}>
 
                             <View style={styles.articleTitle}>
-                                <Text style={{
+                                <Text selectable={true} key={Math.random()} style={{
                                     ...styles.articleTitle,
                                     color: colorScheme === 'dark' ? '#a5a5a5' : 'black'
                                 }}>{articleDetail.article_title}</Text>
@@ -361,12 +361,11 @@ class ArticleDetail extends Component {
                                 </View>
                             </View>
 
-
                             <View style={styles.articleBrief}>
-                                <Text style={{
+                                <Text key={Math.random()} selectable={true} style={{
                                     fontSize: 14,
-                                    fontFamily: 'nyt-cheltenham',
-                                    color: '#9a9a9a',
+                                    fontFamily: 'NotoSerif_700Bold',
+                                    // color: '#9a9a9a',
                                 }}>
                                     {articleDetail.article_brief}
                                 </Text>
@@ -380,9 +379,10 @@ class ArticleDetail extends Component {
                             </View>
 
                             <View style={styles.articleContent}>
-                                <Text style={{
+                                <Text key={Math.random()} selectable={true} style={{
                                     fontSize: 18,
-                                    fontFamily: 'nyt-cheltenham',
+                                    // fontFamily: 'nyt-cheltenham',
+                                    fontFamily: 'NotoSerif_400Regular',
                                     color: colorScheme === 'dark' ? '#a5a5a5' : 'black'
                                 }}>
                                     {articleDetail.article_content}
@@ -420,9 +420,9 @@ class ArticleDetail extends Component {
                             backgroundColor: colorScheme === 'dark' ? '#1a1a1a' : '#fff'
                         }}>
                             <View>
-                                <Text style={styles.articleTitle}>{articleDetail.article_title}</Text>
+                                <Text key={Math.random()} textSelectable={true} style={styles.articleTitle}>{articleDetail.article_title}</Text>
                             </View>
-                            <HTML html={articleDetail.article_translate}
+                            <HTML html={articleDetail.article_translate} textSelectable={true}
                                   imagesMaxWidth={Dimensions.get('window').width}/>
                             <View style={{
                                 height: 52,
@@ -450,7 +450,7 @@ class ArticleDetail extends Component {
                             }}>
                             <View style={styles.centeredView}>
                                 <View style={styles.modalView}>
-                                    <Text style={styles.modalText}>Watch the Ad Video first, then back to
+                                    <Text key={Math.random()} style={styles.modalText}>Watch the Ad Video first, then back to
                                         translation,Thank you!</Text>
                                     <TouchableHighlight
                                         style={{
@@ -460,7 +460,7 @@ class ArticleDetail extends Component {
                                         onPress={() => {
                                             this.setModalVisible(!modalVisible);
                                         }}>
-                                        <Text style={styles.textStyle}>Ok</Text>
+                                        <Text key={Math.random()} style={styles.textStyle}>Ok</Text>
                                     </TouchableHighlight>
                                 </View>
                             </View>
@@ -476,14 +476,14 @@ class ArticleDetail extends Component {
                             <View style={styles.centeredView}>
 
                                 <View style={styles.modalView}>
-                                    <Text style={styles.modalText}>Thank you!</Text>
+                                    <Text key={Math.random()} style={styles.modalText}>Thank you!</Text>
                                     <TouchableHighlight
                                         style={{ ...styles.openButton,
                                             backgroundColor: '#2196F3' }}
                                         onPress={() => {
                                             this.setAlertModalVisible(false);
                                         }}>
-                                        <Text style={styles.textStyle}>Close</Text>
+                                        <Text key={Math.random()} style={styles.textStyle}>Close</Text>
                                     </TouchableHighlight>
                                 </View>
                             </View>
@@ -616,7 +616,7 @@ const styles = StyleSheet.create({
     articlePluginText: {
         fontSize: 14,
         color: '#9a9a9a',
-        fontFamily: 'nyt-cheltenham',
+        fontFamily: 'NotoSerif_400Regular',
     },
     articleAudio: {},
     articleBrief: {
