@@ -45,7 +45,7 @@ import * as SecureStore from 'expo-secure-store';
 import SkeletonContent from 'react-native-skeleton-content';
 import HomeLoadMoreFooter, {LOAD_MORE_STATE} from "../components/HomeLoadMoreFooter";
 import ToastExample from '../components/ToastExample';
-
+import * as Updates from 'expo-updates';
 
 class HomeScreenNew extends Component {
 
@@ -171,6 +171,19 @@ class HomeScreenNew extends Component {
     }
 
     async componentDidMount() {
+       /* try {
+            const update = await Updates.checkForUpdateAsync();
+            if (update.isAvailable) {
+                await Updates.fetchUpdateAsync();
+                // ... notify user of update ...
+                ToastExample.show('Updating...', ToastExample.LONG);
+                await Updates.reloadAsync();
+            }
+        } catch (e) {
+            // handle or log error
+            alert(JSON.stringify(e))
+        }*/
+
         // Set global test device ID
         await setTestDeviceIDAsync('EMULATOR');
         this.setState({
@@ -181,7 +194,7 @@ class HomeScreenNew extends Component {
         // alert(right)
         SecureStore.setItemAsync('_ok', '2342234', {})
 
-        ToastExample.show('Awesome', ToastExample.SHORT);
+        ToastExample.show('It\'s Awesome!', ToastExample.SHORT);
     }
     renderFooter = () => {
         return <HomeLoadMoreFooter state={this.state.showFooter}/>;
@@ -204,7 +217,7 @@ class HomeScreenNew extends Component {
                     {/* header title */}
                     <View style={styles.headView}>
                         <View>
-                            <Text style={styles.headerTitle}>Today Reading!</Text>
+                            <Text style={styles.headerTitle}>Today Reading!!!!!!</Text>
                         </View>
                         <View>
                             <Text style={styles.headerDes}>Read more, Learn more.</Text>

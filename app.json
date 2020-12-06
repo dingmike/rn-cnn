@@ -51,13 +51,7 @@
       }
     },
     "web": {
-      "favicon": "./assets/images/favicon.png",
-      "config": {
-        "firebase": {
-          "apiKey": "AIzaXXXXXXXX-xxxxxxxxxxxxxxxxxxx",
-          "measurementId": "G-XXXXXXXXX"
-        }
-      }
+      "favicon": "./assets/images/favicon.png"
     }
   }
 }
