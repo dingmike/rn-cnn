@@ -41,7 +41,7 @@ import FacebookTabBar from '../../components/FacebookTabBar';
 import ScrollableTabView from '../../components/ScrollableTabView/index';
 import {AntDesign, MaterialIcons, FontAwesome5} from '@expo/vector-icons';
 import {voiceOfArticle} from '../../utils/wordToVoice'
-
+import Dialog from '../../components/Dialog/index';
 
 import {
     Accelerometer,
@@ -52,6 +52,7 @@ import {
     Pedometer,
 } from 'expo-sensors';
 import articleApi from "../../apis/articleApi";
+import wordApi from "../../apis/word";
 import useColorScheme from "../../hooks/useColorScheme";
 
 /*function OptionButton({ icon, label, onPress, isLastOption }) {
@@ -161,26 +162,7 @@ const html = `
  * @type {string}
  */
 const H5AppBridge = `
-/*(function () {
-  var height = null;
-  function changeHeight() {
-    if (document.body.scrollHeight != height) {
-      height = document.body.scrollHeight;
-      if (window.postMessage.setHeight) {
-           let data = {};
-            data.params={
-                        height: height,
-                    };        
-        window.postMessage.setHeight(JSON.stringify(data))
-      }
-    }
-  }
-  setInterval(changeHeight, 100);
-}());*/
 (function() {  
-//高度获取
-  
-  
   window.postMessage = {
       sayHello:function(data){
                 let objData = {};
@@ -203,7 +185,7 @@ const H5AppBridge = `
                  window.ReactNativeWebView.postMessage(JSON.stringify(objData));
           }      
   }
-  
+  //高度获取
    var height = null;
   function changeHeight() {
     if (document.body.scrollHeight != height) {
@@ -249,6 +231,7 @@ class ArticleDetail extends Component {
         this.state = {
             articleHeight: 500,
             photos: [],
+            wordDetail: {},
             articleId: route.params.id,
             articleDetail: {},
             modalVisible: false,
@@ -320,17 +303,6 @@ class ArticleDetail extends Component {
         })
         console.log(this.state.articleDetail.article_brief, '00000000000000000000000000000000000000000')
 
-
-        // const webView = this.refs['webview_ref'];
-        // let params = {
-        //     msg: '这是从RN端传来的消息'
-        // };
-        // // 注意：APP端传递参数到H5页面，要将对象转为JSON字符串
-        // // let jsCode = `window.sayHello && window.sayHello(${JSON.stringify(params)});`;
-        // let jsCode = `window.sayHello && window.sayHello(${JSON.stringify(this.state.articleDetail.article_content)});`;
-        // // 调用H5端的方法，并传递数据
-        // webView.injectJavaScript(jsCode);
-
         this.webview.postMessage(this.state.articleDetail.article_content);
         // this.webview.postMessage('JSON.stringify(this.state.articleDetail.article_content)');
 
@@ -339,6 +311,21 @@ class ArticleDetail extends Component {
     componentDidUpdate() {
     }
 
+    // query word by dic
+    async queryWordByNet(word) {
+        let response = await wordApi.queryWord({
+            word: word,
+            source: 'own',
+        });
+        console.log(response.data)
+        if (typeof (response.data) === 'string') {
+            response.data = JSON.parse(response.data)
+        }
+        return response.data
+        // this.setState({
+        //     wordDetail: response.data
+        // })
+    }
     async speak(playStatus, content) {
         if (playStatus === 'play') {
             if (this.state.audio.length === 0) {
@@ -443,9 +430,27 @@ class ArticleDetail extends Component {
                     break;
                 case 'queryWord':
                     let word = data.params.word;
+
                     if (word) {
-                        alert("queryWord:" + word);
+                        this.queryWordByNet(word).then(res => {
+                            // alert("queryWord:" + word);
+                            Dialog.show(
+                                {
+                                    canPressShadow: true,
+                                    msg:'内容',
+                                    content: res,
+                                    sure: () => {
+                                        console.log('sure')
+                                    },
+                                    cancel:() =>{
+                                        console.log('cancel')
+                                    },
+                                }
+                            );
+                        })
+
                     }
+
                     break;
                 case 'setHeight':
                     let height = data.params.height;

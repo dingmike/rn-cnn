@@ -9,6 +9,7 @@ import {persistor, store} from './redux/persistStore'
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Navigation from './navigation';
 import { AppLoading } from 'expo';
+import {RootSiblingParent} from "react-native-root-siblings";
 // import { useFonts, Inter_900Black  } from '@expo-google-fonts/inter'; // https://fonts.google.com/
 import {
     useFonts,
@@ -34,16 +35,19 @@ export default function App(props) {
     } else {
         return (
             <Provider store={store}>
-                <PersistGate persistor={persistor}>
-                    <SafeAreaProvider style={styles.container}>
+                <RootSiblingParent>
+                    <PersistGate persistor={persistor}>
+                        <SafeAreaProvider style={styles.container}>
                             <Navigation colorScheme={colorScheme} />
                             <StatusBar/>
                             {/*{Platform.OS === 'ios' && <StatusBar
                             animated={true}
                             backgroundColor="#61dafb"
                             barStyle="dark-content"/>}*/}
-                    </SafeAreaProvider>
-                </PersistGate>
+                        </SafeAreaProvider>
+                    </PersistGate>
+                </RootSiblingParent>
+
             </Provider>
         );
     }
