@@ -71,6 +71,25 @@ import useColorScheme from "../../hooks/useColorScheme";
 }*/
 
 
+/*
+* 禁用webview中的文字选择
+* 1.Use injectedJavascript to disable text selection
+* const INJECTEDJAVASCRIPT = "document.body.style.userSelect = 'none'";
+<WebView
+  ...
+  injectedJavaScript={INJECTEDJAVASCRIPT}
+  ...
+/>
+* 2.Another way is just wrapping your webview in View Tag
+* <View pointerEvents="none">
+  <WebView
+    source={{ uri: webviewUrl }}
+    scrollEnabled={false}
+  />
+</View>
+*
+* */
+
 const html = `
       <html>
       <head>
@@ -195,13 +214,12 @@ const H5AppBridge = `
             data.params={
                height: height,
             };        
-              
         window.postMessage.setHeight(JSON.stringify(data))
       }
     }
   }
-  setInterval(changeHeight, 100);
- 
+  setInterval(changeHeight, 200);
+
 })();
 `;
 class ArticleDetail extends Component {
@@ -607,7 +625,7 @@ class ArticleDetail extends Component {
                                     {articleDetail.article_content}
                                 </Text>*/}
 
-                                <SafeAreaView style={{flex: 1}}>
+                                <View style={{flex: 1}}  pointerEvents="none">
                                     {/*<TouchableOpacity
                                         style={{
                                             height: 40,
@@ -650,7 +668,7 @@ class ArticleDetail extends Component {
                                         onNavigationStateChange={() => {}}
                                         onMessage={event => this._handleMessage(event)}
                                     />
-                                </SafeAreaView>
+                                </View>
 
                                 <View style={{
                                     height: 52,

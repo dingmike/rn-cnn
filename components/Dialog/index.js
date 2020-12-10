@@ -74,7 +74,13 @@ class DialogContainer extends Component {
         } = this.props;
         // alert(sureText)
         console.log(content, 'wordsss')
-        console.log(JSON.stringify(content.content.word.content), 'wordcontent')
+        if(content && content.content) {
+            console.log(JSON.stringify(content.content.word.content), 'wordcontent')
+        }else {
+
+        }
+
+
         // console.log(sureText)
         return (
             <View style={s.popViewWrapper}>
