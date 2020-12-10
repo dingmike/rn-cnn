@@ -182,6 +182,7 @@ const html = `
  */
 const H5AppBridge = `
 (function() {  
+  document.body.style.userSelect = 'none';
   window.postMessage = {
       sayHello:function(data){
                 let objData = {};
@@ -625,7 +626,7 @@ class ArticleDetail extends Component {
                                     {articleDetail.article_content}
                                 </Text>*/}
 
-                                <View style={{flex: 1}}  pointerEvents="none">
+                                <View style={{flex: 1}} >
                                     {/*<TouchableOpacity
                                         style={{
                                             height: 40,
