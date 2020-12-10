@@ -11,7 +11,7 @@ import {
     TouchableOpacity,
     Dimensions,
     Modal,
-    Alert, TouchableHighlight, Appearance
+    Alert, TouchableHighlight, Appearance, SafeAreaView
 } from 'react-native';
 import {WebView} from 'react-native-webview';
 import {RectButton, ScrollView} from 'react-native-gesture-handler';
@@ -27,6 +27,7 @@ import HTML from 'react-native-render-html';
 import {Asset} from 'expo-asset';
 import {Loading, EasyLoading} from '../../components/EasyLoading'
 import SkeletonContent from 'react-native-skeleton-content';
+
 import {
     AdMobBanner,
     AdMobInterstitial,
@@ -69,6 +70,158 @@ import useColorScheme from "../../hooks/useColorScheme";
 }*/
 
 
+const html = `
+      <html>
+      <head>
+       <meta charset="utf-8">
+       <meta name="color-scheme" content="light dark">
+       <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1,user-scalable=0,viewport-fit=cover">
+      </head>
+      <style>
+      .article-content-in {
+                    width: 100%;
+                    color: #000;
+                    padding: 1vw 0;
+                    font-size: 4.8vw;
+                    line-height: 8vw;
+                    font-family: nyt-cheltenham, georgia, 'times new roman', times, serif;
+                    /*font-family: Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;*/
+                    /*border-radius: 2vw;*/
+                    /*padding: 1vw 2vw;*/
+                    /*border: 1px solid #1cb5cc;*/
+
+                }
+              .article-content-in:first-letter {
+                        float: left;
+                        font-size: 17vw;
+                        font-weight: bolder;
+                        padding-right: 4px;
+                        margin: 3.8vw 0 0 0;
+                        /*text-transform: uppercase;*/
+                        /*-webkit-text-transform: uppercase;*/
+                    }
+
+      </style>
+      <body>
+<!--        <h1>这是H5页面</h1>-->
+<!--        <button onclick="sayHelloToApp()">sayHelloToApp</button>-->
+        
+           <p id="articleContentIn" class="article-content-in"
+                               style="white-space: pre-line;">
+                
+           </p>
+        <script>
+            
+
+            window.onload = function() {
+
+              
+                let u = navigator.userAgent; 
+                let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //g
+                let isIOS = !!u.match(/\\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+                if (isAndroid) {
+      
+                    //这个是安卓操作系统
+                    document.addEventListener("message", function(event) {
+                         initArticle(event.data)          
+                      });
+                }
+                if (isIOS) {
+                　　//这个是ios操作系统
+                 window.addEventListener("message", function(event) {
+                      initArticle(event.data)     
+                  });
+                }
+                
+                
+                function initArticle(data) {
+                        data = data.replace(/\\b(\\w+?)\\b/g, '<span class="word" data-word="$1" onclick="queryWord(\\'$1\\', this)">$1</span>');
+                        // 渲染article_content
+                        document.getElementById('articleContentIn').innerHTML = data;    
+                }
+                // invoke the app method    
+               window.queryWord = (word, dom) => {
+                   // alert(word)
+                    let data = {};
+                    data.params={
+                        word: word,
+                    };
+                    // 传递事件和数据到APP端
+                   window.postMessage.queryWord(JSON.stringify(data));
+               }
+            
+            }    
+          
+        </script>
+      </body>
+      </html>
+    `;
+/**
+ * APP端注入JS脚本到H5端，供H5页面调用。
+ * @type {string}
+ */
+const H5AppBridge = `
+/*(function () {
+  var height = null;
+  function changeHeight() {
+    if (document.body.scrollHeight != height) {
+      height = document.body.scrollHeight;
+      if (window.postMessage.setHeight) {
+           let data = {};
+            data.params={
+                        height: height,
+                    };        
+        window.postMessage.setHeight(JSON.stringify(data))
+      }
+    }
+  }
+  setInterval(changeHeight, 100);
+}());*/
+(function() {  
+//高度获取
+  
+  
+  window.postMessage = {
+      sayHello:function(data){
+                let objData = {};
+                // 声明事件类型。
+                objData.type='sayHello';
+                objData.data = JSON.parse(data);
+                // 这里注意要把data转化为JSON字符串，postMessage()只接受字符串参数。
+                window.ReactNativeWebView.postMessage(JSON.stringify(objData));
+            },
+      queryWord: function(data) {
+                let objData = {};
+                objData.type='queryWord';
+                objData.data = JSON.parse(data);
+                window.ReactNativeWebView.postMessage(JSON.stringify(objData));
+          },      
+      setHeight: function(data) {
+                let objData = {};
+                objData.type='setHeight';
+                objData.data = JSON.parse(data);
+                 window.ReactNativeWebView.postMessage(JSON.stringify(objData));
+          }      
+  }
+  
+   var height = null;
+  function changeHeight() {
+    if (document.body.scrollHeight != height) {
+      height = document.body.scrollHeight;
+     if (window.postMessage.setHeight) {
+            let data = {};
+            data.params={
+               height: height,
+            };        
+              
+        window.postMessage.setHeight(JSON.stringify(data))
+      }
+    }
+  }
+  setInterval(changeHeight, 100);
+ 
+})();
+`;
 class ArticleDetail extends Component {
 
 // 对props 进行类型检测，如果使用typeScript有内置的
@@ -94,6 +247,7 @@ class ArticleDetail extends Component {
         super(props);
         let {flag, user, jokerVideo, route} = this.props;
         this.state = {
+            articleHeight: 500,
             photos: [],
             articleId: route.params.id,
             articleDetail: {},
@@ -113,11 +267,14 @@ class ArticleDetail extends Component {
             },
             audio: [],
             showedAd: false,
-        }
+        };
         this.bannerError = 'Ad error';
     }
     async componentWillUnmount() {
-        await this.state.audio[this.state.audio.length - 1].stopAsync();
+        if(this.state.audio.length !== 0) {
+            await this.state.audio[this.state.audio.length - 1].stopAsync();
+        }
+
     }
     async componentDidMount() {
         // adMode 是否可用
@@ -157,10 +314,26 @@ class ArticleDetail extends Component {
         this.setState({
             loading: false
         })
-        console.log(response, 100)
+
         this.setState({
             articleDetail: response.data
         })
+        console.log(this.state.articleDetail.article_brief, '00000000000000000000000000000000000000000')
+
+
+        // const webView = this.refs['webview_ref'];
+        // let params = {
+        //     msg: '这是从RN端传来的消息'
+        // };
+        // // 注意：APP端传递参数到H5页面，要将对象转为JSON字符串
+        // // let jsCode = `window.sayHello && window.sayHello(${JSON.stringify(params)});`;
+        // let jsCode = `window.sayHello && window.sayHello(${JSON.stringify(this.state.articleDetail.article_content)});`;
+        // // 调用H5端的方法，并传递数据
+        // webView.injectJavaScript(jsCode);
+
+        this.webview.postMessage(this.state.articleDetail.article_content);
+        // this.webview.postMessage('JSON.stringify(this.state.articleDetail.article_content)');
+
     }
 
     componentDidUpdate() {
@@ -248,13 +421,54 @@ class ArticleDetail extends Component {
             modalVisible: visible
         }));
     }
+    /**
+     * h5 event to react-native with data
+     * @param event
+     * @private
+     */
+    _handleMessage(event) {
+        console.log("event.nativeEvent", event.nativeEvent);
+        const message = event.nativeEvent;
+        try {
+            let objData = JSON.parse(message.data);
+            let data = objData.data;
+            // let data = JSON.parse(objData.data);
+            console.log("data", data);
+            switch (objData.type) {
+                case 'sayHello':
+                    let params = data.params;
+                    if (params) {
+                        alert("sayHello:" + params.msg);
+                    }
+                    break;
+                case 'queryWord':
+                    let word = data.params.word;
+                    if (word) {
+                        alert("queryWord:" + word);
+                    }
+                    break;
+                case 'setHeight':
+                    let height = data.params.height;
+                    this.setState({
+                        articleHeight: parseInt(height)
+                    })
+                    break;
+                default:
+                    break;
+            }
+        } catch (e) {
+            // alert("调用APP方法参数错误！参数为：" + message.data);
+            alert(JSON.stringify(e));
+        }
+    };
 
     render() {
         const colorScheme = Appearance.getColorScheme();
         const {navigate} = this.props.navigation;
-        const {articleDetail, checked, playStatus, modalVisible, showedAd, alertModalVisible} = this.state;
+        const {articleDetail, checked, playStatus, modalVisible, showedAd, alertModalVisible, articleHeight} = this.state;
         // let {flag, user, jokerVideo, route} = this.props;
         // console.log(route.params.article_title)
+        console.log(articleDetail.aritcle_brief,'-----------------------')
         return (
             <SkeletonContent
                 containerStyle={{
@@ -379,14 +593,60 @@ class ArticleDetail extends Component {
                             </View>
 
                             <View style={styles.articleContent}>
-                                <Text key={Math.random()} selectable={true} style={{
+                                {/*<Text key={Math.random()} selectable={true} style={{
                                     fontSize: 18,
                                     // fontFamily: 'nyt-cheltenham',
                                     fontFamily: 'NotoSerif_400Regular',
                                     color: colorScheme === 'dark' ? '#a5a5a5' : 'black'
                                 }}>
                                     {articleDetail.article_content}
-                                </Text>
+                                </Text>*/}
+
+                                <SafeAreaView style={{flex: 1}}>
+                                    {/*<TouchableOpacity
+                                        style={{
+                                            height: 40,
+                                            borderRadius: 20,
+                                            paddingLeft: 15,
+                                            paddingRight: 15,
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            backgroundColor: '#2988ff'
+                                        }}
+                                        onPress={() => {
+                                            const webView = this.refs['webview_ref'];
+                                            let params = {
+                                                msg: '这是从RN端传来的消息'
+                                            };
+                                            // 注意：APP端传递参数到H5页面，要将对象转为JSON字符串
+                                            // let jsCode = `window.sayHello && window.sayHello(${JSON.stringify(params)});`;
+                                            let jsCode = `window.sayHello && window.sayHello(${JSON.stringify(articleDetail.article_content)});`;
+                                            // 调用H5端的方法，并传递数据
+                                            webView.injectJavaScript(jsCode);
+                                        }}
+                                    >
+                                        <Text>
+                                            sayHello
+                                        </Text>
+                                    </TouchableOpacity>*/}
+                                    <WebView
+                                        style={{ height: articleHeight, width: '100%'}}
+                                        // ref={'webview_ref'}
+                                        ref={webview => this.webview = webview}
+                                        source={{html: html}}
+                                        // 初始化webview注入全局代码
+                                        injectedJavaScript={H5AppBridge}
+                                        domStorageEnabled={true}
+                                        scrollEnabled={false}
+                                        scalesPageToFit={false}
+                                        javaScriptEnabled={true}
+                                        showsVerticalScrollIndicator={false}
+                                        showsHorizontalScrollIndicator={false}
+                                        onNavigationStateChange={() => {}}
+                                        onMessage={event => this._handleMessage(event)}
+                                    />
+                                </SafeAreaView>
+
                                 <View style={{
                                     height: 52,
                                     alignItems: 'center',
