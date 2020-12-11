@@ -11,7 +11,7 @@ import {
     TouchableOpacity,
     Dimensions,
     Modal,
-    Alert, TouchableHighlight, Appearance, SafeAreaView
+    Alert, TouchableHighlight, Appearance, SafeAreaView, Vibration
 } from 'react-native';
 import {WebView} from 'react-native-webview';
 import {RectButton, ScrollView} from 'react-native-gesture-handler';
@@ -132,11 +132,9 @@ const html = `
                 
            </p>
         <script>
-            
 
             window.onload = function() {
 
-              
                 let u = navigator.userAgent; 
                 let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //g
                 let isIOS = !!u.match(/\\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
@@ -168,6 +166,7 @@ const html = `
                         word: word,
                     };
                     // 传递事件和数据到APP端
+                   dom.style.color = 'red';
                    window.postMessage.queryWord(JSON.stringify(data));
                }
             
@@ -430,6 +429,7 @@ class ArticleDetail extends Component {
      * @private
      */
     _handleMessage(event) {
+        const ONE_SECOND_IN_MS = 1000;
         console.log("event.nativeEvent", event.nativeEvent);
         const message = event.nativeEvent;
         try {
@@ -446,7 +446,7 @@ class ArticleDetail extends Component {
                     break;
                 case 'queryWord':
                     let word = data.params.word;
-
+                    Vibration.vibrate(1*ONE_SECOND_IN_MS);
                     if (word) {
                         this.queryWordByNet(word).then(res => {
                             // alert("queryWord:" + word);
