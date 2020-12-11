@@ -378,7 +378,8 @@ class ArticleDetail extends Component {
     }
 
     async changeTab({i, ref}) {
-        if (i === 1) {
+        // 暂时通过pay_person_num == 1 强制ad
+        if (i === 1 && this.state.articleDetail.pay_person_num == 1) {
             this.setModalVisible(true)
         }
     }
@@ -411,6 +412,7 @@ class ArticleDetail extends Component {
         }));
     }
     setModalVisible(visible) {
+        // watch the ad video
         if (!visible && !this.state.showedAd) {
             this._rewardVideo().then(res => {
                 // android cannot callback
@@ -750,8 +752,8 @@ class ArticleDetail extends Component {
                             }}>
                             <View style={styles.centeredView}>
                                 <View style={styles.modalView}>
-                                    <Text key={Math.random()} style={styles.modalText}>Watch the Ad Video first, then back to
-                                        translation,Thank you!</Text>
+                                    <Text key={Math.random()} style={styles.modalText}>Get the reward first, then back to
+                                        translation!</Text>
                                     <TouchableHighlight
                                         style={{
                                             ...styles.openButton,
