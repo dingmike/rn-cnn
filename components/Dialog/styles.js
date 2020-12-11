@@ -73,6 +73,7 @@ export const styles = StyleSheet.create({
   },
   submitBtn: {
     flex: 1,
+    paddingVertical: 10,
     alignItems: "center",
     justifyContent: "center"
   },

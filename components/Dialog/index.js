@@ -15,7 +15,6 @@ import RootSiblings from 'react-native-root-siblings';
 import {pTd} from './size';
 import {AntDesign, MaterialIcons, FontAwesome5} from '@expo/vector-icons';
 import {Audio} from "expo-av";
-import word from "../../apis/word";
 
 let lastPopView;
 
@@ -43,7 +42,6 @@ class CommentDialog extends Component {
         lastPopView = new RootSiblings((<DialogContainer {...options} />));
         return lastPopView
     };
-
     static hide = instance => {
         instance.destroy();
     };
@@ -96,7 +94,7 @@ class DialogContainer extends Component {
             cancelText,
             content, // word
             canPressShadow, //点击弹窗外面是否关闭
-            haveCancel
+            haveCancel,
         } = this.props;
         // alert(sureText)
         console.log(content, 'wordsss')
@@ -186,7 +184,7 @@ class DialogContainer extends Component {
                         <View style={s.popViewBackDropView}/>
                     </TouchableWithoutFeedback>
 
-                    <View style={s.main}>
+                    <View style={[s.main]}>
                         <View style={s.topMain}>
                             <Text style={{color: "#343434", fontSize: pTd(20), fontWeight: '600'}}>
                                 {wordHead}
@@ -224,7 +222,7 @@ class DialogContainer extends Component {
                             {wordDetail.trans.length !== 0 ? trans: <View style={s.center}><Text>Sorry! I can't find this word!</Text></View>}
                             {/*remember method*/}
                             {wordDetail.remMethod && wordDetail.remMethod.val !== undefined && wordDetail.remMethod.desc !== ''?  <View style={s.left}>
-                                <Text>
+                                <Text style={{textAlign: 'left'}}>
                                     {wordDetail.remMethod.desc}:  <Text style={{color: 'red'}}>{wordDetail.remMethod.val}</Text>
                                 </Text>
                             </View> : null}
