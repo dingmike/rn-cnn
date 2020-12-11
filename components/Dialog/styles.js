@@ -66,6 +66,7 @@ export const styles = StyleSheet.create({
   },
   bottom: {
     height: pTd(40),
+      marginTop: 10,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row"

@@ -219,7 +219,7 @@ class DialogContainer extends Component {
                             {wordDetail.remMethod && wordDetail.remMethod.val !== undefined ?  <View style={s.left}>
                                 {/*<Text style={s.message}>{msg}</Text>*/}
                                 <Text>
-                                    {wordDetail.remMethod.desc}:    {wordDetail.remMethod.val}
+                                    {wordDetail.remMethod.desc}:  <Text style={{color: 'red'}}>{wordDetail.remMethod.val}</Text>
                                 </Text>
                             </View> : null}
                         </ScrollView>
@@ -229,13 +229,12 @@ class DialogContainer extends Component {
 
                         <View style={s.bottom}>
                             {haveCancel ? (
-                                <>
+                                <View>
                                     <TouchableOpacity style={[s.submitBtn]} onPress={this.cancel}>
                                         <Text style={s.cancleText}>{cancelText}</Text>
                                     </TouchableOpacity>
-
                                     <View style={s.viewLine2}/>
-                                </>
+                                </View>
                             ) : null}
 
                             <TouchableOpacity style={s.submitBtn} onPress={this.sure}>
