@@ -276,7 +276,7 @@ class ArticleDetail extends Component {
         if(this.state.audio.length !== 0) {
             await this.state.audio[this.state.audio.length - 1].stopAsync();
         }
-
+        Dialog.hide(this.wordDialog);
     }
     async componentDidMount() {
         // adMode 是否可用
@@ -429,7 +429,7 @@ class ArticleDetail extends Component {
      * @private
      */
     _handleMessage(event) {
-        const ONE_SECOND_IN_MS = 1000;
+        const ONE_SECOND_IN_MS = 200;
         console.log("event.nativeEvent", event.nativeEvent);
         const message = event.nativeEvent;
         try {
@@ -446,11 +446,11 @@ class ArticleDetail extends Component {
                     break;
                 case 'queryWord':
                     let word = data.params.word;
-                    Vibration.vibrate(1*ONE_SECOND_IN_MS);
+                    // Vibration.vibrate(1*ONE_SECOND_IN_MS);
                     if (word) {
                         this.queryWordByNet(word).then(res => {
                             // alert("queryWord:" + word);
-                            Dialog.show(
+                           this.wordDialog = Dialog.show(
                                 {
                                     canPressShadow: true,
                                     msg:'查询单词',

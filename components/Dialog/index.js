@@ -41,6 +41,7 @@ class CommentDialog extends Component {
             CommentDialog.hide(lastPopView);
         }
         lastPopView = new RootSiblings((<DialogContainer {...options} />));
+        return lastPopView
     };
 
     static hide = instance => {
@@ -192,15 +193,15 @@ class DialogContainer extends Component {
                             </Text>
                         </View>
 
-                        <View style={s.viewLine}/>
+                        {/*<View style={s.viewLine}/>*/}
 
                         {/*content word*/}
                         <ScrollView>
                             {/*speech*/}
-                            <View style={{flexDirection: 'row', justifyContent: 'flex-start', marginBottom: 10}}>
+                            <View style={{flexDirection: 'column', justifyContent: 'flex-start', marginBottom: 10, flexWrap: 'wrap'}}>
                                {wordDetail.usphone ?
-                                <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                    <Text>[{wordDetail.usphone}]</Text>
+                                <View style={{flexDirection: 'row', justifyContent: 'flex-start', height: 26, marginBottom: 10,}}>
+                                    <Text>us: [{wordDetail.usphone}]</Text>
                                     <View style={{paddingHorizontal: 10}}>
                                         <TouchableOpacity onPress={() => this.wordAudioPlay(wordDetail.usspeech)}>
                                             <AntDesign name="sound" size={20} color="black" />
@@ -209,8 +210,8 @@ class DialogContainer extends Component {
 
                                 </View> : null}
                                 {wordDetail.ukphone ?
-                                    <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                        <Text>[{wordDetail.usphone}]</Text>
+                                    <View style={{flexDirection: 'row', justifyContent: 'flex-start', height: 26,}}>
+                                        <Text>uk: [{wordDetail.ukphone}]</Text>
                                         <View style={{paddingHorizontal: 10}}>
                                             <TouchableOpacity onPress={() => this.wordAudioPlay(wordDetail.ukspeech)}>
                                                 <AntDesign name="sound" size={20} color="black" />
@@ -230,7 +231,7 @@ class DialogContainer extends Component {
                         </ScrollView>
 
 
-                        <View style={s.viewLine}/>
+                        {/*<View style={s.viewLine}/>*/}
 
                         <View style={s.bottom}>
                             {haveCancel ? (
@@ -269,13 +270,13 @@ class DialogContainer extends Component {
                             </Text>
                         </View>
 
-                        <View style={s.viewLine}/>
+                        {/*<View style={s.viewLine}/>*/}
 
                         <View style={s.center}>
                             <Text style={s.message}>{msg}</Text>
                         </View>
 
-                        <View style={s.viewLine}/>
+                        {/*<View style={s.viewLine}/>*/}
 
                         <View style={s.bottom}>
                             {haveCancel ? (

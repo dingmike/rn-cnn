@@ -217,7 +217,7 @@ class HomeScreenNew extends Component {
                     {/* header title */}
                     <View style={styles.headView}>
                         <View>
-                            <Text key={Math.random()} selectable={true} style={styles.headerTitle}>Today Reading!!!!!!</Text>
+                            <Text key={Math.random()} selectable={true} style={styles.headerTitle}>Today Reading!</Text>
                         </View>
                         <View>
                             <Text key={Math.random()} selectable={true} style={styles.headerDes}>Read more, Learn more.</Text>

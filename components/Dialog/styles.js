@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.5)"
   },
   main: {
-    width: pTd(300),
+    width: pTd(360),
     minHeight: pTd(124),
     borderRadius: pTd(4),
     backgroundColor: "#ffffff",
