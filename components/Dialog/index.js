@@ -163,6 +163,12 @@ class DialogContainer extends Component {
                             {wordDetail.trans[i].tranOther ? <Text style={{color: 'black'}}><Text style={{fontWeight: '600',color: 'grey'}}>{wordDetail.trans[i].pos}.</Text> {wordDetail.trans[i].tranOther}</Text> : null}
                         </View>
                     )
+                }else {
+                    trans.push(
+                        <View>
+                            <Text>Sorry! I can't find this word!</Text>
+                        </View>
+                    )
                 }
             }
 
@@ -181,7 +187,7 @@ class DialogContainer extends Component {
 
                     <View style={s.main}>
                         <View style={s.topMain}>
-                            <Text style={{color: "#343434", fontSize: pTd(18), fontWeight: '500'}}>
+                            <Text style={{color: "#343434", fontSize: pTd(20), fontWeight: '600'}}>
                                 {wordHead}
                             </Text>
                         </View>
@@ -214,10 +220,9 @@ class DialogContainer extends Component {
                             </View>
 
                             {/*translation*/}
-                            {trans}
+                            {wordDetail.trans.length !== 0 ? trans: <View style={s.center}><Text>Sorry! I can't find this word!</Text></View>}
                             {/*remember method*/}
-                            {wordDetail.remMethod && wordDetail.remMethod.val !== undefined ?  <View style={s.left}>
-                                {/*<Text style={s.message}>{msg}</Text>*/}
+                            {wordDetail.remMethod && wordDetail.remMethod.val !== undefined && wordDetail.remMethod.desc !== ''?  <View style={s.left}>
                                 <Text>
                                     {wordDetail.remMethod.desc}:  <Text style={{color: 'red'}}>{wordDetail.remMethod.val}</Text>
                                 </Text>
@@ -245,7 +250,7 @@ class DialogContainer extends Component {
                 </View>
             );
         } else {
-            let wordDetail = 'No result';
+            // let wordDetail = 'No result';
             return (
                 <View style={s.popViewWrapper}>
                     <TouchableWithoutFeedback
@@ -260,7 +265,7 @@ class DialogContainer extends Component {
                     <View style={s.main}>
                         <View style={s.topMain}>
                             <Text style={{color: "#343434", fontSize: pTd(18)}}>
-                                未查到该单词
+                                Sorry! I can't find this word!
                             </Text>
                         </View>
 
