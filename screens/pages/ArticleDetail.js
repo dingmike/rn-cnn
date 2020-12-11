@@ -19,7 +19,7 @@ import {requestData} from "../../redux/actions/userAction";
 import {connect} from "react-redux";
 import RNGeolocationView from '../../components/RNGeolocationView'
 import OwnCamera from '../../components/OwnCamera'
-import {Video, Audio} from 'expo-av';
+
 import * as SecureStore from 'expo-secure-store';
 import Constants from 'expo-constants';
 import * as Speech from 'expo-speech';
@@ -42,6 +42,7 @@ import ScrollableTabView from '../../components/ScrollableTabView/index';
 import {AntDesign, MaterialIcons, FontAwesome5} from '@expo/vector-icons';
 import {voiceOfArticle} from '../../utils/wordToVoice'
 import Dialog from '../../components/Dialog/index';
+import { Audio } from 'expo-av';
 
 import {
     Accelerometer,
@@ -248,7 +249,7 @@ class ArticleDetail extends Component {
         super(props);
         let {flag, user, jokerVideo, route} = this.props;
         this.state = {
-            articleHeight: 500,
+            articleHeight: 60,
             photos: [],
             wordDetail: {},
             articleId: route.params.id,
@@ -321,10 +322,6 @@ class ArticleDetail extends Component {
             articleDetail: response.data
         })
         console.log(this.state.articleDetail.article_brief, '00000000000000000000000000000000000000000')
-
-        this.webview.postMessage(this.state.articleDetail.article_content);
-        // this.webview.postMessage('JSON.stringify(this.state.articleDetail.article_content)');
-
     }
 
     componentDidUpdate() {
@@ -456,8 +453,9 @@ class ArticleDetail extends Component {
                             Dialog.show(
                                 {
                                     canPressShadow: true,
-                                    msg:'内容',
+                                    msg:'查询单词',
                                     content: res,
+                                    sureText: 'Close',
                                     sure: () => {
                                         console.log('sure')
                                     },
@@ -485,7 +483,23 @@ class ArticleDetail extends Component {
             alert(JSON.stringify(e));
         }
     };
-
+    /**
+     * h5 web load end handle
+     * @param null
+     * @private
+     */
+    _handleOnloadEndWeb() {
+        this.webview.postMessage(this.state.articleDetail.article_content);
+    }
+    _handleLoadError() {
+        Alert.alert(
+            "Tips",
+            "load article error!",
+            [
+                { text: "Retry", onPress: () => this.props.navigation.goBack()}
+            ]
+        );
+    }
     render() {
         const colorScheme = Appearance.getColorScheme();
         const {navigate} = this.props.navigation;
@@ -664,6 +678,8 @@ class ArticleDetail extends Component {
                                         scrollEnabled={false}
                                         scalesPageToFit={false}
                                         javaScriptEnabled={true}
+                                        onLoadEnd={() => this._handleOnloadEndWeb()}
+                                        onError={() => this._handleLoadError()}
                                         showsVerticalScrollIndicator={false}
                                         showsHorizontalScrollIndicator={false}
                                         onNavigationStateChange={() => {}}

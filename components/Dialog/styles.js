@@ -35,9 +35,10 @@ export const styles = StyleSheet.create({
   },
   main: {
     width: pTd(300),
-    height: pTd(224),
-    borderRadius: pTd(2),
-    backgroundColor: "#ffffff"
+    minHeight: pTd(124),
+    borderRadius: pTd(4),
+    backgroundColor: "#ffffff",
+    padding: 15,
   },
   topMain: {
     flexDirection: "row",
@@ -48,6 +49,12 @@ export const styles = StyleSheet.create({
   center: {
     alignItems: "center",
     justifyContent: "center",
+    flex: 1
+  },
+  left: {
+    marginTop: 10,
+    alignItems: "center",
+    justifyContent: "flex-start",
     flex: 1
   },
   message: {
@@ -69,7 +76,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center"
   },
   submitText: {
-    color: "#F54252",
+    color: "#177dc7",
     fontSize: pTd(16)
   },
   cancleText: {

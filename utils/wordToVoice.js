@@ -68,7 +68,7 @@ export async function playAudio(contextArray, index, audioArr){
        return soundObject ;
     } catch (error) {
         // An error occurred!
-        return Promise.reject(error);
+        return await Promise.reject(error);
     }
 }
 
