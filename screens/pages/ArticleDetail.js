@@ -11,7 +11,7 @@ import {
     TouchableOpacity,
     Dimensions,
     Modal,
-    Alert, TouchableHighlight, Appearance, SafeAreaView, Vibration
+    Alert, TouchableHighlight, Appearance, SafeAreaView, Vibration, Platform
 } from 'react-native';
 import {WebView} from 'react-native-webview';
 import {RectButton, ScrollView} from 'react-native-gesture-handler';
@@ -223,6 +223,22 @@ const H5AppBridge = `
 
 })();
 `;
+
+const bannerAdUnitID = Platform.select({
+    // https://developers.google.com/admob/ios/test-ads
+    ios: 'ca-app-pub-3940256099942544/2934735716',
+    // https://developers.google.com/admob/android/test-ads
+    // android: 'ca-app-pub-3940256099942544/6300978111',
+    android: 'ca-app-pub-8394017801211473/2911783388', // my unitID
+});
+
+const rewardAdUnitID = Platform.select({
+    // https://developers.google.com/admob/ios/test-ads
+    ios: 'ca-app-pub-3940256099942544/1712485313',
+    // https://developers.google.com/admob/android/test-ads
+    // android: 'ca-app-pub-3940256099942544/5224354917',
+    android: 'ca-app-pub-8394017801211473/1901954049',  // my rewardID
+});
 class ArticleDetail extends Component {
 
 // 对props 进行类型检测，如果使用typeScript有内置的
@@ -250,6 +266,7 @@ class ArticleDetail extends Component {
         this.state = {
             articleHeight: 60,
             photos: [],
+            enableAdMod: false,
             wordDetail: {},
             articleId: route.params.id,
             articleDetail: {},
@@ -389,8 +406,8 @@ class ArticleDetail extends Component {
     }
     async _rewardVideo() {
         // reward ad
-        await AdMobRewarded.setAdUnitID('ca-app-pub-3940256099942544/5224354917'); // Test ID, Replace with your-admob-unit-id
-        // await AdMobRewarded.setAdUnitID('ca-app-pub-8394017801211473/9105006274'); // My ID, Replace with your-admob-unit-id
+        // await AdMobRewarded.setAdUnitID('ca-app-pub-3940256099942544/5224354917'); // Test ID, Replace with your-admob-unit-id
+        await AdMobRewarded.setAdUnitID(rewardAdUnitID); // My ID, Replace with your-admob-unit-id
         await AdMobRewarded.requestAdAsync({servePersonalizedAds: true});
 
         // rewardedVideoDidLoad rewardedVideoDidOpen rewardedVideoDidStart
@@ -413,7 +430,7 @@ class ArticleDetail extends Component {
     }
     setModalVisible(visible) {
         // watch the ad video
-        if (!visible && !this.state.showedAd) {
+        if (!visible && !this.state.showedAd && this.state.enableAdMod) {
             this._rewardVideo().then(res => {
                 // android cannot callback
                 this.setState({
@@ -698,11 +715,12 @@ class ArticleDetail extends Component {
                                     color: 'white',
                                     // backgroundColor: '#f3f4f6',
                                 }}>
-                                    <PublisherBanner
+                                    {this.state.enableAdMod ? <PublisherBanner
                                         bannerSize="banner"
-                                        adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
+                                        adUnitID={bannerAdUnitID} // Test ID, Replace with your-admob-unit-id
                                         onDidFailToReceiveAdWithError={this.bannerError}
-                                        onAdMobDispatchAppEvent={this.adMobEvent}/>
+                                        onAdMobDispatchAppEvent={this.adMobEvent}/> : null}
+
                                 </View>
                                 {/*favour it!*/}
                                 {/*<TouchableHighlight
@@ -736,7 +754,7 @@ class ArticleDetail extends Component {
                             }}>
                                 <PublisherBanner
                                     bannerSize="banner"
-                                    adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
+                                    adUnitID={bannerAdUnitID} // ca-app-pub-3940256099942544/6300978111 Test ID, Replace with your-admob-unit-id
                                     onDidFailToReceiveAdWithError={this.bannerError}
                                     onAdMobDispatchAppEvent={this.adMobEvent}/>
                             </View>

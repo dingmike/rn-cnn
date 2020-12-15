@@ -39,19 +39,30 @@ import {
     AdMobInterstitial,
     PublisherBanner,
     AdMobRewarded,
-    setTestDeviceIDAsync,
+    setTestDeviceIDAsync, isAvailableAsync,
 } from 'expo-ads-admob';
 import * as SecureStore from 'expo-secure-store';
 import SkeletonContent from 'react-native-skeleton-content';
 import HomeLoadMoreFooter, {LOAD_MORE_STATE} from "../components/HomeLoadMoreFooter";
 import ToastExample from '../components/ToastExample';
 import * as Updates from 'expo-updates';
+import * as Permissions from 'expo-permissions';
+import * as Notifications from 'expo-notifications';
+
+const adUnitID = Platform.select({
+    // https://developers.google.com/admob/ios/test-ads
+    ios: 'ca-app-pub-3940256099942544/2934735716',
+    // https://developers.google.com/admob/android/test-ads
+    // android: 'ca-app-pub-3940256099942544/6300978111',
+    android: 'ca-app-pub-8394017801211473/2911783388', // my unitID
+});
 
 class HomeScreenNew extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            enableAdMod: false,
             loading: true,
             isRefreshing: false,            //控制下拉刷新
             isLoadMore: false,               //控制上拉加载
@@ -62,6 +73,63 @@ class HomeScreenNew extends Component {
             noMoreData:false,
         };
         this.bannerError = 'Ad error'
+    }
+    registerForPushNotificationsAsync = async () => {
+        let experienceId = undefined;
+        if (!Constants.manifest) {
+            // Absence of the manifest means we're in bare workflow
+            experienceId = '@mikezhang/react-native-cnn';
+        }
+        if (Constants.isDevice) {
+            const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+            let finalStatus = existingStatus;
+            if (existingStatus !== 'granted') {
+                const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+                finalStatus = status;
+            }
+            if (finalStatus !== 'granted') {
+                alert('Failed to get push token for push notification!');
+                return;
+            }
+            const token = (await Notifications.getExpoPushTokenAsync({
+                experienceId,
+            })).data;
+            console.log(token);
+            alert(token)
+            this.setState({ expoPushToken: token });
+        } else {
+            alert('Must use physical device for Push Notifications');
+        }
+
+        if (Platform.OS === 'android') {
+            Notifications.setNotificationChannelAsync('default', {
+                name: 'default',
+                importance: Notifications.AndroidImportance.MAX,
+                vibrationPattern: [0, 250, 250, 250],
+                lightColor: '#FF231F7C',
+            });
+        }
+    };
+
+    // Can use this function below, OR use Expo's Push Notification Tool-> https://expo.io/notifications
+    async sendPushNotification(expoPushToken) {
+        const message = {
+            to: expoPushToken,
+            sound: 'default',
+            title: 'Original Title',
+            body: 'And here is the body!',
+            data: { data: 'goes here' },
+        };
+
+        await fetch('https://exp.host/--/api/v2/push/send', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Accept-encoding': 'gzip, deflate',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(message),
+        });
     }
 
     async getDataList() {
@@ -134,11 +202,12 @@ class HomeScreenNew extends Component {
                     backgroundColor: '#f3f4f6',
                 }}>
                     {/*<Text style={{fontSize: 14, color: '#666666'}}>记得多多阅读哦！</Text>*/}
-                    <AdMobBanner
+                    {this.state.enableAdMod ? <AdMobBanner
                         bannerSize="banner"
-                        adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
-                        servePersonalizedAds // true or false
-                        onDidFailToReceiveAdWithError={this.bannerError} />
+                        adUnitID={adUnitID} // ca-app-pub-3940256099942544/6300978111 Test ID, Replace with your-admob-unit-id
+                        servePersonalizedAds={false} // true or false
+                        onDidFailToReceiveAdWithError={this.bannerError} /> : null}
+
                 </View>
             )
         }else {
@@ -171,6 +240,7 @@ class HomeScreenNew extends Component {
     }
 
     async componentDidMount() {
+        // await this.registerForPushNotificationsAsync();
        /* try {
             const update = await Updates.checkForUpdateAsync();
             if (update.isAvailable) {
@@ -184,10 +254,16 @@ class HomeScreenNew extends Component {
             alert(JSON.stringify(e))
         }*/
 
+
         // Set global test device ID
-        await setTestDeviceIDAsync('EMULATOR');
+        // await setTestDeviceIDAsync('EMULATOR'); // test use admod
+
+        // adMode 是否可用
+        let enableAdMod = await isAvailableAsync();
+
         this.setState({
-            loading: true
+            loading: true,
+            enableAdMod: enableAdMod
         })
         await this.getDataList();
         let right = await SecureStore.isAvailableAsync()
@@ -211,7 +287,7 @@ class HomeScreenNew extends Component {
             x:0,
             y:3,
             style:{marginVertical:5}
-        }
+        };
         return (
             <SafeAreaView style={styles.container}>
                     {/* header title */}

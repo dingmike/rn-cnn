@@ -30,7 +30,7 @@
       "bundleIdentifier": "com.fecstec.englishreading",
       "buildNumber": "1.0.0",
       "config": {
-        "googleMobileAdsAppId": "ca-app-pub-3940256099942544~3347511713"
+        "googleMobileAdsAppId": "ca-app-pub-8394017801211473~4526616958"
       },
       "infoPlist": {
         "UIBackgroundModes": [
@@ -42,12 +42,13 @@
       "package": "com.fecstec.englishreading",
       "versionCode": 1,
       "userInterfaceStyle": "light",
+      "useNextNotificationsApi": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
       "config": {
-        "googleMobileAdsAppId": "ca-app-pub-3940256099942544~3347511713"
+        "googleMobileAdsAppId": "ca-app-pub-8394017801211473~4526616958"
       }
     },
     "web": {
