@@ -23,3 +23,12 @@ cd android && gradlew assembleRelease
 更新expo 40
 更新package.json
 
+
+### iOS configuration
+Bare projects are initialized using CocoaPods, a dependency manager for iOS projects.
+
+Run `npx pod-install` to link the native iOS packages using CocoaPods.
+
+Run `npx react-native run-ios` to rebuild your project with the native code linked.
+
+
