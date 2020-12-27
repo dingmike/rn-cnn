@@ -35,5 +35,6 @@ Run `npx react-native run-ios` to rebuild your project with the native code link
 ### ios Xcode 编译错误
 
 1.Last step, you need to edit the `LIBRARY_SEARCH_PATHS` setting.
-
+解决办法：https://stackoverflow.com/questions/63513765/react-native-error-on-deploy-app-to-xcode-directory-not-found-for-option-l
+解决办法：https://github.com/react-native-community/upgrade-support/issues/13
 ![erere](https://user-images.githubusercontent.com/100233/76167794-d0815100-6182-11ea-915c-78ede6d554b9.png)
