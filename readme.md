@@ -32,3 +32,8 @@ Run `npx pod-install` to link the native iOS packages using CocoaPods.
 Run `npx react-native run-ios` to rebuild your project with the native code linked.
 
 
+### ios Xcode 编译错误
+
+1.Last step, you need to edit the `LIBRARY_SEARCH_PATHS` setting.
+
+![erere](https://user-images.githubusercontent.com/100233/76167794-d0815100-6182-11ea-915c-78ede6d554b9.png)
