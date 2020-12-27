@@ -525,7 +525,7 @@ class ArticleDetail extends Component {
         const {articleDetail, checked, playStatus, modalVisible, showedAd, alertModalVisible, articleHeight} = this.state;
         // let {flag, user, jokerVideo, route} = this.props;
         // console.log(route.params.article_title)
-        console.log(articleDetail.aritcle_brief,'-----------------------')
+        console.log(articleDetail.article_brief,'-----------------------')
         return (
             <SkeletonContent
                 containerStyle={{
