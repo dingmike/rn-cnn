@@ -23,6 +23,8 @@ cd android && gradlew assembleRelease
 更新expo 40
 更新package.json
 
+### APPLE DEVELOP DOCUMENT
+https://developer.apple.com/library/archive/documentation/Cocaoa
 
 ### iOS configuration
 Bare projects are initialized using CocoaPods, a dependency manager for iOS projects.

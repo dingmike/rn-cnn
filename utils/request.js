@@ -3,7 +3,8 @@ import axios from 'axios';
 axios.defaults.withCredentials = false  // 如果为true 会报错 The value of the 'Access-Control-Allow-Origin' header in the response must
 const instance = axios.create({
     // baseURL: 'http://api.ngrok.tecfcs.com/rn', // http://learn.fecstec.com/api/rsscontent/10?type=economistWord
-    baseURL: 'https://wxapi.fecstec.com/rn', // http://learn.fecstec.com/api/rsscontent/10?type=economistWord
+    baseURL: 'http://192.168.0.108:8080/rn', // http://learn.fecstec.com/api/rsscontent/10?type=economistWord
+    // baseURL: 'https://wxapi.fecstec.com/rn', // http://learn.fecstec.com/api/rsscontent/10?type=economistWord
     timeout: 8000,
     // headers: { 'X-Custom-Header': 'foobar' }
 });

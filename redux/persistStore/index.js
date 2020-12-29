@@ -1,6 +1,11 @@
 import { persistStore, persistReducer } from 'redux-persist';
 import AppReducer from '../reducers';
+// 日志中间件,仅在开发环境下使用,必须放在最后
+// import logger from 'redux-logger';
+// 异步分发action中间件
 import {AsyncStorage} from 'react-native';
+// import storage from 'redux-persist/lib/storage';
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 //增加
 //AsyncStorage.setItem('text', '葫芦小金刚', (error) => {
 //             error ? this.setState({ text: '增加失败' }) : this.setState({ text: '增加成功' })
@@ -43,7 +48,7 @@ import thunkMiddleware from 'redux-thunk'; // 异步action的支持 需要加入
 const config = {
     key: 'Root',
     storage: AsyncStorage,
-    whitelist: ['login'] // 配置想要持久化的部分store
+    // whitelist: ['login'] // 配置想要持久化的部分store
 };
 
 const reducer = persistReducer(config, AppReducer);
@@ -51,5 +56,6 @@ const store = createStore(reducer, applyMiddleware(thunkMiddleware));
 const persistor = persistStore(store);
 
 export  {
-    persistor, store
+    persistor,
+    store
 }

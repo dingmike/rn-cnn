@@ -1,6 +1,6 @@
 import * as WebBrowser from 'expo-web-browser';
 // import * as React from 'react';
-import React, {Component} from 'react';
+import React, {Component, useRef} from 'react';
 import {connect} from 'react-redux';
 import {
     Image,
@@ -57,11 +57,83 @@ const adUnitID = Platform.select({
     android: 'ca-app-pub-8394017801211473/2911783388', // my unitID
 });
 
+// https://docs.expo.io/push-notifications/overview/
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: false,
+        shouldSetBadge: false,
+    }),
+});
+
+// Can use this function below, OR use Expo's Push Notification Tool-> https://expo.io/notifications
+async function sendPushNotification(expoPushToken) {
+    const message = {
+        to: expoPushToken,
+        sound: 'default',
+        title: 'Original Title',
+        body: 'And here is the body!',
+        data: { data: 'goes here' },
+    };
+
+    await fetch('https://exp.host/--/api/v2/push/send', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Accept-encoding': 'gzip, deflate',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(message),
+    });
+}
+
+async function registerForPushNotificationsAsync() {
+    let token;
+    let experienceId = undefined;
+    console.log(Constants)
+    if (!Constants.manifest) {
+        // Absence of the manifest means we're in bare workflow
+        experienceId = '@mikezhang/react-native-cnn';
+    }
+    if (Constants.isDevice) {
+        const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+        let finalStatus = existingStatus;
+        if (existingStatus !== 'granted') {
+            const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+            finalStatus = status;
+        }
+        if (finalStatus !== 'granted') {
+            alert('Failed to get push token for push notification!');
+            return;
+        }
+        token = (await Notifications.getExpoPushTokenAsync({experienceId})).data;
+        console.log(token);
+        alert(token)
+    } else {
+        alert('Must use physical device for Push Notifications');
+    }
+    if (Platform.OS === 'android') {
+        await Notifications.setNotificationChannelAsync('default', {
+            name: 'default',
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: '#FF231F7C',
+        });
+    }
+    alert(token)
+    console.log('expoPushToken--------------------: ' + token)
+    return token;
+}
+
 class HomeScreenNew extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            expoPushToken: '',
+            notification: '',
+            notificationListener: '',
+            responseListener:'',
             enableAdMod: false,
             loading: true,
             isRefreshing: false,            //控制下拉刷新
@@ -75,6 +147,7 @@ class HomeScreenNew extends Component {
         this.bannerError = 'Ad error'
     }
     registerForPushNotificationsAsync = async () => {
+        alert('register for ')
         let experienceId = undefined;
         if (!Constants.manifest) {
             // Absence of the manifest means we're in bare workflow
@@ -102,7 +175,7 @@ class HomeScreenNew extends Component {
         }
 
         if (Platform.OS === 'android') {
-            Notifications.setNotificationChannelAsync('default', {
+            await Notifications.setNotificationChannelAsync('default', {
                 name: 'default',
                 importance: Notifications.AndroidImportance.MAX,
                 vibrationPattern: [0, 250, 250, 250],
@@ -254,6 +327,19 @@ class HomeScreenNew extends Component {
             alert(JSON.stringify(e))
         }*/
 
+       // 获取或更新用户信息
+        let {updateAppUserInfo} = this.props;
+alert(12)
+        registerForPushNotificationsAsync().then(token => {
+            alert('after register')
+            alert(token)
+            debugger
+            updateAppUserInfo({pushToken: token, platform: Platform.OS});
+            this.setState({
+                expoPushToken : token
+            })
+        });
+
 
         // Set global test device ID
         // await setTestDeviceIDAsync('EMULATOR'); // test use admod
@@ -359,14 +445,13 @@ function mapStateToProps(state) {
     return {
         flag: state.userReducer.flag,
         user: state.userReducer.user,
-        jokerVideo: state.userReducer.jokerVideo
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        updateData: function () {
-            dispatch(requestData());
+        updateAppUserInfo(params) {
+            dispatch(requestData(params));
         }
     };
 }

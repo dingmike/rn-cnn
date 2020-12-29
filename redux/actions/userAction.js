@@ -1,28 +1,23 @@
 import * as TYPES from '../actionTypes/userTypes';
 import userApi from '../../apis/userApi'
+// import {err} from "react-native-svg/lib/typescript/xml";
 
 
 export function updateData(user){
     return {
         type: TYPES.UPDATE_DATA,
         user: user,
-        jokerVideo: user
     };
 }
 
-export function requestData(){
+export function requestData(params){
     return dispatch => {
-        let url = 'https://my.oschina.net/gef';
-        userApi.getMovieData({page: 1, count: 2, type: 'video'}).then(response => {
-            console.log(response);
-            if (response) {
-                debugger
-                dispatch(updateData(response.result));
-            }
-            // return response;
-        }).catch((error) => {
+        userApi.newUser(params).then(response => {
+            console.log(response)
+            dispatch(updateData(response.data));
+        }).catch(error => {
             console.log("error:" + error);
-        });
+        })
             /*   fetch(url)
             .then((response) =>{
                 console.log("response:" + response);
