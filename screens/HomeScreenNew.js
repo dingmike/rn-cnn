@@ -108,7 +108,6 @@ async function registerForPushNotificationsAsync() {
         }
         token = (await Notifications.getExpoPushTokenAsync({experienceId})).data;
         console.log(token);
-        alert(token)
     } else {
         alert('Must use physical device for Push Notifications');
     }
@@ -120,7 +119,6 @@ async function registerForPushNotificationsAsync() {
             lightColor: '#FF231F7C',
         });
     }
-    alert(token)
     console.log('expoPushToken--------------------: ' + token)
     return token;
 }
@@ -146,8 +144,7 @@ class HomeScreenNew extends Component {
         };
         this.bannerError = 'Ad error'
     }
-    registerForPushNotificationsAsync = async () => {
-        alert('register for ')
+    /*registerForPushNotificationsAsync = async () => {
         let experienceId = undefined;
         if (!Constants.manifest) {
             // Absence of the manifest means we're in bare workflow
@@ -168,7 +165,6 @@ class HomeScreenNew extends Component {
                 experienceId,
             })).data;
             console.log(token);
-            alert(token)
             this.setState({ expoPushToken: token });
         } else {
             alert('Must use physical device for Push Notifications');
@@ -182,7 +178,7 @@ class HomeScreenNew extends Component {
                 lightColor: '#FF231F7C',
             });
         }
-    };
+    };*/
 
     // Can use this function below, OR use Expo's Push Notification Tool-> https://expo.io/notifications
     async sendPushNotification(expoPushToken) {
@@ -329,12 +325,17 @@ class HomeScreenNew extends Component {
 
        // 获取或更新用户信息
         let {updateAppUserInfo} = this.props;
-alert(12)
         registerForPushNotificationsAsync().then(token => {
-            alert('after register')
-            alert(token)
+            // alert('after register')
+            // alert(token)
             debugger
-            updateAppUserInfo({pushToken: token, platform: Platform.OS});
+            console.log(token)
+            if(token){
+                updateAppUserInfo({pushToken: token, platform: Platform.OS});
+            }else {
+                updateAppUserInfo({pushToken: 'textToken9999999', platform: Platform.OS});
+            }
+
             this.setState({
                 expoPushToken : token
             })
