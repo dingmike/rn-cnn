@@ -44,12 +44,13 @@ export function voiceOfArticle(context, audioArr) {
 export async function playAudio(contextArray, index, audioArr){
     let audioUrl = makeAudioUrl(contextArray.length, contextArray[index], index);
     console.log(audioUrl)
+    const soundObject = new Audio.Sound();
     try {
-        const soundObject = new Audio.Sound();
         await soundObject.loadAsync(
             { uri: audioUrl },
             { shouldPlay: true });
-        let res = await soundObject.playAsync();
+
+        await soundObject.playAsync();
         // alert(JSON.stringify(res))
         // Your sound is playing!
         audioArr.push(soundObject)
