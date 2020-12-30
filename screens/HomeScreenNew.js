@@ -324,13 +324,15 @@ class HomeScreenNew extends Component {
         }*/
 
        // 获取或更新用户信息
-        let {updateAppUserInfo} = this.props;
+        let {updateAppUserInfo, user, flag} = this.props;
         registerForPushNotificationsAsync().then(token => {
             // alert('after register')
             // alert(token)
             debugger
+            alert(user.platform)
             console.log(token)
-            if(token){
+            console.log(user,'user info ')
+            if(token && !user){
                 updateAppUserInfo({pushToken: token, platform: Platform.OS});
             }else {
                 updateAppUserInfo({pushToken: 'textToken9999999', platform: Platform.OS});

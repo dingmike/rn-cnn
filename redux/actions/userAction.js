@@ -13,7 +13,8 @@ export function updateData(user){
 export function requestData(params){
     return dispatch => {
         userApi.newUser(params).then(response => {
-            console.log(response)
+            // console.log(response)
+            console.log(response.msg)
             dispatch(updateData(response.data));
         }).catch(error => {
             console.log("error:" + error);

@@ -14,6 +14,8 @@ export default {
         })
     },
 
+
+
     // 注册新用户
     newUser(params) {
         return Net.Post('/user/smbuser/new', {

@@ -9,9 +9,9 @@ export default {
         })
     },
 
-    // 注册新用户
+    // new user add and save pushToken
     newUser(params) {
-        return Net.Post('/user/smbuser/new', {
+        return Net.Post('/test/app/user', {
             ...params
         })
     },
