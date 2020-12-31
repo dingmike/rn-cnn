@@ -296,14 +296,11 @@ class ArticleDetail extends Component {
         Dialog.hide(this.wordDialog);
     }
     async componentDidMount() {
+        let {getShowAdStatus, showAd } = this.props;
         // adMode 是否可用
         let enableAdMod = await isAvailableAsync();
 
-
-
         // await setTestDeviceIDAsync('EMULATOR');
-
-
         // await AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/1033173712'); // Test ID, Replace with your-admob-unit-id
         // await AdMobInterstitial.requestAdAsync({ servePersonalizedAds: true});
         // await AdMobInterstitial.showAdAsync();
@@ -324,7 +321,7 @@ class ArticleDetail extends Component {
         // EasyLoading.show('Loading...', -1, 'type'); // loading model
         this.setState({
             loading: true,
-            enableAdMod: enableAdMod,
+            enableAdMod: enableAdMod && showAd,
         })
         let response = await articleApi.articleDetail({
             id: this.state.articleId,
@@ -819,7 +816,8 @@ function mapStateToProps(state) {
     return {
         flag: state.userReducer.flag,
         user: state.userReducer.user,
-        jokerVideo: state.userReducer.jokerVideo
+        showAd: state.commonReducer.showAd,
+        // jokerVideo: state.userReducer.jokerVideo
     };
 }
 

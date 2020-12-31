@@ -33,6 +33,7 @@ import articleApi from "../apis/articleApi";
 import HomeDetail from "./HomeDetail";
 
 import {requestData} from '../redux/actions/userAction';
+import {requestData as getShowAdData} from '../redux/actions/commonAction';
 import {ImageBackground as WebImageBackground} from "react-native-web";
 import {
     AdMobBanner,
@@ -323,8 +324,9 @@ class HomeScreenNew extends Component {
             alert(JSON.stringify(e))
         }*/
 
-       // 获取或更新用户信息
-        let {updateAppUserInfo, user, flag} = this.props;
+       // 获取或更新用户等信息
+        let {updateAppUserInfo, getShowAdStatus, user, showAd, flag} = this.props;
+        getShowAdStatus({activityName: 'showAd'}); // ad 状态
         registerForPushNotificationsAsync().then(token => {
             // alert('after register')
             // alert(token)
@@ -352,12 +354,12 @@ class HomeScreenNew extends Component {
 
         this.setState({
             loading: true,
-            enableAdMod: enableAdMod
-        })
+            enableAdMod: enableAdMod && showAd
+        });
         await this.getDataList();
-        let right = await SecureStore.isAvailableAsync()
+        let right = await SecureStore.isAvailableAsync();
         // alert(right)
-        SecureStore.setItemAsync('_ok', '2342234', {})
+        SecureStore.setItemAsync('_ok', '2342234', {});
 
         ToastExample.show('It\'s Awesome!', ToastExample.SHORT);
     }
@@ -448,6 +450,7 @@ function mapStateToProps(state) {
     return {
         flag: state.userReducer.flag,
         user: state.userReducer.user,
+        showAd: state.commonReducer.showAd,
     };
 }
 
@@ -455,6 +458,9 @@ function mapDispatchToProps(dispatch) {
     return {
         updateAppUserInfo(params) {
             dispatch(requestData(params));
+        },
+        getShowAdStatus(params) {
+            dispatch(getShowAdData(params));
         }
     };
 }
