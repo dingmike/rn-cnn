@@ -17,8 +17,8 @@ cd android && gradlew assembleRelease
 
 // 发布跟新bundle
  expo export -p https://listeningeng.com/static/json --output-dir ./dist --config app.json --force
-// firebase serverTOken AAAAVMAZhdY:APA91bFwy3R422BDIHd1g9T5oRVwzoaDJ83temo91pbc5VJqVyXyF0vCN9Zandw1JMDLB-5MYNztm6yq1cNtzhuu01f1Tggf2UM_ZjQtx6i5uBSTYOwsfZ9tD93X6tU1URfi-zpvbZmK
-
+// firebase serverTOken yXyF0vCN9Zandw1JMDLB-5MYNztm6yq1cNtzhuu01f1Tggf2UM_ZjQtx6i5uBSTYOwsfZ9tD93X6tU1URfi-zpvbZmK
+// expo push:android:upload --api-key CN9Zandw1JMDLB-5MYNztm6yq1cNtzhuu01f1Tggf2UM_ZjQtx6i5uBSTYOwsfZ9tD93X6tU1URfi-zpvbZmK
 ### 2020.12.16 
 更新expo 40
 更新package.json
