@@ -229,7 +229,8 @@ const bannerAdUnitID = Platform.select({
     ios: 'ca-app-pub-3940256099942544/2934735716',
     // https://developers.google.com/admob/android/test-ads
     // android: 'ca-app-pub-3940256099942544/6300978111',
-    android: 'ca-app-pub-8394017801211473/2911783388', // my unitID
+    // android: 'ca-app-pub-8394017801211473/2911783388', // my unitID
+    android: 'ca-app-pub-8394017801211473/9802994365', // my unitID EnglishAbility
 });
 
 const rewardAdUnitID = Platform.select({
@@ -237,7 +238,8 @@ const rewardAdUnitID = Platform.select({
     ios: 'ca-app-pub-3940256099942544/1712485313',
     // https://developers.google.com/admob/android/test-ads
     // android: 'ca-app-pub-3940256099942544/5224354917',
-    android: 'ca-app-pub-8394017801211473/1901954049',  // my rewardID
+    // android: 'ca-app-pub-8394017801211473/1901954049',  // my rewardID
+    android: 'ca-app-pub-8394017801211473/9105006274',  // my rewardID EnglishAbility
 });
 class ArticleDetail extends Component {
 
@@ -519,7 +521,7 @@ class ArticleDetail extends Component {
     render() {
         const colorScheme = Appearance.getColorScheme();
         const {navigate} = this.props.navigation;
-        const {articleDetail, checked, playStatus, modalVisible, showedAd, alertModalVisible, articleHeight} = this.state;
+        const {articleDetail, checked, playStatus, modalVisible, showedAd, enableAdMod, alertModalVisible, articleHeight} = this.state;
         // let {flag, user, jokerVideo, route} = this.props;
         // console.log(route.params.article_title)
         console.log(articleDetail.article_brief,'-----------------------')
@@ -761,7 +763,7 @@ class ArticleDetail extends Component {
                             animationType="fade"
                             transparent={true}
                             hardwareAccelerated={true}
-                            visible={modalVisible && !showedAd}
+                            visible={modalVisible && !showedAd && enableAdMod}
                             onRequestClose={() => {
                                 this.setModalVisible(!modalVisible); // android back button close the modal.
                             }}>

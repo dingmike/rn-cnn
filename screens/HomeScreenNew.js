@@ -55,7 +55,8 @@ const adUnitID = Platform.select({
     ios: 'ca-app-pub-3940256099942544/2934735716',
     // https://developers.google.com/admob/android/test-ads
     // android: 'ca-app-pub-3940256099942544/6300978111',
-    android: 'ca-app-pub-8394017801211473/2911783388', // my unitID
+    // android: 'ca-app-pub-8394017801211473/2911783388', // my unitID
+    android: 'ca-app-pub-8394017801211473/9802994365', // my unitID EnglishAbility
 });
 
 // https://docs.expo.io/push-notifications/overview/
@@ -63,7 +64,7 @@ Notifications.setNotificationHandler({
     handleNotification: async () => ({
         shouldShowAlert: true,
         shouldPlaySound: false,
-        shouldSetBadge: true,
+        shouldSetBadge: false,
     }),
 });
 
@@ -148,19 +149,14 @@ class HomeScreenNew extends Component {
         };
         this.bannerError = 'Ad error'
     }
-   /* registerForPushNotificationsAsync = async () => {
-
-        alert('register')
-        alert(Constants.expoVersion)
+    registerForPushNotificationsAsync = async () => {
+        let token;
         let experienceId = undefined;
         if (!Constants.manifest) {
             // Absence of the manifest means we're in bare workflow
             experienceId = '@mikezhang/react-native-cnn';
         }
-        // experienceId = '@mikezhang/react-native-cnn';
         if (Constants.isDevice) {
-            alert('exp')
-            alert(experienceId)
             const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
             let finalStatus = existingStatus;
             if (existingStatus !== 'granted') {
@@ -171,12 +167,21 @@ class HomeScreenNew extends Component {
                 alert('Failed to get push token for push notification!');
                 return;
             }
-            const token = (await Notifications.getExpoPushTokenAsync({
-                experienceId,
-            })).data;
-            console.log(token);
-            alert(12)
-            this.setState({ expoPushToken: token });
+            try {
+                token = (await Notifications.getExpoPushTokenAsync({
+                    experienceId,
+                })).data;
+                return new Promise((resolve, reject) => {
+                    if(token) {
+                        resolve(token)
+                    }else{
+                        reject(null)
+                    }
+                })
+                // this.setState({ expoPushToken: token });
+            } catch (e) {
+                console.log(e)
+            }
 
         } else {
             alert('Must use physical device for Push Notifications');
@@ -190,7 +195,7 @@ class HomeScreenNew extends Component {
                 lightColor: '#FF231F7C',
             });
         }
-    };*/
+    };
 
     // Can use this function below, OR use Expo's Push Notification Tool-> https://expo.io/notifications
     async sendPushNotification(expoPushToken) {
@@ -219,12 +224,10 @@ class HomeScreenNew extends Component {
             // 请求接口，参数不用管；这里只需要主要  currentPage 和 pageSize即可 {page: 1, count: 2, type: 'video'}
             let response = await articleApi.allArticleList({
                 page: this.state.currentPage,
-                limit: 5,
+                limit: 6,
                 sortNum: -1,
                 articleCate: []
-            }); //
-            console.log(response.data)
-
+            });
             if (0 === response.data.docs.length) {
                 // 全部数据加载完成,显示没有更多数据
                 this.setState({showFooter: LOAD_MORE_STATE.NO_MORE_DATA, noMoreData: true});
@@ -340,26 +343,16 @@ class HomeScreenNew extends Component {
         let {expoPushToken} = this.state;
         await getShowAdStatus({activityName: 'showAd'}); // ad 状态
 
-     /*   if( expoPushToken && !user){
-            updateAppUserInfo({pushToken: expoPushToken, platform: Platform.OS});
-        }else {
-            updateAppUserInfo({pushToken: 'textToken9999999', platform: Platform.OS});
-        }*/
-
-
-
-        let token = await registerForPushNotificationsAsync();
-        console.log(token)
-        console.log(user,'user info ')
-        if(token && !user){
-            updateAppUserInfo({pushToken: token, platform: Platform.OS});
-        }else {
-            updateAppUserInfo({pushToken: 'textToken9999999', platform: Platform.OS});
-        }
-        this.setState({
-            expoPushToken : token
-        })
-
+        this.registerForPushNotificationsAsync().then(token => {
+            if(token && !user){
+                updateAppUserInfo({pushToken: token, platform: Platform.OS});
+            }else {
+                updateAppUserInfo({pushToken: 'textToken9999999', platform: Platform.OS});
+            }
+            this.setState({
+                expoPushToken : token
+            })
+        });
         // Set global test device ID
         // await setTestDeviceIDAsync('EMULATOR'); // test use admod
 
@@ -398,7 +391,7 @@ class HomeScreenNew extends Component {
                     {/* header title */}
                     <View style={styles.headView}>
                         <View>
-                            <Text key={Math.random()} selectable={true} style={styles.headerTitle}>Today Reading. 🙂</Text>
+                            <Text key={Math.random()} selectable={true} style={styles.headerTitle}>Today Reading 🙂</Text>
                         </View>
                         <View>
                             <Text key={Math.random()} selectable={true} style={styles.headerDes}>Read more, Learn more.</Text>
