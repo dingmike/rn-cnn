@@ -749,11 +749,11 @@ class ArticleDetail extends Component {
                                 marginBottom: 20,
                                 backgroundColor: colorScheme === 'dark' ? '#1a1a1a' : '#fff'
                             }}>
-                                <PublisherBanner
+                                {this.state.enableAdMod ? <PublisherBanner
                                     bannerSize="banner"
-                                    adUnitID={bannerAdUnitID} // ca-app-pub-3940256099942544/6300978111 Test ID, Replace with your-admob-unit-id
+                                    adUnitID={bannerAdUnitID} // Test ID, Replace with your-admob-unit-id
                                     onDidFailToReceiveAdWithError={this.bannerError}
-                                    onAdMobDispatchAppEvent={this.adMobEvent}/>
+                                    onAdMobDispatchAppEvent={this.adMobEvent}/> : null}
                             </View>
                         </View>
                         {/* you should watch the reward vide first!*/}

@@ -63,7 +63,7 @@ Notifications.setNotificationHandler({
     handleNotification: async () => ({
         shouldShowAlert: true,
         shouldPlaySound: false,
-        shouldSetBadge: false,
+        shouldSetBadge: true,
     }),
 });
 
@@ -89,39 +89,42 @@ async function sendPushNotification(expoPushToken) {
 }
 
 async function registerForPushNotificationsAsync() {
-    let token;
-    let experienceId = undefined;
-    console.log(Constants)
-    if (!Constants.manifest) {
-        // Absence of the manifest means we're in bare workflow
-        experienceId = '@mikezhang/react-native-cnn';
-    }
-    if (Constants.isDevice) {
-        const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-        let finalStatus = existingStatus;
-        if (existingStatus !== 'granted') {
-            const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-            finalStatus = status;
+    try {
+        let token;
+        let experienceId = undefined;
+        if (!Constants.manifest) {
+            // Absence of the manifest means we're in bare workflow
+            experienceId = '@mikezhang/react-native-cnn';
         }
-        if (finalStatus !== 'granted') {
-            alert('Failed to get push token for push notification!');
-            return;
+        if (Constants.isDevice) {
+            const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+            let finalStatus = existingStatus;
+            if (existingStatus !== 'granted') {
+                const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+                finalStatus = status;
+            }
+            if (finalStatus !== 'granted') {
+                alert('Failed to get push token for push notification!');
+                return;
+            }
+            token = (await Notifications.getExpoPushTokenAsync({experienceId})).data;
+            console.log(token);
+        } else {
+            alert('Must use physical device for Push Notifications');
         }
-        token = (await Notifications.getExpoPushTokenAsync({experienceId})).data;
-        console.log(token);
-    } else {
-        alert('Must use physical device for Push Notifications');
+        if (Platform.OS === 'android') {
+            await Notifications.setNotificationChannelAsync('default', {
+                name: 'default',
+                importance: Notifications.AndroidImportance.MAX,
+                vibrationPattern: [0, 250, 250, 250],
+                lightColor: '#FF231F7C',
+            });
+        }
+        console.log('expoPushToken--------------------: ' + token)
+        return token;
+    }catch (e) {
+        console.log(e)
     }
-    if (Platform.OS === 'android') {
-        await Notifications.setNotificationChannelAsync('default', {
-            name: 'default',
-            importance: Notifications.AndroidImportance.MAX,
-            vibrationPattern: [0, 250, 250, 250],
-            lightColor: '#FF231F7C',
-        });
-    }
-    console.log('expoPushToken--------------------: ' + token)
-    return token;
 }
 
 class HomeScreenNew extends Component {
@@ -145,13 +148,19 @@ class HomeScreenNew extends Component {
         };
         this.bannerError = 'Ad error'
     }
-    /*registerForPushNotificationsAsync = async () => {
+   /* registerForPushNotificationsAsync = async () => {
+
+        alert('register')
+        alert(Constants.expoVersion)
         let experienceId = undefined;
         if (!Constants.manifest) {
             // Absence of the manifest means we're in bare workflow
             experienceId = '@mikezhang/react-native-cnn';
         }
+        // experienceId = '@mikezhang/react-native-cnn';
         if (Constants.isDevice) {
+            alert('exp')
+            alert(experienceId)
             const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
             let finalStatus = existingStatus;
             if (existingStatus !== 'granted') {
@@ -166,7 +175,9 @@ class HomeScreenNew extends Component {
                 experienceId,
             })).data;
             console.log(token);
+            alert(12)
             this.setState({ expoPushToken: token });
+
         } else {
             alert('Must use physical device for Push Notifications');
         }
@@ -323,28 +334,31 @@ class HomeScreenNew extends Component {
             // handle or log error
             alert(JSON.stringify(e))
         }*/
-
+        // await this.registerForPushNotificationsAsync();
        // 获取或更新用户等信息
         let {updateAppUserInfo, getShowAdStatus, user, showAd, flag} = this.props;
-        getShowAdStatus({activityName: 'showAd'}); // ad 状态
-        registerForPushNotificationsAsync().then(token => {
-            // alert('after register')
-            // alert(token)
-            debugger
-            alert(user.platform)
-            console.log(token)
-            console.log(user,'user info ')
-            if(token && !user){
-                updateAppUserInfo({pushToken: token, platform: Platform.OS});
-            }else {
-                updateAppUserInfo({pushToken: 'textToken9999999', platform: Platform.OS});
-            }
+        let {expoPushToken} = this.state;
+        await getShowAdStatus({activityName: 'showAd'}); // ad 状态
 
-            this.setState({
-                expoPushToken : token
-            })
-        });
+     /*   if( expoPushToken && !user){
+            updateAppUserInfo({pushToken: expoPushToken, platform: Platform.OS});
+        }else {
+            updateAppUserInfo({pushToken: 'textToken9999999', platform: Platform.OS});
+        }*/
 
+
+
+        let token = await registerForPushNotificationsAsync();
+        console.log(token)
+        console.log(user,'user info ')
+        if(token && !user){
+            updateAppUserInfo({pushToken: token, platform: Platform.OS});
+        }else {
+            updateAppUserInfo({pushToken: 'textToken9999999', platform: Platform.OS});
+        }
+        this.setState({
+            expoPushToken : token
+        })
 
         // Set global test device ID
         // await setTestDeviceIDAsync('EMULATOR'); // test use admod
@@ -384,7 +398,7 @@ class HomeScreenNew extends Component {
                     {/* header title */}
                     <View style={styles.headView}>
                         <View>
-                            <Text key={Math.random()} selectable={true} style={styles.headerTitle}>Today Reading!</Text>
+                            <Text key={Math.random()} selectable={true} style={styles.headerTitle}>Today Reading. 🙂</Text>
                         </View>
                         <View>
                             <Text key={Math.random()} selectable={true} style={styles.headerDes}>Read more, Learn more.</Text>
