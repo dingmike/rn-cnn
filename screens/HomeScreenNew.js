@@ -21,7 +21,7 @@ import MyButton from '../components/MyButton';
 import CardArticle from '../components/CardArticle';
 import LineCardArticle from '../components/LineCardArticle';
 import {ScrollView} from 'react-native-gesture-handler';
-
+import NetInfo from '@react-native-community/netinfo';
 import {MonoText} from '../components/StyledText';
 
 import {styles} from '../style/homeScreenNewStyle';
@@ -33,6 +33,7 @@ import articleApi from "../apis/articleApi";
 import HomeDetail from "./HomeDetail";
 
 import {requestData} from '../redux/actions/userAction';
+import {requestData as getShowAdData, updateNetInfoAsync} from '../redux/actions/commonAction';
 import {ImageBackground as WebImageBackground} from "react-native-web";
 import {
     AdMobBanner,
@@ -48,15 +49,18 @@ import ToastExample from '../components/ToastExample';
 import * as Updates from 'expo-updates';
 import * as Permissions from 'expo-permissions';
 import * as Notifications from 'expo-notifications';
+import {EasyLoading} from "../components/EasyLoading";
+import Toast, {DURATION} from "../components/EasyToast";
 
 const adUnitID = Platform.select({
     // https://developers.google.com/admob/ios/test-ads
     ios: 'ca-app-pub-3940256099942544/2934735716',
     // https://developers.google.com/admob/android/test-ads
     // android: 'ca-app-pub-3940256099942544/6300978111',
-    android: 'ca-app-pub-8394017801211473/2911783388', // my unitID
+    // android: 'ca-app-pub-8394017801211473/2911783388', // my unitID
+    android: 'ca-app-pub-8394017801211473/9802994365', // my unitID EnglishAbility
 });
-
+let unsubscribeNet = null;  // 网络监控
 // https://docs.expo.io/push-notifications/overview/
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -88,39 +92,58 @@ async function sendPushNotification(expoPushToken) {
 }
 
 async function registerForPushNotificationsAsync() {
-    let token;
-    let experienceId = undefined;
-    console.log(Constants)
-    if (!Constants.manifest) {
-        // Absence of the manifest means we're in bare workflow
-        experienceId = '@mikezhang/react-native-cnn';
-    }
-    if (Constants.isDevice) {
-        const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-        let finalStatus = existingStatus;
-        if (existingStatus !== 'granted') {
-            const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-            finalStatus = status;
+    try {
+        let token;
+        let experienceId = undefined;
+        if (!Constants.manifest) {
+            // Absence of the manifest means we're in bare workflow
+            experienceId = '@mikezhang/react-native-cnn';
         }
-        if (finalStatus !== 'granted') {
-            alert('Failed to get push token for push notification!');
-            return;
+        if (Constants.isDevice) {
+            console.log('get push permission');
+            const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+            let finalStatus = existingStatus;
+            if (existingStatus !== 'granted') {
+                console.log(`ask push permission: ${existingStatus}`);
+                const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS).catch((err) => {
+                    console.error(`Error in ask permission: ${err.message}`);
+                    throw err;
+                });
+                finalStatus = status;
+            }
+            if (finalStatus !== 'granted') {
+                alert('Failed to get push token for push notification!');
+                return;
+            }
+            // await Notifications.requestPermissionsAsync();
+            console.log('getting expo push token');
+
+            token = (
+                await Notifications.getExpoPushTokenAsync({
+                    experienceId,
+                    development: true,
+                }).catch((err) => {
+                    console.error(`Error in get expo token: ${err.message}`);
+                    throw err;
+                })
+            ).data;
+            console.log(token);
+        } else {
+            alert('Must use physical device for Push Notifications');
         }
-        token = (await Notifications.getExpoPushTokenAsync({experienceId})).data;
-        console.log(token);
-    } else {
-        alert('Must use physical device for Push Notifications');
+        if (Platform.OS === 'android') {
+            await Notifications.setNotificationChannelAsync('default', {
+                name: 'default',
+                importance: Notifications.AndroidImportance.MAX,
+                vibrationPattern: [0, 250, 250, 250],
+                lightColor: '#FF231F7C',
+            });
+        }
+        console.log('expoPushToken--------------------: ' + token)
+        return token;
+    }catch (e) {
+        console.log(e)
     }
-    if (Platform.OS === 'android') {
-        await Notifications.setNotificationChannelAsync('default', {
-            name: 'default',
-            importance: Notifications.AndroidImportance.MAX,
-            vibrationPattern: [0, 250, 250, 250],
-            lightColor: '#FF231F7C',
-        });
-    }
-    console.log('expoPushToken--------------------: ' + token)
-    return token;
 }
 
 class HomeScreenNew extends Component {
@@ -128,6 +151,9 @@ class HomeScreenNew extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            position: 'top',
+            toastPosition: 'bottom',
+            style: {},
             expoPushToken: '',
             notification: '',
             notificationListener: '',
@@ -144,7 +170,8 @@ class HomeScreenNew extends Component {
         };
         this.bannerError = 'Ad error'
     }
-    /*registerForPushNotificationsAsync = async () => {
+    registerForPushNotificationsAsync = async () => {
+        let token;
         let experienceId = undefined;
         if (!Constants.manifest) {
             // Absence of the manifest means we're in bare workflow
@@ -161,11 +188,22 @@ class HomeScreenNew extends Component {
                 alert('Failed to get push token for push notification!');
                 return;
             }
-            const token = (await Notifications.getExpoPushTokenAsync({
-                experienceId,
-            })).data;
-            console.log(token);
-            this.setState({ expoPushToken: token });
+            try {
+                token = (await Notifications.getExpoPushTokenAsync({
+                    experienceId,
+                })).data;
+                return new Promise((resolve, reject) => {
+                    if(token) {
+                        resolve(token)
+                    }else{
+                        reject(null)
+                    }
+                })
+                // this.setState({ expoPushToken: token });
+            } catch (e) {
+                console.log(e)
+            }
+
         } else {
             alert('Must use physical device for Push Notifications');
         }
@@ -178,7 +216,7 @@ class HomeScreenNew extends Component {
                 lightColor: '#FF231F7C',
             });
         }
-    };*/
+    };
 
     // Can use this function below, OR use Expo's Push Notification Tool-> https://expo.io/notifications
     async sendPushNotification(expoPushToken) {
@@ -207,12 +245,10 @@ class HomeScreenNew extends Component {
             // 请求接口，参数不用管；这里只需要主要  currentPage 和 pageSize即可 {page: 1, count: 2, type: 'video'}
             let response = await articleApi.allArticleList({
                 page: this.state.currentPage,
-                limit: 5,
+                limit: 6,
                 sortNum: -1,
                 articleCate: []
-            }); //
-            console.log(response.data)
-
+            });
             if (0 === response.data.docs.length) {
                 // 全部数据加载完成,显示没有更多数据
                 this.setState({showFooter: LOAD_MORE_STATE.NO_MORE_DATA, noMoreData: true});
@@ -255,7 +291,6 @@ class HomeScreenNew extends Component {
     }
 
     _goToDetail(item) {
-        console.log(item)
         this.props.navigation.navigate('ArticleDetail', {...item})
     }
 
@@ -276,7 +311,6 @@ class HomeScreenNew extends Component {
                         adUnitID={adUnitID} // ca-app-pub-3940256099942544/6300978111 Test ID, Replace with your-admob-unit-id
                         servePersonalizedAds={false} // true or false
                         onDidFailToReceiveAdWithError={this.bannerError} /> : null}
-
                 </View>
             )
         }else {
@@ -289,8 +323,7 @@ class HomeScreenNew extends Component {
 
     };
 
-    _onEndReached() {         //上拉加载更多
-
+    _onEndReached() {//上拉加载更多
         if (this.state.showFooter !== LOAD_MORE_STATE.CANCEL || this.state.noMoreData) {
             return;
         }
@@ -307,59 +340,87 @@ class HomeScreenNew extends Component {
             })
         }
     }
+    componentWillUnmount(){
+        unsubscribeNet(); // 不再监控网络
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        /*alert(JSON.stringify(this.props))
+        // 网络可用的时候刷新数据
+        if(this.props.internetReachable){
+            this._onRefresh();
+        }*/
+
+    }
 
     async componentDidMount() {
-        // await this.registerForPushNotificationsAsync();
-       /* try {
+        let {updateAppUserInfo, getShowAdStatus, setNetInfoData, user, showAd, internetReachable, flag} = this.props;
+        let {expoPushToken} = this.state;
+        unsubscribeNet =  NetInfo.addEventListener(state => {
+            console.log('Connection type', state.type);
+            console.log('Is connected?', state.isConnected);
+            console.log('Is InternetReachable?', state.isInternetReachable);
+            setNetInfoData(state.isInternetReachable);
+            if(state.isInternetReachable && state.isConnected){
+                //有网络可达
+                // this._onRefresh();
+            }else{
+                // EasyLoading.show('Network unavailable...', -1, 'type');
+                this.toast.show('Network unavailable, check the network...', 3000);
+                /*Alert.alert(
+                    "Note",
+                    "Network unavailable,check the network!",
+                    [
+                        { text: "OK", onPress: () => console.log("OK Pressed") }
+                    ],
+                    { cancelable: false }
+                );*/
+            }
+        });
+
+        try {
             const update = await Updates.checkForUpdateAsync();
             if (update.isAvailable) {
-                await Updates.fetchUpdateAsync();
                 // ... notify user of update ...
-                ToastExample.show('Updating...', ToastExample.LONG);
+                // ToastExample.show('Updating...', ToastExample.LONG);
+                this.toast.show('Updating and restart app....', DURATION.FOREVER);
+                await Updates.fetchUpdateAsync();
+                this.toast.close('restart now...');
                 await Updates.reloadAsync();
             }
         } catch (e) {
             // handle or log error
-            alert(JSON.stringify(e))
-        }*/
+            this.toast.show('Updating failed restart app now...', DURATION.FOREVER);
+            // alert(JSON.stringify(e))
+        }
 
-       // 获取或更新用户信息
-        let {updateAppUserInfo, user, flag} = this.props;
-        registerForPushNotificationsAsync().then(token => {
-            // alert('after register')
-            // alert(token)
-            debugger
-            alert(user.platform)
-            console.log(token)
-            console.log(user,'user info ')
+        await getShowAdStatus({activityName: 'showAd'}); // ad 状态
+        this.registerForPushNotificationsAsync().then(token => {
             if(token && !user){
                 updateAppUserInfo({pushToken: token, platform: Platform.OS});
             }else {
                 updateAppUserInfo({pushToken: 'textToken9999999', platform: Platform.OS});
             }
-
             this.setState({
                 expoPushToken : token
             })
         });
-
-
         // Set global test device ID
         // await setTestDeviceIDAsync('EMULATOR'); // test use admod
-
         // adMode 是否可用
         let enableAdMod = await isAvailableAsync();
-
         this.setState({
             loading: true,
-            enableAdMod: enableAdMod
-        })
+            enableAdMod: enableAdMod && showAd
+        });
         await this.getDataList();
-        let right = await SecureStore.isAvailableAsync()
-        // alert(right)
-        SecureStore.setItemAsync('_ok', '2342234', {})
-
-        ToastExample.show('It\'s Awesome!', ToastExample.SHORT);
+        let right = await SecureStore.isAvailableAsync();
+        SecureStore.setItemAsync('_ok', '2342234', {});
+        // 自定义android原生组件
+       /* if(Platform.OS === 'android') {
+            ToastExample.show('It\'s Awesome!', ToastExample.SHORT);
+        }*/
+        this.toastWithStyle.show('It\'s Awesome!', 2000);
     }
     renderFooter = () => {
         return <HomeLoadMoreFooter state={this.state.showFooter}/>;
@@ -382,7 +443,7 @@ class HomeScreenNew extends Component {
                     {/* header title */}
                     <View style={styles.headView}>
                         <View>
-                            <Text key={Math.random()} selectable={true} style={styles.headerTitle}>Today Reading!</Text>
+                            <Text key={Math.random()} selectable={true} style={styles.headerTitle}>Today Reading 🙂</Text>
                         </View>
                         <View>
                             <Text key={Math.random()} selectable={true} style={styles.headerDes}>Read more, Learn more.</Text>
@@ -425,11 +486,6 @@ class HomeScreenNew extends Component {
                                         // paddingLeft: 60,
                                         backgroundColor: '#f3f4f6',
                                     }}>
-                                        {/*<AdMobBanner
-                                            bannerSize="banner"
-                                            adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
-                                            servePersonalizedAds // true or false
-                                            onDidFailToReceiveAdWithError={this.bannerError} />*/}
                                     </View>
                                 }
                                 onRefresh={() => {
@@ -439,6 +495,8 @@ class HomeScreenNew extends Component {
                             />
                         </SkeletonContent>
                     </View>
+                <Toast ref={toast => this.toast = toast} position={this.state.position}></Toast>
+                <Toast ref={toast => this.toastWithStyle = toast} style={{backgroundColor: '#a8a8a8'}} position={this.state.toastPosition}></Toast>
             </SafeAreaView>
         )
     }
@@ -448,6 +506,8 @@ function mapStateToProps(state) {
     return {
         flag: state.userReducer.flag,
         user: state.userReducer.user,
+        showAd: state.commonReducer.showAd,
+        internetReachable: state.commonReducer.internetReachable,
     };
 }
 
@@ -455,6 +515,12 @@ function mapDispatchToProps(dispatch) {
     return {
         updateAppUserInfo(params) {
             dispatch(requestData(params));
+        },
+        getShowAdStatus(params) {
+            dispatch(getShowAdData(params));
+        },
+        setNetInfoData(params) {
+            dispatch(updateNetInfoAsync(params))
         }
     };
 }

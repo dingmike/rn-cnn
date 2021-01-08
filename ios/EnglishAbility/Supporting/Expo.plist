@@ -3,7 +3,7 @@
 <plist version="1.0">
   <dict>
     <key>EXUpdatesSDKVersion</key>
-    <string>39.0.0</string>
+    <string>40.0.0</string>
     <key>EXUpdatesEnabled</key>
     <true/>
     <key>EXUpdatesCheckOnLaunch</key>
@@ -12,5 +12,7 @@
     <integer>0</integer>
     <key>EXUpdatesURL</key>
     <string>https://listeningeng.com/static/json/ios-index.json</string>
+    <key>EXUpdatesReleaseChannel</key>
+    <string>default</string>
   </dict>
 </plist>

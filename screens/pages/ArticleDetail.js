@@ -55,6 +55,8 @@ import {
 import articleApi from "../../apis/articleApi";
 import wordApi from "../../apis/word";
 import useColorScheme from "../../hooks/useColorScheme";
+import Toast from "../../components/EasyToast";
+import ActionButton from "../../components/ActionButton";
 
 /*function OptionButton({ icon, label, onPress, isLastOption }) {
     return (
@@ -229,7 +231,8 @@ const bannerAdUnitID = Platform.select({
     ios: 'ca-app-pub-3940256099942544/2934735716',
     // https://developers.google.com/admob/android/test-ads
     // android: 'ca-app-pub-3940256099942544/6300978111',
-    android: 'ca-app-pub-8394017801211473/2911783388', // my unitID
+    // android: 'ca-app-pub-8394017801211473/2911783388', // my unitID
+    android: 'ca-app-pub-8394017801211473/9802994365', // my unitID EnglishAbility
 });
 
 const rewardAdUnitID = Platform.select({
@@ -237,7 +240,8 @@ const rewardAdUnitID = Platform.select({
     ios: 'ca-app-pub-3940256099942544/1712485313',
     // https://developers.google.com/admob/android/test-ads
     // android: 'ca-app-pub-3940256099942544/5224354917',
-    android: 'ca-app-pub-8394017801211473/1901954049',  // my rewardID
+    // android: 'ca-app-pub-8394017801211473/1901954049',  // my rewardID
+    android: 'ca-app-pub-8394017801211473/9105006274',  // my rewardID EnglishAbility
 });
 class ArticleDetail extends Component {
 
@@ -264,6 +268,7 @@ class ArticleDetail extends Component {
         super(props);
         let {flag, user, jokerVideo, route} = this.props;
         this.state = {
+            position: 'top',
             articleHeight: 60,
             photos: [],
             enableAdMod: false,
@@ -295,15 +300,23 @@ class ArticleDetail extends Component {
         }
         Dialog.hide(this.wordDialog);
     }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        // 网络可用的时候刷新数据
+        if(this.props.isInternetReachable){
+            this._onRefresh();
+        }
+
+    }
     async componentDidMount() {
+        let {getShowAdStatus, showAd, internetReachable } = this.props;
+        if(!internetReachable) {
+            this.toast.show('Network unavailable, check the network...', 3000);
+        }
         // adMode 是否可用
         let enableAdMod = await isAvailableAsync();
 
-
-
         // await setTestDeviceIDAsync('EMULATOR');
-
-
         // await AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/1033173712'); // Test ID, Replace with your-admob-unit-id
         // await AdMobInterstitial.requestAdAsync({ servePersonalizedAds: true});
         // await AdMobInterstitial.showAdAsync();
@@ -324,7 +337,7 @@ class ArticleDetail extends Component {
         // EasyLoading.show('Loading...', -1, 'type'); // loading model
         this.setState({
             loading: true,
-            enableAdMod: enableAdMod,
+            enableAdMod: enableAdMod && showAd,
         })
         let response = await articleApi.articleDetail({
             id: this.state.articleId,
@@ -337,10 +350,6 @@ class ArticleDetail extends Component {
         this.setState({
             articleDetail: response.data
         })
-        console.log(this.state.articleDetail.article_brief, '00000000000000000000000000000000000000000')
-    }
-
-    componentDidUpdate() {
     }
 
     // query word by dic
@@ -522,7 +531,7 @@ class ArticleDetail extends Component {
     render() {
         const colorScheme = Appearance.getColorScheme();
         const {navigate} = this.props.navigation;
-        const {articleDetail, checked, playStatus, modalVisible, showedAd, alertModalVisible, articleHeight} = this.state;
+        const {articleDetail, checked, playStatus, modalVisible, showedAd, enableAdMod, alertModalVisible, articleHeight} = this.state;
         // let {flag, user, jokerVideo, route} = this.props;
         // console.log(route.params.article_title)
         console.log(articleDetail.article_brief,'-----------------------')
@@ -752,11 +761,11 @@ class ArticleDetail extends Component {
                                 marginBottom: 20,
                                 backgroundColor: colorScheme === 'dark' ? '#1a1a1a' : '#fff'
                             }}>
-                                <PublisherBanner
+                                {this.state.enableAdMod ? <PublisherBanner
                                     bannerSize="banner"
-                                    adUnitID={bannerAdUnitID} // ca-app-pub-3940256099942544/6300978111 Test ID, Replace with your-admob-unit-id
+                                    adUnitID={bannerAdUnitID} // Test ID, Replace with your-admob-unit-id
                                     onDidFailToReceiveAdWithError={this.bannerError}
-                                    onAdMobDispatchAppEvent={this.adMobEvent}/>
+                                    onAdMobDispatchAppEvent={this.adMobEvent}/> : null}
                             </View>
                         </View>
                         {/* you should watch the reward vide first!*/}
@@ -764,7 +773,7 @@ class ArticleDetail extends Component {
                             animationType="fade"
                             transparent={true}
                             hardwareAccelerated={true}
-                            visible={modalVisible && !showedAd}
+                            visible={modalVisible && !showedAd && enableAdMod}
                             onRequestClose={() => {
                                 this.setModalVisible(!modalVisible); // android back button close the modal.
                             }}>
@@ -810,6 +819,21 @@ class ArticleDetail extends Component {
                         </Modal>
                     </ScrollView>
                 </ScrollableTabView>
+                <Toast ref={toast => this.toast = toast} position={this.state.position}></Toast>
+                <ActionButton buttonColor="rgba(231,76,60,1)">
+                    <ActionButton.Item buttonColor='#9b59b6' title="New Task" onPress={() => console.log("notes tapped!")}>
+                        {/*<Icon name="md-create" style={styles.actionButtonIcon} />*/}
+                        <AntDesign name="pausecircleo" style={styles.actionButtonIcon}/>
+                    </ActionButton.Item>
+                    <ActionButton.Item buttonColor='#3498db' title="Notifications" onPress={() => {}}>
+                        {/*<Icon name="md-notifications-off" style={styles.actionButtonIcon} />*/}
+                        <AntDesign name="pausecircleo"  style={styles.actionButtonIcon}/>
+                    </ActionButton.Item>
+                    <ActionButton.Item buttonColor='#1abc9c' title="All Tasks" onPress={() => {}}>
+                        {/*<Icon name="md-done-all" style={styles.actionButtonIcon} />*/}
+                        <AntDesign name="pausecircleo"  style={styles.actionButtonIcon}/>
+                    </ActionButton.Item>
+                </ActionButton>
             </SkeletonContent>
         );
     }
@@ -819,7 +843,8 @@ function mapStateToProps(state) {
     return {
         flag: state.userReducer.flag,
         user: state.userReducer.user,
-        jokerVideo: state.userReducer.jokerVideo
+        showAd: state.commonReducer.showAd,
+        internetReachable: state.commonReducer.internetReachable,
     };
 }
 
@@ -1017,5 +1042,10 @@ const styles = StyleSheet.create({
     modalText: {
         marginBottom: 15,
         textAlign: 'center',
+    },
+    actionButtonIcon: {
+        fontSize: 20,
+        height: 22,
+        color: 'white',
     },
 });

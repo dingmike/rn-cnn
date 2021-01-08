@@ -19,7 +19,7 @@ export function requestCourseData(){
                 console.log("responseText:" + responseText);
                 if (responseText) {
                     let user = {
-                        'name' : "葛夫锋",
+                        'name' : "mike",
                         'age' : 18,
                         'job' :'developer'
                     };

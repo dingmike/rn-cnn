@@ -26,12 +26,14 @@ const styles = StyleSheet.create({
     },
     headerTitle: {
         fontSize: 20,
-        lineHeight: 20,
+        lineHeight: 24,
+        height: 24,
         textAlign: 'left',
         fontWeight: '600'
     },
     headerDes: {
       fontSize: 16,
+      height: 16,
       lineHeight: 16,
       marginTop: 4
     },

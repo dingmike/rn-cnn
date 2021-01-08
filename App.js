@@ -194,12 +194,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(App);*/
 
 // 函数型组件
 export default function App(props) {
-    const [expoPushToken, setExpoPushToken] = useState('');
-    const [notification, setNotification] = useState(false);
-    const notificationListener = useRef();
-    const responseListener = useRef();
-
-    useEffect(() => {
+    // const [expoPushToken, setExpoPushToken] = useState('');
+    // const [notification, setNotification] = useState(false);
+    // const notificationListener = useRef();
+    // const responseListener = useRef();
+    /*useEffect(() => {
         registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
 
         // This listener is fired whenever a notification is received while the app is foregrounded
@@ -216,7 +215,7 @@ export default function App(props) {
             Notifications.removeNotificationSubscription(notificationListener);
             Notifications.removeNotificationSubscription(responseListener);
         };
-    }, []);
+    }, []);*/
 
     // enableScreens(); // react-native-screens provides native primitives to represent screens instead of plain <View> components in order to better take advantage of operating system behavior and optimizations around screens.
     const isLoadingComplete = useCachedResources();
@@ -256,26 +255,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
 });
-// Can use this function below, OR use Expo's Push Notification Tool-> https://expo.io/notifications
-async function sendPushNotification(expoPushToken) {
-    const message = {
-        to: expoPushToken,
-        sound: 'default',
-        title: 'Original Title',
-        body: 'And here is the body!',
-        data: { data: 'goes here' },
-    };
-
-    await fetch('https://exp.host/--/api/v2/push/send', {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Accept-encoding': 'gzip, deflate',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(message),
-    });
-}
 
 async function registerForPushNotificationsAsync() {
     let token;

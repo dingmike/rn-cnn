@@ -11,7 +11,7 @@ const courseInitState = {
 };
 
 
-export default function (state = courseInitState, action) {
+export default function courseReducer(state = courseInitState, action) {
 
     switch (action.type) {
 

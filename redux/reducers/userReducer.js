@@ -5,7 +5,7 @@ const initState = {
     user: null,
 };
 
-export default function addUser(state = initState,action){
+export default function userReducer(state = initState,action){
     switch(action.type){
         case TYPES.LOAD_USER:
             return Object.assign({},state,{flag : 1});
