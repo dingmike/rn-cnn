@@ -1,1 +1,1 @@
-../../../../../node_modules/unimodules-app-loader/ios/UMAppLoader/UMAppLoaderProvider.h
+../../../../../node_modules/expo/node_modules/unimodules-app-loader/ios/UMAppLoader/UMAppLoaderProvider.h
