@@ -52,3 +52,7 @@ To set up the script on Android, apply the following diff to android/app/build.g
 
  apply from: "../../node_modules/react-native/react.gradle"
 +apply from: "../../node_modules/expo-constants/scripts/get-app-config-android.gradle"
+
+
+### ios 打包发布
+https://www.devio.org/2020/03/15/React-Native-releases-packaged-iOS-apps-for-apps/

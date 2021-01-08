@@ -55,6 +55,8 @@ import {
 import articleApi from "../../apis/articleApi";
 import wordApi from "../../apis/word";
 import useColorScheme from "../../hooks/useColorScheme";
+import Toast from "../../components/EasyToast";
+import ActionButton from "../../components/ActionButton";
 
 /*function OptionButton({ icon, label, onPress, isLastOption }) {
     return (
@@ -266,6 +268,7 @@ class ArticleDetail extends Component {
         super(props);
         let {flag, user, jokerVideo, route} = this.props;
         this.state = {
+            position: 'top',
             articleHeight: 60,
             photos: [],
             enableAdMod: false,
@@ -297,8 +300,19 @@ class ArticleDetail extends Component {
         }
         Dialog.hide(this.wordDialog);
     }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        // 网络可用的时候刷新数据
+        if(this.props.isInternetReachable){
+            this._onRefresh();
+        }
+
+    }
     async componentDidMount() {
-        let {getShowAdStatus, showAd } = this.props;
+        let {getShowAdStatus, showAd, internetReachable } = this.props;
+        if(!internetReachable) {
+            this.toast.show('Network unavailable, check the network...', 3000);
+        }
         // adMode 是否可用
         let enableAdMod = await isAvailableAsync();
 
@@ -336,10 +350,6 @@ class ArticleDetail extends Component {
         this.setState({
             articleDetail: response.data
         })
-        console.log(this.state.articleDetail.article_brief, '00000000000000000000000000000000000000000')
-    }
-
-    componentDidUpdate() {
     }
 
     // query word by dic
@@ -809,6 +819,21 @@ class ArticleDetail extends Component {
                         </Modal>
                     </ScrollView>
                 </ScrollableTabView>
+                <Toast ref={toast => this.toast = toast} position={this.state.position}></Toast>
+                <ActionButton buttonColor="rgba(231,76,60,1)">
+                    <ActionButton.Item buttonColor='#9b59b6' title="New Task" onPress={() => console.log("notes tapped!")}>
+                        {/*<Icon name="md-create" style={styles.actionButtonIcon} />*/}
+                        <AntDesign name="pausecircleo" style={styles.actionButtonIcon}/>
+                    </ActionButton.Item>
+                    <ActionButton.Item buttonColor='#3498db' title="Notifications" onPress={() => {}}>
+                        {/*<Icon name="md-notifications-off" style={styles.actionButtonIcon} />*/}
+                        <AntDesign name="pausecircleo"  style={styles.actionButtonIcon}/>
+                    </ActionButton.Item>
+                    <ActionButton.Item buttonColor='#1abc9c' title="All Tasks" onPress={() => {}}>
+                        {/*<Icon name="md-done-all" style={styles.actionButtonIcon} />*/}
+                        <AntDesign name="pausecircleo"  style={styles.actionButtonIcon}/>
+                    </ActionButton.Item>
+                </ActionButton>
             </SkeletonContent>
         );
     }
@@ -819,7 +844,7 @@ function mapStateToProps(state) {
         flag: state.userReducer.flag,
         user: state.userReducer.user,
         showAd: state.commonReducer.showAd,
-        // jokerVideo: state.userReducer.jokerVideo
+        internetReachable: state.commonReducer.internetReachable,
     };
 }
 
@@ -1017,5 +1042,10 @@ const styles = StyleSheet.create({
     modalText: {
         marginBottom: 15,
         textAlign: 'center',
+    },
+    actionButtonIcon: {
+        fontSize: 20,
+        height: 22,
+        color: 'white',
     },
 });

@@ -10,6 +10,14 @@ export function updateData(showAd){
     };
 }
 
+export function updateNetInfoData(internetReachable){
+    return {
+        type: TYPES.NET_INFO,
+        internetReachable: internetReachable,
+    };
+}
+
+
 export function requestData(params){
     return dispatch => {
         commonApi.getShowSomething(params).then(response => {
@@ -18,6 +26,13 @@ export function requestData(params){
         }).catch(error => {
             console.log("error:" + error);
         })
+    };
+
+}
+
+export function updateNetInfoAsync(internetReachable){
+    return dispatch => {
+        dispatch(updateNetInfoData(internetReachable));
     };
 
 }
