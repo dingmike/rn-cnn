@@ -26,7 +26,7 @@ cd android && gradlew assembleRelease
 ### APPLE DEVELOP DOCUMENT
 https://developer.apple.com/library/archive/documentation/Cocaoa
 
-### iOS configuration
+### iOS  build configuration
 Bare projects are initialized using CocoaPods, a dependency manager for iOS projects.
 
 Run `npx pod-install` to link the native iOS packages using CocoaPods.
@@ -45,7 +45,7 @@ Run `npx react-native run-ios` to rebuild your project with the native code link
 Optional: set up script to get app config
 Optionally, you can set up a build script that will grab your app's config (from app.json or app.config.js) and embed it into your build. This will ensure Constants.manifest is defined on the first run of your app (before it has downloaded any OTA updates). If your app doesn't use Constants.manifest, you can skip this step.
 
-To set up the script on iOS, add the following line to the Bundle React Native code and images Build Phase in your Xcode project:
+To set up the script on iOS, add the following line to the Bundle React Native code and `images Build Phase` in your Xcode project:
 
 ../node_modules/expo-constants/scripts/get-app-config-ios.sh
 To set up the script on Android, apply the following diff to android/app/build.gradle:
@@ -56,3 +56,5 @@ To set up the script on Android, apply the following diff to android/app/build.g
 
 ### ios 打包发布
 https://www.devio.org/2020/03/15/React-Native-releases-packaged-iOS-apps-for-apps/
+
+Library Search Path

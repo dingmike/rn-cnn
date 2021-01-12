@@ -173,7 +173,7 @@ class HomeScreenNew extends Component {
     registerForPushNotificationsAsync = async () => {
         let token;
         let experienceId = undefined;
-        if (!Constants.manifest) {
+        if (Constants.manifest !== null) {
             // Absence of the manifest means we're in bare workflow
             experienceId = '@mikezhang/react-native-cnn';
         }
@@ -360,8 +360,8 @@ class HomeScreenNew extends Component {
             console.log('Connection type', state.type);
             console.log('Is connected?', state.isConnected);
             console.log('Is InternetReachable?', state.isInternetReachable);
-            setNetInfoData(state.isInternetReachable);
-            if(state.isInternetReachable && state.isConnected){
+            setNetInfoData(state.isConnected);
+            if(state.isConnected){
                 //有网络可达
                 // this._onRefresh();
             }else{
@@ -389,8 +389,9 @@ class HomeScreenNew extends Component {
                 await Updates.reloadAsync();
             }
         } catch (e) {
+            console.log(JSON.stringify(e))
             // handle or log error
-            this.toast.show('Updating failed restart app now...', DURATION.FOREVER);
+            // this.toast.show('Updating failed restart app now...', DURATION.FOREVER);
             // alert(JSON.stringify(e))
         }
 
@@ -495,8 +496,8 @@ class HomeScreenNew extends Component {
                             />
                         </SkeletonContent>
                     </View>
-                <Toast ref={toast => this.toast = toast} position={this.state.position}></Toast>
-                <Toast ref={toast => this.toastWithStyle = toast} style={{backgroundColor: '#a8a8a8'}} position={this.state.toastPosition}></Toast>
+                <Toast ref={toast => this.toast = toast} useNativeAnimation={true} position={this.state.position}></Toast>
+                <Toast ref={toast => this.toastWithStyle = toast} useNativeAnimation={true} style={{backgroundColor: '#a8a8a8'}} position={this.state.toastPosition}></Toast>
             </SafeAreaView>
         )
     }

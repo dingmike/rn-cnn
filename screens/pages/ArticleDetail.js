@@ -311,7 +311,7 @@ class ArticleDetail extends Component {
     async componentDidMount() {
         let {getShowAdStatus, showAd, internetReachable } = this.props;
         if(!internetReachable) {
-            this.toast.show('Network unavailable, check the network...', 3000);
+            this.toast2.show('Network unavailable, check the network...', 3000);
         }
         // adMode 是否可用
         let enableAdMod = await isAvailableAsync();
@@ -536,6 +536,7 @@ class ArticleDetail extends Component {
         // console.log(route.params.article_title)
         console.log(articleDetail.article_brief,'-----------------------')
         return (
+            <SafeAreaView style={styles.container}>
             <SkeletonContent
                 containerStyle={{
                     flex: 1,
@@ -819,7 +820,7 @@ class ArticleDetail extends Component {
                         </Modal>
                     </ScrollView>
                 </ScrollableTabView>
-                <Toast ref={toast => this.toast = toast} position={this.state.position}></Toast>
+            </SkeletonContent>
                 <ActionButton buttonColor="rgba(231,76,60,1)">
                     <ActionButton.Item buttonColor='#9b59b6' title="New Task" onPress={() => console.log("notes tapped!")}>
                         {/*<Icon name="md-create" style={styles.actionButtonIcon} />*/}
@@ -834,7 +835,8 @@ class ArticleDetail extends Component {
                         <AntDesign name="pausecircleo"  style={styles.actionButtonIcon}/>
                     </ActionButton.Item>
                 </ActionButton>
-            </SkeletonContent>
+                <Toast ref={toast => this.toast2 = toast} useNativeAnimation={true} position={this.state.position}></Toast>
+            </SafeAreaView>
         );
     }
 }
@@ -862,8 +864,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        justifyContent: 'center',
-        flexDirection: 'column', // 主轴Y
+        // justifyContent: 'center',
+        // flexDirection: 'column', // 主轴Y
         // paddingTop: Constants.statusBarHeight,
         // backgroundColor: '#ecf0f1',
         // padding: 8,
