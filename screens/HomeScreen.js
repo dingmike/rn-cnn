@@ -2,126 +2,155 @@ import * as WebBrowser from 'expo-web-browser';
 // import * as React from 'react';
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, Button } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-
-import { MonoText } from '../components/StyledText';
-
+import { Platform, Text, View, Button } from 'react-native';
 import { styles } from '../style/homeStyle';
-
-import HomeDetail from "./HomeDetail";
-
 import {requestData} from '../redux/actions/userAction';
+import ScrollableTabView, {ScrollableTabBar} from '../components/ScrollableTabView';
+import TodayRead from "./pages/TodayRead";
+import articleApi from "../apis/articleApi";
+import CategoryRead from "./pages/CategoryRead";
+import NetInfo from "@react-native-community/netinfo";
+import * as Notifications from "expo-notifications";
+import Constants from "expo-constants";
+import * as Permissions from "expo-permissions";
+import {updateNetInfoAsync} from "../redux/actions/commonAction";
 
-
-/*export default function HomeScreen({ navigation }) {
-
-  return (
-    <View style={styles.container}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-        <View style={styles.welcomeContainer}>
-          <Image
-            source={
-              (!__DEV__)
-                ? require('../assets/images/robot-dev.png')
-                : require('../assets/images/robot-prod.png')
-            }
-            style={styles.welcomeImage}
-          />
-        </View>
-
-        <View style={styles.getStartedContainer}>
-          <DevelopmentModeNotice />
-          <HomeDetail/>
-          <Text style={styles.getStartedText}>Open up the code for this screen ok:</Text>
-
-          <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-            <MonoText>screens/HomeScreen.js</MonoText>
-          </View>
-          <Button
-              title="Go to HomeDetail---->"
-              onPress={() => navigation.navigate('HomeDetail')}
-          />
-          <Text style={styles.getStartedText}>
-            Change any of the text, save the file, and your app will automatically reload.
-          </Text>
-        </View>
-
-        <View style={styles.helpContainer}>
-          <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
-            <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-
-      <View style={styles.tabBarInfoContainer}>
-        <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
-        <Text style={styles.red}>just red</Text>
-        <Text style={{
-          color: 'blue',
-          fontWeight: 'bold',
-          fontSize: 30,
-        }}>just bigblue</Text>
-        <Text style={[styles.bigblue, styles.red]}>bigblue, then red</Text>
-        <Text style={[styles.red, styles.bigblue]}>red, then bigblue</Text>
-        <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-          <MonoText style={styles.codeHighlightText}>navigation/BottomTabNavigator.js</MonoText>
-        </View>
-      </View>
-    </View>
-  );
-}*/
-
+let unsubscribeNet = null;  // 网络监控
+// https://docs.expo.io/push-notifications/overview/
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: false,
+        shouldSetBadge: false,
+    }),
+});
 
 class HomeScreen extends Component{
+    constructor(props) {
+        super(props);
+        this.state ={
+            count: 0,
+            categories: [],
+        }
+    }
 
     render(){
-        const {navigate} = this.props.navigation;
-        let {flag,user, jokerVideo} = this.props;
-        //user
-        let userView = null;
-        if (jokerVideo) {
-            userView = (<View>
-                <Text>{jokerVideo[0].text}</Text>
-                <Button
-                    title="Go to HomeDetail---->"
-                    onPress={() => navigate('HomeDetail')}
-                />
-            </View>);
+        // const {navigate} = this.props.navigation;
+        let {categories} = this.state;
+        if(categories.length !==0) {
+            return (
+                <ScrollableTabView
+                    tabBarInactiveTextColor='#666' // 没有被选中的文字颜色
+                    tabBarActiveTextColor='black'       // 选中的文字颜色
+                    tabBarBackgroundColor='white'     // 选项卡背景颜色
+                    tabBarUnderlineStyle={{backgroundColor:'#ffba40',height:2}}   //下划线的样式
+                    initialPage={0}
+                    renderTabBar={() => <ScrollableTabBar style={{height: 40, borderWidth:0, elevation:2}} tabStyle={{height: 37}}
+                                                          underlineHeight={3}/>}>
+                    <TodayRead tabLabel='Today Read' navigation={this.props.navigation}/>
+                    {categories.map((item,index) => <CategoryRead key={index} tabLabel={item.category_name} category={item}/>)}
+                    {/*<CategoryRead tabLabel='Tab #1'>My</CategoryRead>
+                <CategoryRead tabLabel='Tab #2 word word'>favorite</CategoryRead>
+                <CategoryRead tabLabel='Tab #3 word word word'>project</CategoryRead>
+                <CategoryRead tabLabel='Tab #4 word word word word'>favorite</CategoryRead>
+                <CategoryRead tabLabel='Tab #5'>project</CategoryRead>*/}
+                </ScrollableTabView>
+            );
+        }else {
+            return null
         }
 
-        return (
-            <View>
-                {userView}
-            </View>
-        );
-    }
-    componentWillUpdate(){
-        console.log("componentWillUpdate1111---组件将要更新");
-    }
 
+    }
     componentDidUpdate(){
         console.log("componentDidUpdate1111---组件更新完毕");
     }
     shouldComponentUpdate(nextProps, nextState){
-        /*console.log(this.state.detailContent,'detailContent');
-        if (this.state.count !== nextState.count) {
-            console.log("shouldComponentUpdate1111---组件需要更新");
+        if (this.state.categories !== nextState.categories) {
+            console.log("shouldComponentUpdate---组件需要更新");
             return true;
         }
-        return false;*/
+        return false;
     }
-    // 在子组件中对父元素props或state的改变进行监听进行相应的操作
-    componentWillReceiveProps(nextProps){
-        // console.log(this.props.detailContent,'this--->>componentWillReceiveProps');
-        // console.log(nextProps.detailContent,'next--->>componentWillReceiveProps')
+    async componentDidMount(){
+        let { setNetInfoData, user, internetReachable, flag} = this.props;
+        let {expoPushToken} = this.state;
+        // 分类信息
+        let response = await articleApi.allCategoryList();
+        this.setState((prevState, pros) => ({
+            categories: response.data
+        }));
+        unsubscribeNet =  NetInfo.addEventListener(state => {
+            console.log('Connection type', state.type);
+            console.log('Is connected?', state.isConnected);
+            console.log('Is InternetReachable?', state.isInternetReachable);
+            setNetInfoData(state.isConnected);
+            if(state.isConnected){
+                //有网络可达
+                // this._onRefresh();
+            }else{
+                // EasyLoading.show('Network unavailable...', -1, 'type');
+                this.toast.show('Network unavailable, check the network...', 3000);
+                /*Alert.alert(
+                    "Note",
+                    "Network unavailable,check the network!",
+                    [
+                        { text: "OK", onPress: () => console.log("OK Pressed") }
+                    ],
+                    { cancelable: false }
+                );*/
+            }
+        });
+
+
     }
-// componentWillReceiveProps -> 改变后执行父组件中 shouldComponentUpdate -> componentWillUpdate -> componentDidUpdate
-    componentDidMount(){
-        console.log(this.props)
-        let { updateData } = this.props;
-        updateData();
-    }
+    async registerForPushNotificationsAsync() {
+        let token;
+        let experienceId = undefined;
+        if (Constants.manifest !== null) {
+            // Absence of the manifest means we're in bare workflow
+            experienceId = '@mikezhang/react-native-cnn';
+        }
+        if (Constants.isDevice) {
+            const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+            let finalStatus = existingStatus;
+            if (existingStatus !== 'granted') {
+                const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+                finalStatus = status;
+            }
+            if (finalStatus !== 'granted') {
+                alert('Failed to get push token for push notification!');
+                return;
+            }
+            try {
+                token = (await Notifications.getExpoPushTokenAsync({
+                    experienceId,
+                })).data;
+                return new Promise((resolve, reject) => {
+                    if(token) {
+                        resolve(token)
+                    }else{
+                        reject(null)
+                    }
+                })
+                // this.setState({ expoPushToken: token });
+            } catch (e) {
+                console.log(e)
+            }
+
+        } else {
+            alert('Must use physical device for Push Notifications');
+        }
+
+        if (Platform.OS === 'android') {
+            await Notifications.setNotificationChannelAsync('default', {
+                name: 'default',
+                importance: Notifications.AndroidImportance.MAX,
+                vibrationPattern: [0, 250, 250, 250],
+                lightColor: '#FF231F7C',
+            });
+        }
+    };
 }
 
 
@@ -156,13 +185,16 @@ function mapStateToProps(state){
     return {
         flag: state.userReducer.flag,
         user: state.userReducer.user,
-        jokerVideo: state.userReducer.jokerVideo
+        internetReachable: state.commonReducer.internetReachable,
     };
 }
 function mapDispatchToProps(dispatch){
     return {
         updateData: function(){
             dispatch(requestData());
+        },
+        setNetInfoData(params) {
+            dispatch(updateNetInfoAsync(params))
         }
     };
 }

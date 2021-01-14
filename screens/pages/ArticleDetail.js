@@ -20,7 +20,7 @@ import {connect} from "react-redux";
 import RNGeolocationView from '../../components/RNGeolocationView'
 import OwnCamera from '../../components/OwnCamera'
 
-import * as SecureStore from 'expo-secure-store';
+// import * as SecureStore from 'expo-secure-store';
 import Constants from 'expo-constants';
 import * as Speech from 'expo-speech';
 import HTML from 'react-native-render-html';

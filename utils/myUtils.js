@@ -146,7 +146,33 @@ export default class myUtils {
     }
     return currentdate + ' ' + w;
   }
-
+// deploy time
+static getEngDateTime(data) {
+  let dt = new Date();
+  if(data) {
+    dt = new Date(data)
+  }
+  let m=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Spt","Oct","Nov","Dec"];
+  let w=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+  let d=["st","nd","rd","th"];
+  let mn=dt.getMonth();
+  let wn=dt.getDay();
+  let dn=dt.getDate();
+  let dns;
+  if(((dn%10)<1) ||((dn%10)>3)){
+    dns=d[3];
+  }
+  else
+  {
+    dns=d[(dn%10)-1];
+    if((dn==11)||(dn==12)){
+      dns=d[3];
+    }
+  }
+  return  m[mn]+ ". " + dn + dns + ". " + dt.getFullYear()
+  // return  w[wn-1] + ', ' + m[mn]+ "." + dn + dns + "." + dt.getFullYear()
+  // document.write(m[mn]+" "+dn+dns+" " +w[wn-1]+" "+dt.getFullYear());
+}
 
   static getEngDate(data) {
     let dt = new Date();

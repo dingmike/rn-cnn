@@ -53,7 +53,6 @@
     "react-native-root-siblings": "^4.1.0",
     "react-native-safe-area-context": "3.1.4",
     "react-native-screens": "~2.10.1",
-    "react-native-scrollable-tab-view": "^1.0.0",
     "react-native-shadow": "^1.2.2",
     "react-native-skeleton-content": "^1.0.20",
     "react-native-svg": "12.1.0",

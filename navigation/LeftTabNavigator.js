@@ -1,3 +1,4 @@
+
 import {Ionicons} from '@expo/vector-icons';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -6,71 +7,81 @@ import * as React from 'react';
 import TabBarIcon from '../components/TabBarIcon';
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
+// import TabOneScreen from '../screens/TabOneScreen';
+// import TabTwoScreen from '../screens/TabTwoScreen';
 import HomeScreen from '../screens/HomeScreen';
 import HomeScreenNew from '../screens/HomeScreenNew';
+import LinksScreen from '../screens/LinksScreen';
 import ArticleDetail from "../screens/pages/ArticleDetail";
+// import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import {
+    Alert,
+    Button,
     Text,
     TouchableOpacity,
     View,
     StyleSheet,
     Dimensions,
+    NativeModules,
     SafeAreaView, StatusBar
 } from "react-native";
 import {AntDesign} from '@expo/vector-icons';
+// const BottomTab = createBottomTabNavigator();
 import Constants from "expo-constants";
-import {useSelector} from "react-redux";
-const BottomTab = createBottomTabNavigator();
-const INITIAL_ROUTE_NAME = 'Home';
+import {NavigationContainer, DefaultTheme, DarkTheme} from '@react-navigation/native';
 
+const Drawer = createDrawerNavigator();
+const INITIAL_ROUTE_NAME = 'Home';
 export default function BottomTabNavigator({navigation, route}) {
-    // function component use redux state https://react-redux.js.org/api/hooks#useStore
-    let userInfo = useSelector(state => state.userReducer.user);
-    console.log('userinfo --------------------5454545---------')
-    console.log(userInfo);
-    console.log('navigation----------')
-    console.log(navigation)
+
     const colorScheme = useColorScheme();
     // Set the header title on the parent stack navigator depending on the
     // currently active tab. Learn more in the documentation:
     // https://reactnavigation.org/docs/en/screen-options-resolution.html https://reactnavigation.org/docs/bottom-tab-navigator#!
     //点击子页面时隐藏底部导航栏
+    console.log(navigation)
     const routeName = getFocusedRouteNameFromRoute(route);
+    console.log(routeName)
     return (
-         <BottomTab.Navigator
-             initialRouteName={INITIAL_ROUTE_NAME}
-             tabBarOptions={{ activeTintColor: Colors[colorScheme].tabIconSelected, inactiveTintColor: Colors[colorScheme].tabIconDefault }}>
-             <BottomTab.Screen
-                 name="Home"
-                 component={TabOneNavigator}
-                 options={{
-                     tabBarIcon: ({ color, focused }) => <TabBarIcon focused={focused} color={color}  name="md-book" />,
-                     tabBarBadge: null,  // tip badges
-                 }}
-             />
-             <BottomTab.Screen
-                 name="My"
-                 component={TabTwoNavigator}
-                 options={{
-                     tabBarIcon: ({ color, focused }) => <TabBarIcon focused={focused} color={color} name="md-person"/>,
-                     tabBarBadge: null,
-                 }}
-             />
-         </BottomTab.Navigator>
+        <Drawer.Navigator
+            initialRouteName={INITIAL_ROUTE_NAME}
+            drawerStyle={Dimensions.get('window').width >= 768  ? null : { width: '50%',  backgroundColor: '#fff', }}
+            drawerType={Dimensions.get('window').width >= 768 ? 'permanent' : 'slide'}
+            drawerContentOptions={{activeTintColor: Colors[colorScheme].tint,
+                activeBackgroundColor: Colors[colorScheme].background, inactiveTintColor: Colors[colorScheme].inSelectText }}
+            >
+            <Drawer.Screen
+                name="Home"
+                component={TabOneNavigator}
+                options={{
+                    drawerIcon: ({color, focused}) => <TabBarIcon focused={focused} color={color} name="md-book"/>,
+                }}
+            />
+           {/* <Drawer.Screen
+                name="My"
+                component={TabTwoNavigator}
+                options={{
+                    drawerIcon: ({color, focused}) => <TabBarIcon focused={focused} color={color} name="md-person"/>,
+                }}
+            />*/}
+        </Drawer.Navigator>
     );
+
 }
+
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
 const TabHomeStack = createStackNavigator();
 const styleTypes = ['default', 'dark-content', 'light-content'];
+
 function TabOneNavigator() {
     const colorScheme = useColorScheme();
     return (
         <TabHomeStack.Navigator>
             <TabHomeStack.Screen
                 name="TabHomeScreen"
-                component={HomeScreen}
+                component={HomeScreenNew}
                 // options={{ headerTitle: 'English Ability' }}
                 options={{
                     headerTitle: 'English Ability',
@@ -137,7 +148,7 @@ function TabOneNavigator() {
                                         name="md-information-circle"
                                         size={24}
                                         style={{ marginBottom: -3 }}
-                                        // color={this.props.focused ? Colors.tabIconSelected : Colors.tabIconDefault}
+                                        // color={props.focused ? Colors.tabIconSelected : Colors.tabIconDefault}
                                         color="#000"
                                     />
                                 </TouchableOpacity>
@@ -161,7 +172,9 @@ function TabOneNavigator() {
         </TabHomeStack.Navigator>
     );
 }
+
 const TabMyStack = createStackNavigator();
+
 function TabTwoNavigator() {
     const colorScheme = useColorScheme();
     return (
@@ -246,4 +259,5 @@ function TabTwoNavigator() {
         </TabMyStack.Navigator>
     );
 }
+
 const styles = StyleSheet.create({});

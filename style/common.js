@@ -49,6 +49,8 @@ const layout = {
 const color = {
     redFont: 'red',
     whiteFont: 'white',
+    blackFont: 'black',
+    backgroundGray: '#fefefe',
     tabIconDefault: '#ccc',
     tabIconSelected: Colors.tintColor,
     tabBar: '#fefefe',

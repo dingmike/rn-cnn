@@ -8,6 +8,7 @@ import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/
 import { createStackNavigator } from '@react-navigation/stack';
 // import LinkingConfiguration from "./LinkingConfiguration";
 import BottomTabNavigator from "./BottomTabNavigator";
+import LeftTabNavigator from "./LeftTabNavigator";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import AboutScreen from "../screens/AboutScreen";
 import React from "react";

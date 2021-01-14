@@ -2,7 +2,11 @@ import { Net } from '../utils/request'
 
 export default {
 
-    //
+    allCategoryList(params) {
+        return Net.Get('/test/article/category/list', {
+            ...params
+        })
+    },
     allArticleList(params) {
         return Net.Post('/test/article/allList', {
             ...params
@@ -13,8 +17,6 @@ export default {
             ...params
         })
     },
-
-
 
     // 注册新用户
     newUser(params) {
