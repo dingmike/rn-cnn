@@ -48,12 +48,7 @@ class HomeScreen extends Component{
                     renderTabBar={() => <ScrollableTabBar style={{height: 40, borderWidth:0, elevation:2}} tabStyle={{height: 37}}
                                                           underlineHeight={3}/>}>
                     <TodayRead tabLabel='Today Read' navigation={this.props.navigation}/>
-                    {categories.map((item,index) => <CategoryRead key={index} tabLabel={item.category_name} category={item}/>)}
-                    {/*<CategoryRead tabLabel='Tab #1'>My</CategoryRead>
-                <CategoryRead tabLabel='Tab #2 word word'>favorite</CategoryRead>
-                <CategoryRead tabLabel='Tab #3 word word word'>project</CategoryRead>
-                <CategoryRead tabLabel='Tab #4 word word word word'>favorite</CategoryRead>
-                <CategoryRead tabLabel='Tab #5'>project</CategoryRead>*/}
+                    {categories.map((item,index) => <CategoryRead key={index} tabLabel={item.category_name} navigation={this.props.navigation} category={item}/>)}
                 </ScrollableTabView>
             );
         }else {

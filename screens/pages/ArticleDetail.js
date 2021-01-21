@@ -168,12 +168,12 @@ const html = `
                         word: word,
                     };
                     // 传递事件和数据到APP端
-                   dom.style.color = 'red';
+                   // dom.style.color = 'red';
+                   // dom.style.fontWeight= 'bold';
+                   dom.style.backgroundColor = '#FFB600';
                    window.postMessage.queryWord(JSON.stringify(data));
                }
-            
             }    
-          
         </script>
       </body>
       </html>
@@ -707,6 +707,7 @@ class ArticleDetail extends Component {
                                         scrollEnabled={false}
                                         scalesPageToFit={false}
                                         javaScriptEnabled={true}
+                                        javaScriptCanOpenWindowsAutomatically={true}
                                         onLoadEnd={() => this._handleOnloadEndWeb()}
                                         onError={() => this._handleLoadError()}
                                         showsVerticalScrollIndicator={false}

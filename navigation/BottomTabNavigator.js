@@ -8,6 +8,7 @@ import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import HomeScreen from '../screens/HomeScreen';
 import HomeScreenNew from '../screens/HomeScreenNew';
+import CenterScreen from "../screens/CenterScreen";
 import ArticleDetail from "../screens/pages/ArticleDetail";
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import {
@@ -21,6 +22,7 @@ import {
 import {AntDesign} from '@expo/vector-icons';
 import Constants from "expo-constants";
 import {useSelector} from "react-redux";
+import AboutPage from "../screens/pages/AboutPage";
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
 
@@ -50,10 +52,10 @@ export default function BottomTabNavigator({navigation, route}) {
                  }}
              />
              <BottomTab.Screen
-                 name="My"
+                 name="More"
                  component={TabTwoNavigator}
                  options={{
-                     tabBarIcon: ({ color, focused }) => <TabBarIcon focused={focused} color={color} name="md-person"/>,
+                     tabBarIcon: ({ color, focused }) => <TabBarIcon focused={focused} color={color} name="ellipsis-horizontal-circle-sharp"/>,
                      tabBarBadge: null,
                  }}
              />
@@ -168,7 +170,7 @@ function TabTwoNavigator() {
         <TabMyStack.Navigator>
             <TabMyStack.Screen
                 name="TabMyScreen"
-                component={HomeScreen}
+                component={CenterScreen}
                 options={{
                     headerTitle: 'My Center',
                     headerStyle: {
@@ -207,8 +209,8 @@ function TabTwoNavigator() {
                                     paddingHorizontal: 10,
                                     flex: 1,
                                     // marginTop: 5
-                                }} onPress={scene.descriptor.navigation.toggleDrawer}>
-                                    <AntDesign name="bars" size={28} color={options.headerStyle.color}/>
+                                }}>
+
                                 </TouchableOpacity>
                                 <View style={{
                                     paddingBottom: 10,
@@ -223,9 +225,11 @@ function TabTwoNavigator() {
                                 <TouchableOpacity  style={{
                                     flex: 1,
                                     paddingBottom: 10,
-                                    paddingHorizontal: 10,
                                 }}>
-
+                                    <Ionicons name="settings-sharp"
+                                              size={24}
+                                              style={{ marginBottom: -3 }}
+                                              color="black" />
                                 </TouchableOpacity>
                             </SafeAreaView>
                         );
@@ -243,7 +247,9 @@ function TabTwoNavigator() {
                      },*/
                 }}
             />
+            <TabMyStack.Screen name="About" component={AboutPage} options={{title: 'About'}}/>
         </TabMyStack.Navigator>
+
     );
 }
 const styles = StyleSheet.create({});

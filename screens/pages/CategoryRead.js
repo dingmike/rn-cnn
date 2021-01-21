@@ -138,30 +138,31 @@ class CategoryRead extends Component {
     }
 
     _goToDetail(item) {
-        console.log(this.props)
         this.props.navigation.navigate('ArticleDetail', {...item})
     }
 
     // 渲染卡片
     renderItem = ({item,index}) => {
-        console.log(item)
         if((index+1) % 4 === 0) {
-            return (
-                <View style={{
-                    height: 52,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: 20,
-                    backgroundColor: '#f3f4f6',
-                }}>
-                    {/*<Text style={{fontSize: 14, color: '#666666'}}>记得多多阅读哦！</Text>*/}
-                    {this.state.enableAdMod ? <AdMobBanner
-                        bannerSize="banner"
-                        adUnitID={adUnitID} // ca-app-pub-3940256099942544/6300978111 Test ID, Replace with your-admob-unit-id
-                        servePersonalizedAds={false} // true or false
-                        onDidFailToReceiveAdWithError={this.bannerError} /> : null}
-                </View>
-            )
+            if(this.state.enableAdMod) {
+                return (
+                    <View style={{
+                        height: 52,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginBottom: 20,
+                        backgroundColor: '#f3f4f6',
+                    }}>
+                      <AdMobBanner
+                            bannerSize="banner"
+                            adUnitID={adUnitID} // ca-app-pub-3940256099942544/6300978111 Test ID, Replace with your-admob-unit-id
+                            servePersonalizedAds={false} // true or false
+                            onDidFailToReceiveAdWithError={this.bannerError} />
+                    </View>
+                )
+            }else {
+                return null
+            }
         }else {
             return (
                 <CardArticle articleItem={item} goToDetail={() => this._goToDetail(item)}
@@ -169,7 +170,6 @@ class CategoryRead extends Component {
                              articleTitle={item.chinese_title}/>
             )
         }
-
     };
 
     _onEndReached() {//上拉加载更多

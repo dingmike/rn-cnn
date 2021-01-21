@@ -138,8 +138,6 @@ class TodayRead extends Component {
     }
 
     _goToDetail(item) {
-        console.log('rorps -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=')
-        console.log(this.props.navigation)
         this.props.navigation.navigate('ArticleDetail', {...item})
     }
 

@@ -23,10 +23,10 @@ class CommentDialog extends Component {
         options = Object.assign(
             {},
             {
-                msg: "啥玩意儿！",
-                cancelText: "取消",
-                sureText: "确定",
-                content: "无",
+                msg: "what?！",
+                cancelText: "Cancel",
+                sureText: "Confirm",
+                content: "None",
                 canPressShadow: false, //点击弹窗外面是否关闭
                 haveCancel: false,
                 cancel: () => {
@@ -96,8 +96,6 @@ class DialogContainer extends Component {
             canPressShadow, //点击弹窗外面是否关闭
             haveCancel,
         } = this.props;
-        // alert(sureText)
-        console.log(content, 'wordsss')
         if (content && content.content) {
             let wordHead = content.content.word.wordHead;
             let wordDetail = content.content.word.content;
@@ -151,7 +149,7 @@ class DialogContainer extends Component {
                     "descCn": "中释",
                     "tranOther": "a serious argument about something that involves many people and continues for a long time"
                 }]
-            }
+            };
             let trans = [];
             for(let i = 0 ; i < wordDetail.trans.length; i++) {
                 if(wordDetail.trans[i].descCn) {

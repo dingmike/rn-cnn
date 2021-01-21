@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
         }),
     },
     updateTimeStyle:{
-        color: color.blackFont,
+        color: color.tabIconDefault,
         fontFamily: 'NotoSerif_400Regular'
     },
     bigblue: {
