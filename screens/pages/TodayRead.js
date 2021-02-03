@@ -136,7 +136,6 @@ class TodayRead extends Component {
     async componentDidMount() {
         let {updateAppUserInfo, getShowAdStatus, setNetInfoData, user, showAd, internetReachable, flag} = this.props;
         let {expoPushToken} = this.state;
-
         await getShowAdStatus({activityName: 'showAd'}); // ad 状态
         // Set global test device ID
         // await setTestDeviceIDAsync('EMULATOR'); // test use admod
@@ -148,14 +147,10 @@ class TodayRead extends Component {
         });
         await this.getDataList();
     }
-    renderFooter = () => {
-        return <HomeLoadMoreFooter state={this.state.showFooter}/>;
-    };
     render() {
         // const {navigate} = this.props.navigation;
         const {sourceData, loading} = this.state;
         console.log(this.state.sourceData)
-        alert(this.state.sourceData.length)
         const shadowOpt = {
             width:160,
             height:170,
@@ -181,7 +176,7 @@ class TodayRead extends Component {
                             containerStyle={{
                                 flex: 1,
                                 width: '100%'}}
-                            isLoading={this.state.loading}
+                            isLoading={loading}
                             animationType="shiver"
                             animationDirection="horizontalLeft"
                             boneColor="#dedede"
@@ -227,12 +222,9 @@ class TodayRead extends Component {
                                             </View>
                                         </ImageBackground>
                                   </TouchableOpacity>
-
                                 </ScrollView>: null}
-
                         </SkeletonContent>
                     </View>
-
             </SafeAreaView>
         )
     }

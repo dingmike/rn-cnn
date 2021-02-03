@@ -61,7 +61,7 @@ const adUnitID = Platform.select({
     android: 'ca-app-pub-8394017801211473/9802994365', // my unitID EnglishAbility
 });
 
-class TodayRead extends Component {
+class AllRead extends Component {
 
     constructor(props) {
         super(props);
@@ -241,15 +241,6 @@ class TodayRead extends Component {
         };
         return (
             <SafeAreaView style={styles.container}>
-                    {/*<View style={styles.headView}>
-                        <View>
-                            <Text key={Math.random()} selectable={true} style={styles.headerTitle}>Today Reading 🙂</Text>
-                        </View>
-                        <View>
-                            <Text key={Math.random()} selectable={true} style={styles.headerDes}>Read more, Learn more.</Text>
-                        </View>
-                    </View>*/}
-
                     <View style={styles.articleList}>
                         <SkeletonContent
                             containerStyle={{
@@ -325,4 +316,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TodayRead);
+export default connect(mapStateToProps, mapDispatchToProps)(AllRead);

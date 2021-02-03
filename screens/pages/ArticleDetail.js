@@ -298,7 +298,10 @@ class ArticleDetail extends Component {
         if(this.state.audio.length !== 0) {
             await this.state.audio[this.state.audio.length - 1].stopAsync();
         }
-        Dialog.hide(this.wordDialog);
+        // 离开页面如果有弹窗就销毁
+        if(this.wordDialog) {
+            Dialog.hide(this.wordDialog);
+        }
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {

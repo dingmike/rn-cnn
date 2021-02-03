@@ -29,10 +29,6 @@ const INITIAL_ROUTE_NAME = 'Home';
 export default function BottomTabNavigator({navigation, route}) {
     // function component use redux state https://react-redux.js.org/api/hooks#useStore
     let userInfo = useSelector(state => state.userReducer.user);
-    console.log('userinfo --------------------5454545---------')
-    console.log(userInfo);
-    console.log('navigation----------')
-    console.log(navigation)
     const colorScheme = useColorScheme();
     // Set the header title on the parent stack navigator depending on the
     // currently active tab. Learn more in the documentation:

@@ -61,7 +61,7 @@ class CenterScreen extends Component{
         <View>
 
           <ThemeProvider theme={theme}>
-            <Card>
+            {/*<Card>
               <Card.Title>CARD WITH DIVIDER</Card.Title>
               <Card.Divider/>
               {
@@ -78,7 +78,7 @@ class CenterScreen extends Component{
                   );
                 })
               }
-            </Card>
+            </Card>*/}
           <ListItem key={0} onPress={() => this.goAboutPage()} bottomDivider>
             <Icon
                   name='rss'
