@@ -14,6 +14,7 @@ import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
 import {updateNetInfoAsync} from "../redux/actions/commonAction";
+import AllRead from "./pages/AllRead";
 
 let unsubscribeNet = null;  // 网络监控
 // https://docs.expo.io/push-notifications/overview/
@@ -37,6 +38,7 @@ class HomeScreen extends Component{
     render(){
         // const {navigate} = this.props.navigation;
         let {categories} = this.state;
+        // 必须存在categories才能正常渲染scrollView
         if(categories.length !==0) {
             return (
                 <ScrollableTabView
@@ -48,6 +50,7 @@ class HomeScreen extends Component{
                     renderTabBar={() => <ScrollableTabBar style={{height: 40, borderWidth:0, elevation:2}} tabStyle={{height: 37}}
                                                           underlineHeight={3}/>}>
                     <TodayRead tabLabel='Today Read' navigation={this.props.navigation}/>
+                    <AllRead tabLabel='All' navigation={this.props.navigation}/>
                     {categories.map((item,index) => <CategoryRead key={index} tabLabel={item.category_name} navigation={this.props.navigation} category={item}/>)}
                 </ScrollableTabView>
             );
