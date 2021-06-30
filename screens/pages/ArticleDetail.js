@@ -227,7 +227,7 @@ const H5AppBridge = `
 `;
 
 const bannerAdUnitID = Platform.select({
-    // https://developers.google.com/admob/ios/test-ads
+    // https://developers.google.com/admob/ios/test-ads //
     // ios: 'ca-app-pub-3940256099942544/2934735716',
     ios: 'ca-app-pub-8394017801211473/9802994365', // my unitID EnglishAbility
     // https://developers.google.com/admob/android/test-ads
