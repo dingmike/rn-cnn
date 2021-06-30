@@ -60,6 +60,9 @@ export default function BottomTabNavigator({navigation, route}) {
 }
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
+
+
+// Home screen
 const TabHomeStack = createStackNavigator();
 const styleTypes = ['default', 'dark-content', 'light-content'];
 function TabOneNavigator() {
@@ -104,26 +107,26 @@ function TabOneNavigator() {
                                 ...options.headerStyle
                             }}>
                                 <StatusBar backgroundColor="white" barStyle={options.barStyle}/>
-                                <TouchableOpacity style={{
+                                {/*<TouchableOpacity style={{
                                     paddingBottom: 10,
                                     paddingHorizontal: 10,
                                     flex: 1,
                                     // marginTop: 5
                                 }} onPress={scene.descriptor.navigation.toggleDrawer}>
                                     <AntDesign name="bars" size={28} color={options.headerStyle.color}/>
-                                </TouchableOpacity>
+                                </TouchableOpacity>*/}
                                 <View style={{
                                     paddingBottom: 10,
                                     paddingHorizontal: 10,
-                                    flex: 6,
+                                    flex: 24,
                                     // marginTop: 5
                                     alignItems: "center",
                                 }}>
                                     <Text style={{fontSize: 18, fontWeight: '500',
                                         color: options.headerStyle.color}}>{title}</Text>
                                 </View>
-                                <TouchableOpacity  style={{
-                                    flex: 1,
+                                {/*<TouchableOpacity  style={{
+                                    flex: 2,
                                     paddingBottom: 10,
                                     alignItems: "center",
                                     paddingHorizontal: 10,
@@ -138,7 +141,7 @@ function TabOneNavigator() {
                                         // color={this.props.focused ? Colors.tabIconSelected : Colors.tabIconDefault}
                                         color="#000"
                                     />
-                                </TouchableOpacity>
+                                </TouchableOpacity>*/}
                             </SafeAreaView>
                         );
                     },
@@ -159,6 +162,9 @@ function TabOneNavigator() {
         </TabHomeStack.Navigator>
     );
 }
+
+
+// more screen
 const TabMyStack = createStackNavigator();
 function TabTwoNavigator() {
     const colorScheme = useColorScheme();
@@ -200,25 +206,18 @@ function TabTwoNavigator() {
                                               ...options.headerStyle
                                           }}>
                                 <StatusBar backgroundColor="white" barStyle={styleTypes[1]}/>
-                                <TouchableOpacity style={{
-                                    paddingBottom: 10,
-                                    paddingHorizontal: 10,
-                                    flex: 1,
-                                    // marginTop: 5
-                                }}>
 
-                                </TouchableOpacity>
                                 <View style={{
                                     paddingBottom: 10,
                                     paddingHorizontal: 10,
-                                    flex: 6,
+                                    flex: 24,
                                     // marginTop: 5
                                     alignItems: "center",
                                 }}>
                                     <Text style={{fontSize: 18, fontWeight: '500',
                                         color: options.headerStyle.color}}>{title}</Text>
                                 </View>
-                                <TouchableOpacity  style={{
+                                {/*<TouchableOpacity  style={{
                                     flex: 1,
                                     paddingBottom: 10,
                                 }}>
@@ -226,7 +225,7 @@ function TabTwoNavigator() {
                                               size={24}
                                               style={{ marginBottom: -3 }}
                                               color="black" />
-                                </TouchableOpacity>
+                                </TouchableOpacity>*/}
                             </SafeAreaView>
                         );
                     },

@@ -79,7 +79,7 @@ class CenterScreen extends Component{
                 })
               }
             </Card>*/}
-          <ListItem key={0} onPress={() => this.goAboutPage()} bottomDivider>
+            {/*<ListItem key={0} onPress={() => this.goAboutPage()} bottomDivider>
             <Icon
                   name='rss'
                   type='font-awesome'
@@ -99,7 +99,7 @@ class CenterScreen extends Component{
                 </ListItem.Title>
               </ListItem.Content>
               <ListItem.Chevron color="black" />
-            </ListItem>
+            </ListItem>*/}
             <ListItem key={2} onPress={() => this.goAboutPage()} bottomDivider>
               <Icon name='info-circle' type='font-awesome-5' color='#000'/>
               <ListItem.Content>
