@@ -17,8 +17,8 @@ import {WebView} from 'react-native-webview';
 import {RectButton, ScrollView} from 'react-native-gesture-handler';
 import {requestData} from "../../redux/actions/userAction";
 import {connect} from "react-redux";
-import RNGeolocationView from '../../components/RNGeolocationView'
-import OwnCamera from '../../components/OwnCamera'
+// import RNGeolocationView from '../../components/RNGeolocationView'
+// import OwnCamera from '../../components/OwnCamera'
 
 // import * as SecureStore from 'expo-secure-store';
 import Constants from 'expo-constants';

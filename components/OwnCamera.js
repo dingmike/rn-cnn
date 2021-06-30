@@ -3,7 +3,7 @@
  * All rights reserved, Designed By Zdj
  * @date 2020-11-20 11:42
  */
-import React, {Component} from 'react';
+/*import React, {Component} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
 import {Camera} from 'expo-camera';
 
@@ -101,4 +101,4 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
         alignItems: 'center',
     },
-});
+});*/
