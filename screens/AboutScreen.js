@@ -12,11 +12,11 @@ class AboutScreen extends Component{
     const {navigation} =  this.props;
     return (
         <View style={styles.container}>
-          <Text style={styles.headerTitle}>Welcome to English Ability</Text>
+          {/*<Text style={styles.headerTitle}>Welcome to English Ability</Text>
           <Text style={styles.title}>Let's learn English in the simplest way!</Text>
           <Text style={styles.contentDes}>
             Read an English article every day to understand the world in the simplest way!
-          </Text>
+          </Text>*/}
           <Text style={styles.contentDes}>
             Come on! read more learn more!
           </Text>
