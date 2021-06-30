@@ -228,7 +228,8 @@ const H5AppBridge = `
 
 const bannerAdUnitID = Platform.select({
     // https://developers.google.com/admob/ios/test-ads
-    ios: 'ca-app-pub-3940256099942544/2934735716',
+    // ios: 'ca-app-pub-3940256099942544/2934735716',
+    ios: 'ca-app-pub-8394017801211473/9802994365', // my unitID EnglishAbility
     // https://developers.google.com/admob/android/test-ads
     // android: 'ca-app-pub-3940256099942544/6300978111',
     // android: 'ca-app-pub-8394017801211473/2911783388', // my unitID
@@ -237,7 +238,8 @@ const bannerAdUnitID = Platform.select({
 
 const rewardAdUnitID = Platform.select({
     // https://developers.google.com/admob/ios/test-ads
-    ios: 'ca-app-pub-3940256099942544/1712485313',
+    // ios: 'ca-app-pub-3940256099942544/1712485313',
+    ios: 'ca-app-pub-8394017801211473/9105006274',
     // https://developers.google.com/admob/android/test-ads
     // android: 'ca-app-pub-3940256099942544/5224354917',
     // android: 'ca-app-pub-8394017801211473/1901954049',  // my rewardID
