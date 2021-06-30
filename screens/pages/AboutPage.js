@@ -14,10 +14,10 @@ class AboutScreen extends Component{
     return (
         <View style={styles.container}>
             <View>
-                <Texth h1>Heading 1</Texth>
+               {/* <Texth h1>Heading 1</Texth>
                 <Texth h2>Heading 2</Texth>
                 <Texth h3>Heading 3</Texth>
-                <Texth h4>Heading 4</Texth>
+                <Texth h4>Heading 4</Texth>*/}
                 <Text style={styles.headerTitle}>Welcome to English Ability</Text>
                 <Text style={styles.title}>Let's learn English in the simplest way!</Text>
                 <Text style={styles.contentDes}>
